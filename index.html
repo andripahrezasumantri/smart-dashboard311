@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SMART ANALYTICS CORE DASHBOARD</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+  <style>
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: #f8fafc;
+    }
+  </style>
+</head>
+<body class="p-3 md:p-6 text-slate-800">
+
+  <div class="max-w-7xl mx-auto space-y-4">
+    
+    <div class="bg-white p-4 md:p-5 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div>
+        <h1 class="text-xl md:text-2xl font-black text-slate-800 tracking-tight">SMART ANALYTICS CORE DASHBOARD</h1>
+        <p class="text-xs md:text-sm font-semibold text-blue-600">MDS DUTA MALL BANJARMASIN - 311</p>
+        <p class="text-xs text-slate-500 font-medium mt-1">
+          Store Manager: <span class="font-bold text-slate-700">ANDRI PAHREZA SUMANTRI</span> | 
+          Assistant Store Manager: <span class="font-bold text-slate-700">DEVIN GUNAWAN</span>
+        </p>
+      </div>
+      
+      <div class="text-left md:text-right bg-slate-50 p-2.5 rounded-lg border border-slate-200 w-full md:w-auto">
+        <div id="clock" class="text-base md:text-lg font-bold text-slate-800 leading-none">00:00:00</div>
+        <div id="date" class="text-xs text-slate-500 font-medium mt-1">--/--/----</div>
+      </div>
+    </div>
+
+    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+        <div>
+          <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Tahun</label>
+          <select id="fYear" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Bulan Awal</label>
+          <select id="fBulanAwal" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Bulan Akhir</label>
+          <select id="fBulanAkhir" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Tgl Awal</label>
+          <input type="number" id="fTglAwal" value="1" min="1" max="31" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Tgl Akhir</label>
+          <input type="number" id="fTglAkhir" value="31" min="1" max="31" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      
+      <div class="md:col-span-2 bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+        <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">SALES PERFORMANCE</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center">
+          <div class="bg-blue-50 p-2.5 rounded-lg border border-blue-100">
+            <span class="block text-[10px] font-bold text-blue-600 uppercase">Target</span>
+            <span id="vTarget" class="text-xs sm:text-sm font-extrabold text-slate-800">0</span>
+          </div>
+          <div class="bg-blue-50 p-2.5 rounded-lg border border-blue-100">
+            <span class="block text-[10px] font-bold text-blue-600 uppercase">Sales</span>
+            <span id="vSales" class="text-xs sm:text-sm font-extrabold text-slate-800">0</span>
+          </div>
+          <div class="bg-blue-50 p-2.5 rounded-lg border border-blue-100">
+            <span class="block text-[10px] font-bold text-blue-600 uppercase">Achievement</span>
+            <span id="vAch" class="text-xs sm:text-sm font-extrabold text-blue-600">0%</span>
+          </div>
+          <div class="bg-blue-50 p-2.5 rounded-lg border border-blue-100">
+            <span class="block text-[10px] font-bold text-blue-600 uppercase">Bazaar</span>
+            <span id="vBazaar" class="text-xs sm:text-sm font-extrabold text-slate-800">0</span>
+          </div>
+          <div class="bg-blue-50 p-2.5 rounded-lg border border-blue-100 col-span-2 sm:col-span-1">
+            <span class="block text-[10px] font-bold text-blue-600 uppercase">In Store</span>
+            <span id="vInStore" class="text-xs sm:text-sm font-extrabold text-slate-800">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
+        <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">GROWTH PERFORMANCE</h2>
+        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 my-auto text-center">
+          <div class="text-xs font-semibold text-slate-600 mb-1">GROWTH</div>
+          <div class="text-xs sm:text-sm font-bold space-x-1">
+            <span>grego : <span id="vGrowth" class="text-green-600">0.0%</span></span>
+            <span class="text-slate-300">|</span>
+            <span>fisk : <span id="vGrwFiskal" class="text-indigo-700">0.0%</span></span>
+            <span class="text-slate-300">|</span>
+            <span>SSSG : <span id="vSSSG" class="text-green-600">0.0%</span></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+      <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">SALES CHANNEL</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div class="bg-indigo-50/60 p-3 rounded-lg border border-indigo-100 flex justify-between items-center">
+          <div>
+            <span class="block text-xs font-bold text-indigo-900">SNT</span>
+            <span id="vSnT" class="text-sm font-extrabold text-indigo-900">Rp 0</span>
+          </div>
+          <span id="vSnTContrib" class="text-xs font-bold bg-indigo-100 text-indigo-700 px-2.5 py-1 rounded-md">Contrib: 0.0%</span>
+        </div>
+        <div class="bg-purple-50/60 p-3 rounded-lg border border-purple-100 flex justify-between items-center">
+          <div>
+            <span class="block text-xs font-bold text-purple-900">B2B</span>
+            <span id="vB2B" class="text-sm font-extrabold text-purple-900">Rp 0</span>
+          </div>
+          <span id="vB2BContrib" class="text-xs font-bold bg-purple-100 text-purple-700 px-2.5 py-1 rounded-md">Contrib: 0.0%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+      <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">STATISTIK OPERASIONAL</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-3">
+        
+        <div class="bg-purple-50 p-3 rounded-lg border border-purple-100 text-center">
+          <span class="block text-[10px] font-bold text-purple-600 uppercase">QTY</span>
+          <span id="vQty" class="text-base font-black text-purple-900">0</span>
+          <div class="text-[10px] font-semibold text-slate-600 mt-1">
+            Grego: <span id="vQtyGrego" class="font-bold">0.0%</span> | Fisk: <span id="vQtyFisk" class="font-bold">0.0%</span>
+          </div>
+        </div>
+
+        <div class="bg-teal-50 p-3 rounded-lg border border-teal-100 text-center">
+          <span class="block text-[10px] font-bold text-teal-600 uppercase">TRX</span>
+          <span id="vTrx" class="text-base font-black text-teal-900">0</span>
+          <div class="text-[10px] font-semibold text-slate-600 mt-1">
+            Grego: <span id="vTrxGrego" class="font-bold">0.0%</span> | Fisk: <span id="vTrxFisk" class="font-bold">0.0%</span>
+          </div>
+        </div>
+
+        <div class="bg-amber-50 p-3 rounded-lg border border-amber-100 text-center">
+          <span class="block text-[10px] font-bold text-amber-600 uppercase">AUR</span>
+          <span id="vAur" class="text-base font-black text-amber-900">Rp 0</span>
+          <div class="text-[10px] font-semibold text-slate-600 mt-1">
+            Grego: <span id="vAurGrego" class="font-bold">0.0%</span> | Fisk: <span id="vAurFisk" class="font-bold">0.0%</span>
+          </div>
+        </div>
+
+        <div class="bg-emerald-50 p-3 rounded-lg border border-emerald-100 text-center">
+          <span class="block text-[10px] font-bold text-emerald-600 uppercase">UPT</span>
+          <span id="vUpt" class="text-base font-black text-emerald-900">0.00</span>
+          <div class="text-[10px] font-semibold text-slate-600 mt-1">
+            Grego: <span id="vUptGrego" class="font-bold">0.0%</span> | Fisk: <span id="vUptFisk" class="font-bold">0.0%</span>
+          </div>
+        </div>
+
+        <div class="bg-rose-50 p-3 rounded-lg border border-rose-100 text-center">
+          <span class="block text-[10px] font-bold text-rose-600 uppercase">Basket Size</span>
+          <span id="vBasket" class="text-base font-black text-rose-900">Rp 0</span>
+          <div class="text-[10px] font-semibold text-slate-600 mt-1">
+            Grego: <span id="vBasketGrego" class="font-bold">0.0%</span> | Fisk: <span id="vBasketFisk" class="font-bold">0.0%</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+        <canvas id="barChart" height="200"></canvas>
+      </div>
+      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+        <canvas id="lineChart" height="200"></canvas>
+      </div>
+      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+        <canvas id="pieChart" height="200"></canvas>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // URL WEB APP GOOGLE APPS SCRIPT (BERHASIL DI-DEPLOY)
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzkcNC-ql7B6R1TKW6xMDyBiF2Q1sO6A0hIBOa2fCTwf04GERklYu9PZ3Eqwd2YoNxnUA/exec";
+
+    let masterData = [];
+    let charts = {};
+
+    const blnIndo = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+    const blnInggris = ["january","february","march","april","may","june","july","august","september","october","november","december"];
+
+    // Register Chart.js DataLabels Plugin
+    if (typeof ChartDataLabels !== 'undefined') {
+      Chart.register(ChartDataLabels);
+    }
+
+    window.onload = () => {
+      // Fetch data dari Google Apps Script Web App
+      fetch(GAS_WEB_APP_URL)
+        .then(response => {
+          if (!response.ok) throw new Error("Gagal mengambil data dari server");
+          return response.json();
+        })
+        .then(data => {
+          masterData = data;
+          
+          // Set pilihan Tahun
+          const years = [...new Set(data.map(d => d.year))].sort((a,b) => b-a);
+          const fYear = document.getElementById('fYear');
+          fYear.innerHTML = '';
+          years.forEach(y => {
+            fYear.innerHTML += `<option value="${y}">${y}</option>`;
+          });
+
+          // Set pilihan Bulan
+          const fBulanAwal = document.getElementById('fBulanAwal');
+          const fBulanAkhir = document.getElementById('fBulanAkhir');
+          fBulanAwal.innerHTML = '';
+          fBulanAkhir.innerHTML = '';
+          blnIndo.forEach((b, i) => {
+            fBulanAwal.innerHTML += `<option value="${i}">${b}</option>`;
+            fBulanAkhir.innerHTML += `<option value="${i}" ${i === 11 ? 'selected' : ''}>${b}</option>`;
+          });
+
+          applyFilters();
+        })
+        .catch(err => {
+          console.error("Error loading dashboard data:", err);
+          alert("Terjadi kesalahan saat memuat data. Silakan pastikan URL Web App sudah benar dan dapat diakses.");
+        });
+
+      // Update Jam & Tanggal secara Realtime
+      setInterval(() => {
+        const n = new Date();
+        document.getElementById('clock').innerText = n.toLocaleTimeString('id-ID', {timeZone: 'Asia/Makassar'});
+        document.getElementById('date').innerText = n.toLocaleDateString('id-ID', {
+          weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+        });
+      }, 1000);
+    };
+
+    function applyFilters() {
+      if (!masterData || masterData.length === 0) return;
+
+      const year = parseInt(document.getElementById('fYear').value) || new Date().getFullYear();
+      const bA = parseInt(document.getElementById('fBulanAwal').value) || 0;
+      const bK = parseInt(document.getElementById('fBulanAkhir').value) || 11;
+      const tA = parseInt(document.getElementById('fTglAwal').value) || 1;
+      const tK = parseInt(document.getElementById('fTglAkhir').value) || 31;
+
+      // Data Periode Berjalan (Current)
+      const cur = masterData.filter(d => 
+        d.year === year && 
+        blnInggris.indexOf(d.bulan) >= bA && 
+        blnInggris.indexOf(d.bulan) <= bK && 
+        d.day >= tA && d.day <= tK
+      );
+
+      // Data Periode Tahun Lalu Gregorian (Prev)
+      const prev = masterData.filter(d => 
+        d.year === year - 1 && 
+        blnInggris.indexOf(d.bulan) >= bA && 
+        blnInggris.indexOf(d.bulan) <= bK && 
+        d.day >= tA && d.day <= tK
+      );
+
+      // Trend Data untuk Chart
+      const trend = masterData.filter(d => 
+        d.year === year && 
+        blnInggris.indexOf(d.bulan) >= bA && 
+        blnInggris.indexOf(d.bulan) <= bK
+      );
+
+      // Data Periode Tahun Lalu Fiskal (Fiscal Prev)
+      const fiscalPrev = masterData.filter(d => 
+        d.year === year - 1 && 
+        cur.some(c => c.week === d.week && c.dayName === d.dayName)
+      );
+
+      updateUI(cur, prev, trend, fiscalPrev);
+    }
+
+    function setGrowthStyle(elementId, val) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      el.innerText = (val >= 0 ? '+' : '') + val.toFixed(1) + '%';
+      el.className = val < 0 ? 'font-bold text-red-600' : 'font-bold text-green-600';
+    }
+
+    function updateUI(cur, prev, trend, fiscalPrev) {
+      // Aggregasi Sales Performance
+      const s = cur.reduce((a, b) => a + b.sales, 0);
+      const ps = prev.reduce((a, b) => a + b.sales, 0);
+      const t = cur.reduce((a, b) => a + b.target, 0);
+      const ach = (s / (t || 1)) * 100;
+
+      const bz = cur.reduce((a, b) => a + b.bazaar, 0);
+      const pbz = prev.reduce((a, b) => a + b.bazaar, 0);
+      const inS = s - bz;
+      const pInS = ps - pbz;
+
+      // Growth Sales
+      const gr = ps ? ((s - ps) / ps) * 100 : 0;
+      const sssg = pInS ? ((inS - pInS) / pInS) * 100 : 0;
+      
+      const fCurS = s;
+      const fPrevS = fiscalPrev.reduce((a, b) => a + b.sales, 0);
+      const fGr = fPrevS ? ((fCurS - fPrevS) / fPrevS) * 100 : 0;
+
+      // DOM Update Sales Performance
+      document.getElementById('vTarget').innerText = Math.round(t).toLocaleString('id-ID');
+      document.getElementById('vSales').innerText = Math.round(s).toLocaleString('id-ID');
+      
+      const vAch = document.getElementById('vAch');
+      vAch.innerText = ach.toFixed(1) + '%';
+      vAch.className = ach < 100 ? 'text-xs sm:text-sm font-extrabold text-red-600' : 'text-xs sm:text-sm font-extrabold text-blue-600';
+
+      document.getElementById('vBazaar').innerText = Math.round(bz).toLocaleString('id-ID');
+      document.getElementById('vInStore').innerText = Math.round(inS).toLocaleString('id-ID');
+
+      // DOM Update Growth Panel
+      setGrowthStyle('vGrowth', gr);
+      setGrowthStyle('vSSSG', sssg);
+      
+      const vGrwFiskal = document.getElementById('vGrwFiskal');
+      vGrwFiskal.innerText = (fGr >= 0 ? '+' : '') + fGr.toFixed(1) + '%';
+      vGrwFiskal.className = fGr < 0 ? 'font-bold text-red-600' : 'font-bold text-indigo-700';
+
+      // Aggregasi Channel (SnT & B2B)
+      const snt = cur.reduce((a, b) => a + b.snt, 0);
+      const b2b = cur.reduce((a, b) => a + b.b2b, 0);
+      document.getElementById('vSnT').innerText = 'Rp ' + Math.round(snt).toLocaleString('id-ID');
+      document.getElementById('vSnTContrib').innerText = 'Contrib: ' + ((snt / (s || 1)) * 100).toFixed(1) + '%';
+      document.getElementById('vB2B').innerText = 'Rp ' + Math.round(b2b).toLocaleString('id-ID');
+      document.getElementById('vB2BContrib').innerText = 'Contrib: ' + ((b2b / (s || 1)) * 100).toFixed(1) + '%';
+
+      // Aggregasi Statistik Operasional (Current)
+      const qty = cur.reduce((a, b) => a + b.qty, 0);
+      const trx = cur.reduce((a, b) => a + b.trx, 0);
+      const aur = s / (qty || 1);
+      const upt = qty / (trx || 1);
+      const basket = s / (trx || 1);
+
+      // Aggregasi Statistik Operasional (Gregorian Prev)
+      const pQty = prev.reduce((a, b) => a + b.qty, 0);
+      const pTrx = prev.reduce((a, b) => a + b.trx, 0);
+      const pAur = ps / (pQty || 1);
+      const pUpt = pQty / (pTrx || 1);
+      const pBasket = ps / (pTrx || 1);
+
+      // Aggregasi Statistik Operasional (Fiscal Prev)
+      const fQty = fiscalPrev.reduce((a, b) => a + b.qty, 0);
+      const fTrx = fiscalPrev.reduce((a, b) => a + b.trx, 0);
+      const fAur = fPrevS / (fQty || 1);
+      const PerUpt = fQty / (fTrx || 1);
+      const fBasket = fPrevS / (fTrx || 1);
+
+      // Perhitungan Growth Gregorian Statistik
+      const qtyGr = pQty ? ((qty - pQty) / pQty) * 100 : 0;
+      const trxGr = pTrx ? ((trx - pTrx) / pTrx) * 100 : 0;
+      const aurGr = pAur ? ((aur - pAur) / pAur) * 100 : 0;
+      const uptGr = pUpt ? ((upt - pUpt) / pUpt) * 100 : 0;
+      const basketGr = pBasket ? ((basket - pBasket) / pBasket) * 100 : 0;
+
+      // Perhitungan Growth Fiskal Statistik
+      const qtyFiskGr = fQty ? ((qty - fQty) / fQty) * 100 : 0;
+      const trxFiskGr = fTrx ? ((trx - fTrx) / fTrx) * 100 : 0;
+      const aurFiskGr = fAur ? ((aur - fAur) / fAur) * 100 : 0;
+      const uptFiskGr = PerUpt ? ((upt - PerUpt) / PerUpt) * 100 : 0;
+      const basketFiskGr = fBasket ? ((basket - fBasket) / fBasket) * 100 : 0;
+
+      // DOM Update Values Utama Statistik
+      document.getElementById('vQty').innerText = qty.toLocaleString('id-ID');
+      document.getElementById('vTrx').innerText = trx.toLocaleString('id-ID');
+      document.getElementById('vAur').innerText = 'Rp ' + Math.round(aur).toLocaleString('id-ID');
+      document.getElementById('vUpt').innerText = upt.toFixed(2);
+      document.getElementById('vBasket').innerText = 'Rp ' + Math.round(basket).toLocaleString('id-ID');
+
+      // DOM Update Growth Grego & Fiskal Statistik
+      setGrowthStyle('vQtyGrego', qtyGr);
+      setGrowthStyle('vQtyFisk', qtyFiskGr);
+
+      setGrowthStyle('vTrxGrego', trxGr);
+      setGrowthStyle('vTrxFisk', trxFiskGr);
+
+      setGrowthStyle('vAurGrego', aurGr);
+      setGrowthStyle('vAurFisk', aurFiskGr);
+
+      setGrowthStyle('vUptGrego', uptGr);
+      setGrowthStyle('vUptFisk', uptFiskGr);
+
+      setGrowthStyle('vBasketGrego', basketGr);
+      setGrowthStyle('vBasketFisk', basketFiskGr);
+
+      renderCharts(cur, trend);
+    }
+
+    function renderCharts(cur, trend) {
+      ['barChart', 'lineChart', 'pieChart'].forEach(id => {
+        if (charts[id]) charts[id].destroy();
+      });
+
+      const totalDiv = (cur.reduce((a, b) => a + b.div1 + b.div2 + b.div3 + b.div4, 0)) || 1;
+
+      // 1. BAR CHART: Sales by Division
+      charts.barChart = new Chart('barChart', {
+        type: 'bar',
+        data: {
+          labels: ['D1', 'D2', 'D3', 'D4'],
+          datasets: [{
+            data: [
+              cur.reduce((a, b) => a + b.div1, 0),
+              cur.reduce((a, b) => a + b.div2, 0),
+              cur.reduce((a, b) => a + b.div3, 0),
+              cur.reduce((a, b) => a + b.div4, 0)
+            ],
+            backgroundColor: '#3b82f6',
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: { display: true, text: 'Sales by Division', font: { size: 12, weight: 'bold' } },
+            legend: { display: false },
+            datalabels: {
+              anchor: 'end',
+              align: 'end',
+              formatter: (v) => ((v / totalDiv) * 100).toFixed(1) + '%',
+              font: { size: 10, weight: 'bold' },
+              color: '#1e293b'
+            }
+          },
+          scales: {
+            y: { display: false, beginAtZero: true },
+            x: { grid: { display: false } }
+          }
+        }
+      });
+
+      // 2. LINE CHART: Avg Sales/Day
+      const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      charts.lineChart = new Chart('lineChart', {
+        type: 'line',
+        data: {
+          labels: days,
+          datasets: [{
+            data: days.map(d => {
+              const f = trend.filter(x => x.dayName === d);
+              return f.length ? f.reduce((a, b) => a + b.sales, 0) / f.length : 0;
+            }).map(v => Math.floor(v / 1000)),
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 4,
+            pointBackgroundColor: '#10b981'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: { display: true, text: 'Avg Sales/Day (in K)', font: { size: 12, weight: 'bold' } },
+            legend: { display: false },
+            datalabels: { display: false }
+          },
+          scales: {
+            y: { display: false, beginAtZero: true },
+            x: { grid: { display: false } }
+          }
+        }
+      });
+
+      // 3. PIE CHART: DP vs CV
+      charts.pieChart = new Chart('pieChart', {
+        type: 'pie',
+        data: {
+          labels: ['DP', 'CV'],
+          datasets: [{
+            data: [
+              cur.reduce((a, b) => a + b.dp, 0),
+              cur.reduce((a, b) => a + b.cv, 0)
+            ],
+            backgroundColor: ['#f59e0b', '#ef4444']
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: { display: true, text: 'DP vs CV Share', font: { size: 12, weight: 'bold' } },
+            datalabels: {
+              formatter: (v, ctx) => {
+                const s = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                return s ? ((v / s) * 100).toFixed(1) + '%' : '0.0%';
+              },
+              color: '#ffffff',
+              font: { weight: 'bold', size: 11 }
+            }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
