@@ -10,159 +10,247 @@
   <style>
     body {
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      background-color: #f8fafc;
+      background-color: #0b1120; /* Deep Midnight Slate */
+      color: #f1f5f9;
     }
   </style>
 </head>
-<body class="p-3 md:p-6 text-slate-800">
+<body class="p-3 md:p-6">
 
   <div class="max-w-7xl mx-auto space-y-4">
     
-    <div class="bg-white p-4 md:p-5 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div class="bg-slate-900/90 backdrop-blur-md p-4 md:p-5 rounded-xl shadow-lg border border-slate-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div>
-        <h1 class="text-xl md:text-2xl font-black text-slate-800 tracking-tight">SMART ANALYTICS CORE DASHBOARD</h1>
-        <p class="text-xs md:text-sm font-semibold text-blue-600">MDS DUTA MALL BANJARMASIN - 311</p>
-        <p class="text-xs text-slate-500 font-medium mt-1">
-          Store Manager: <span class="font-bold text-slate-700">ANDRI PAHREZA SUMANTRI</span> | 
-          Assistant Store Manager: <span class="font-bold text-slate-700">DEVIN GUNAWAN</span>
+        <h1 class="text-xl md:text-2xl font-black text-amber-400 tracking-tight flex items-center gap-2">
+          <span>SMART ANALYTICS CORE DASHBOARD</span>
+        </h1>
+        <p class="text-xs md:text-sm font-semibold text-amber-500/90">MDS DUTA MALL BANJARMASIN - 311</p>
+        <p class="text-xs text-slate-400 font-medium mt-1">
+          Store Manager: <span class="font-bold text-slate-200">ANDRI PAHREZA SUMANTRI</span> | 
+          Assistant Store Manager: <span class="font-bold text-slate-200">DEVIN GUNAWAN</span>
         </p>
       </div>
       
-      <div class="text-left md:text-right bg-slate-50 p-2.5 rounded-lg border border-slate-200 w-full md:w-auto">
-        <div id="clock" class="text-base md:text-lg font-bold text-slate-800 leading-none">00:00:00</div>
-        <div id="date" class="text-xs text-slate-500 font-medium mt-1">--/--/----</div>
+      <div class="text-left md:text-right bg-slate-950/60 p-2.5 rounded-lg border border-slate-800 w-full md:w-auto">
+        <div id="clock" class="text-base md:text-lg font-bold text-amber-400 leading-none">00:00:00</div>
+        <div id="date" class="text-xs text-slate-400 font-medium mt-1">--/--/----</div>
       </div>
     </div>
 
-    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-        <div>
-          <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Tahun</label>
-          <select id="fYear" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
+    <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800 space-y-3">
+      
+      <div>
+        <div class="text-[11px] font-bold text-amber-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]"></span> Periode Utama (This Year / TY)
         </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Bulan Awal</label>
-          <select id="fBulanAwal" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Bulan Akhir</label>
-          <select id="fBulanAkhir" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Tgl Awal</label>
-          <input type="number" id="fTglAwal" value="1" min="1" max="31" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Tgl Akhir</label>
-          <input type="number" id="fTglAkhir" value="31" min="1" max="31" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Tahun (TY)</label>
+            <select id="fYearTY" onchange="onYearTYChange()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500"></select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Bulan Awal (TY)</label>
+            <select id="fBulanAwalTY" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500"></select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Bulan Akhir (TY)</label>
+            <select id="fBulanAkhirTY" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500"></select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Tgl Awal (TY)</label>
+            <input type="number" id="fTglAwalTY" value="1" min="1" max="31" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Tgl Akhir (TY)</label>
+            <input type="number" id="fTglAkhirTY" value="31" min="1" max="31" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500">
+          </div>
         </div>
       </div>
+
+      <hr class="border-slate-800">
+
+      <div>
+        <div class="text-[11px] font-bold text-indigo-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.6)]"></span> Periode Pembanding (Last Year / LY)
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Pembanding (LY)</label>
+            <select id="fYearLY" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Bulan Awal (LY)</label>
+            <select id="fBulanAwalLY" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Bulan Akhir (LY)</label>
+            <select id="fBulanAkhirLY" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Tgl Awal (LY)</label>
+            <input type="number" id="fTglAwalLY" value="1" min="1" max="31" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Tgl Akhir (LY)</label>
+            <input type="number" id="fTglAkhirLY" value="31" min="1" max="31" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       
-      <div class="md:col-span-2 bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-        <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">SALES PERFORMANCE</h2>
-        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center">
-          <div class="bg-blue-50 p-2.5 rounded-lg border border-blue-100">
-            <span class="block text-[10px] font-bold text-blue-600 uppercase">Target</span>
-            <span id="vTarget" class="text-xs sm:text-sm font-extrabold text-slate-800">0</span>
+      <div class="md:col-span-2 bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800 space-y-3">
+        <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider">SALES PERFORMANCE</h2>
+        
+        <div>
+          <div class="text-[10px] font-bold text-amber-400 uppercase mb-1 flex items-center gap-1">
+            <span>PERIODE UTAMA (TY)</span>
           </div>
-          <div class="bg-blue-50 p-2.5 rounded-lg border border-blue-100">
-            <span class="block text-[10px] font-bold text-blue-600 uppercase">Sales</span>
-            <span id="vSales" class="text-xs sm:text-sm font-extrabold text-slate-800">0</span>
-          </div>
-          <div class="bg-blue-50 p-2.5 rounded-lg border border-blue-100">
-            <span class="block text-[10px] font-bold text-blue-600 uppercase">Achievement</span>
-            <span id="vAch" class="text-xs sm:text-sm font-extrabold text-blue-600">0%</span>
-          </div>
-          <div class="bg-blue-50 p-2.5 rounded-lg border border-blue-100">
-            <span class="block text-[10px] font-bold text-blue-600 uppercase">Bazaar</span>
-            <span id="vBazaar" class="text-xs sm:text-sm font-extrabold text-slate-800">0</span>
-          </div>
-          <div class="bg-blue-50 p-2.5 rounded-lg border border-blue-100 col-span-2 sm:col-span-1">
-            <span class="block text-[10px] font-bold text-blue-600 uppercase">In Store</span>
-            <span id="vInStore" class="text-xs sm:text-sm font-extrabold text-slate-800">0</span>
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center">
+            <div class="bg-amber-950/30 p-2.5 rounded-lg border border-amber-900/40">
+              <span class="block text-[10px] font-bold text-amber-400 uppercase">Target TY</span>
+              <span id="vTarget" class="text-xs sm:text-sm font-extrabold text-slate-100">0</span>
+            </div>
+            <div class="bg-amber-950/30 p-2.5 rounded-lg border border-amber-900/40">
+              <span class="block text-[10px] font-bold text-amber-400 uppercase">Sales TY</span>
+              <span id="vSales" class="text-xs sm:text-sm font-extrabold text-slate-100">0</span>
+            </div>
+            <div class="bg-amber-950/30 p-2.5 rounded-lg border border-amber-900/40">
+              <span class="block text-[10px] font-bold text-amber-400 uppercase">Achievement</span>
+              <span id="vAch" class="text-xs sm:text-sm font-extrabold text-amber-400">0%</span>
+            </div>
+            <div class="bg-amber-950/30 p-2.5 rounded-lg border border-amber-900/40">
+              <span class="block text-[10px] font-bold text-amber-400 uppercase">Bazaar TY</span>
+              <span id="vBazaar" class="text-xs sm:text-sm font-extrabold text-slate-100">0</span>
+            </div>
+            <div class="bg-amber-950/30 p-2.5 rounded-lg border border-amber-900/40 col-span-2 sm:col-span-1">
+              <span class="block text-[10px] font-bold text-amber-400 uppercase">In Store TY</span>
+              <span id="vInStore" class="text-xs sm:text-sm font-extrabold text-slate-100">0</span>
+            </div>
           </div>
         </div>
+
+        <div>
+          <div class="text-[10px] font-bold text-indigo-400 uppercase mb-1">PEMBANDING (LY)</div>
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center">
+            <div class="bg-indigo-950/30 p-2.5 rounded-lg border border-indigo-900/40">
+              <span class="block text-[10px] font-bold text-indigo-400 uppercase">Target LY</span>
+              <span id="vTargetLY" class="text-xs sm:text-sm font-extrabold text-slate-300">0</span>
+            </div>
+            <div class="bg-indigo-950/30 p-2.5 rounded-lg border border-indigo-900/40">
+              <span class="block text-[10px] font-bold text-indigo-400 uppercase">Sales LY</span>
+              <span id="vSalesLY" class="text-xs sm:text-sm font-extrabold text-slate-300">0</span>
+            </div>
+            <div class="bg-indigo-950/30 p-2.5 rounded-lg border border-indigo-900/40">
+              <span class="block text-[10px] font-bold text-indigo-400 uppercase">Ach LY</span>
+              <span id="vAchLY" class="text-xs sm:text-sm font-extrabold text-indigo-400">0%</span>
+            </div>
+            <div class="bg-indigo-950/30 p-2.5 rounded-lg border border-indigo-900/40">
+              <span class="block text-[10px] font-bold text-indigo-400 uppercase">Bazaar LY</span>
+              <span id="vBazaarLY" class="text-xs sm:text-sm font-extrabold text-slate-300">0</span>
+            </div>
+            <div class="bg-indigo-950/30 p-2.5 rounded-lg border border-indigo-900/40 col-span-2 sm:col-span-1">
+              <span class="block text-[10px] font-bold text-indigo-400 uppercase">In Store LY</span>
+              <span id="vInStoreLY" class="text-xs sm:text-sm font-extrabold text-slate-300">0</span>
+            </div>
+          </div>
+        </div>
+
       </div>
 
-      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
+      <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800 flex flex-col justify-between">
         <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">GROWTH PERFORMANCE</h2>
-        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 my-auto text-center">
-          <div class="text-xs font-semibold text-slate-600 mb-1">GROWTH</div>
+        <div class="bg-slate-950/80 p-3.5 rounded-lg border border-slate-800 my-auto text-center">
+          <div class="text-xs font-semibold text-slate-400 mb-1">GROWTH SUMMARY</div>
           <div class="text-xs sm:text-sm font-bold space-x-1">
-            <span>grego : <span id="vGrowth" class="text-green-600">0.0%</span></span>
-            <span class="text-slate-300">|</span>
-            <span>fisk : <span id="vGrwFiskal" class="text-indigo-700">0.0%</span></span>
-            <span class="text-slate-300">|</span>
-            <span>SSSG : <span id="vSSSG" class="text-green-600">0.0%</span></span>
+            <span>grego : <span id="vGrowth" class="text-emerald-400">0.0%</span></span>
+            <span class="text-slate-600">|</span>
+            <span>fisk : <span id="vGrwFiskal" class="text-indigo-400">0.0%</span></span>
+            <span class="text-slate-600">|</span>
+            <span>SSSG : <span id="vSSSG" class="text-emerald-400">0.0%</span></span>
           </div>
         </div>
       </div>
 
     </div>
 
-    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+    <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800">
       <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">SALES CHANNEL</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <div class="bg-indigo-50/60 p-3 rounded-lg border border-indigo-100 flex justify-between items-center">
-          <div>
-            <span class="block text-xs font-bold text-indigo-900">SNT</span>
-            <span id="vSnT" class="text-sm font-extrabold text-indigo-900">Rp 0</span>
+        
+        <div class="bg-slate-950/80 p-3 rounded-lg border border-indigo-900/40 space-y-2">
+          <span class="block text-xs font-bold text-indigo-400 border-b border-slate-800 pb-1">SNT (Shopping & Delivery)</span>
+          
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-semibold text-slate-400">TY: <span id="vSnT" class="font-bold text-amber-400">Rp 0</span></span>
+            <span id="vSnTContrib" class="font-bold text-amber-300 bg-amber-950/60 border border-amber-800/50 px-2 py-0.5 rounded text-[10px]">Contrib: 0.0%</span>
           </div>
-          <span id="vSnTContrib" class="text-xs font-bold bg-indigo-100 text-indigo-700 px-2.5 py-1 rounded-md">Contrib: 0.0%</span>
-        </div>
-        <div class="bg-purple-50/60 p-3 rounded-lg border border-purple-100 flex justify-between items-center">
-          <div>
-            <span class="block text-xs font-bold text-purple-900">B2B</span>
-            <span id="vB2B" class="text-sm font-extrabold text-purple-900">Rp 0</span>
+          
+          <div class="flex justify-between items-center text-xs border-t border-slate-800/80 pt-1.5">
+            <span class="font-semibold text-slate-500">LY: <span id="vSnTLY" class="font-bold text-slate-300">Rp 0</span></span>
+            <span id="vSnTContribLY" class="font-bold text-slate-400 bg-slate-900 px-2 py-0.5 rounded text-[10px]">Contrib: 0.0%</span>
           </div>
-          <span id="vB2BContrib" class="text-xs font-bold bg-purple-100 text-purple-700 px-2.5 py-1 rounded-md">Contrib: 0.0%</span>
         </div>
+
+        <div class="bg-slate-950/80 p-3 rounded-lg border border-purple-900/40 space-y-2">
+          <span class="block text-xs font-bold text-purple-400 border-b border-slate-800 pb-1">B2B (Business to Business)</span>
+          
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-semibold text-slate-400">TY: <span id="vB2B" class="font-bold text-purple-300">Rp 0</span></span>
+            <span id="vB2BContrib" class="font-bold text-purple-300 bg-purple-950/60 border border-purple-800/50 px-2 py-0.5 rounded text-[10px]">Contrib: 0.0%</span>
+          </div>
+          
+          <div class="flex justify-between items-center text-xs border-t border-slate-800/80 pt-1.5">
+            <span class="font-semibold text-slate-500">LY: <span id="vB2BLY" class="font-bold text-slate-300">Rp 0</span></span>
+            <span id="vB2BContribLY" class="font-bold text-slate-400 bg-slate-900 px-2 py-0.5 rounded text-[10px]">Contrib: 0.0%</span>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+    <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800">
       <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">STATISTIK OPERASIONAL</h2>
       <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-3">
         
-        <div class="bg-purple-50 p-3 rounded-lg border border-purple-100 text-center">
-          <span class="block text-[10px] font-bold text-purple-600 uppercase">QTY</span>
-          <span id="vQty" class="text-base font-black text-purple-900">0</span>
-          <div class="text-[10px] font-semibold text-slate-600 mt-1">
+        <div class="bg-purple-950/20 p-3 rounded-lg border border-purple-900/30 text-center">
+          <span class="block text-[10px] font-bold text-purple-400 uppercase">QTY</span>
+          <span id="vQty" class="text-base font-black text-purple-200">0</span>
+          <div class="text-[10px] font-semibold text-slate-400 mt-1">
             Grego: <span id="vQtyGrego" class="font-bold">0.0%</span> | Fisk: <span id="vQtyFisk" class="font-bold">0.0%</span>
           </div>
         </div>
 
-        <div class="bg-teal-50 p-3 rounded-lg border border-teal-100 text-center">
-          <span class="block text-[10px] font-bold text-teal-600 uppercase">TRX</span>
-          <span id="vTrx" class="text-base font-black text-teal-900">0</span>
-          <div class="text-[10px] font-semibold text-slate-600 mt-1">
+        <div class="bg-teal-950/20 p-3 rounded-lg border border-teal-900/30 text-center">
+          <span class="block text-[10px] font-bold text-teal-400 uppercase">TRX</span>
+          <span id="vTrx" class="text-base font-black text-teal-200">0</span>
+          <div class="text-[10px] font-semibold text-slate-400 mt-1">
             Grego: <span id="vTrxGrego" class="font-bold">0.0%</span> | Fisk: <span id="vTrxFisk" class="font-bold">0.0%</span>
           </div>
         </div>
 
-        <div class="bg-amber-50 p-3 rounded-lg border border-amber-100 text-center">
-          <span class="block text-[10px] font-bold text-amber-600 uppercase">AUR</span>
-          <span id="vAur" class="text-base font-black text-amber-900">Rp 0</span>
-          <div class="text-[10px] font-semibold text-slate-600 mt-1">
+        <div class="bg-amber-950/20 p-3 rounded-lg border border-amber-900/30 text-center">
+          <span class="block text-[10px] font-bold text-amber-400 uppercase">AUR</span>
+          <span id="vAur" class="text-base font-black text-amber-200">Rp 0</span>
+          <div class="text-[10px] font-semibold text-slate-400 mt-1">
             Grego: <span id="vAurGrego" class="font-bold">0.0%</span> | Fisk: <span id="vAurFisk" class="font-bold">0.0%</span>
           </div>
         </div>
 
-        <div class="bg-emerald-50 p-3 rounded-lg border border-emerald-100 text-center">
-          <span class="block text-[10px] font-bold text-emerald-600 uppercase">UPT</span>
-          <span id="vUpt" class="text-base font-black text-emerald-900">0.00</span>
-          <div class="text-[10px] font-semibold text-slate-600 mt-1">
+        <div class="bg-emerald-950/20 p-3 rounded-lg border border-emerald-900/30 text-center">
+          <span class="block text-[10px] font-bold text-emerald-400 uppercase">UPT</span>
+          <span id="vUpt" class="text-base font-black text-emerald-200">0.00</span>
+          <div class="text-[10px] font-semibold text-slate-400 mt-1">
             Grego: <span id="vUptGrego" class="font-bold">0.0%</span> | Fisk: <span id="vUptFisk" class="font-bold">0.0%</span>
           </div>
         </div>
 
-        <div class="bg-rose-50 p-3 rounded-lg border border-rose-100 text-center">
-          <span class="block text-[10px] font-bold text-rose-600 uppercase">Basket Size</span>
-          <span id="vBasket" class="text-base font-black text-rose-900">Rp 0</span>
-          <div class="text-[10px] font-semibold text-slate-600 mt-1">
+        <div class="bg-rose-950/20 p-3 rounded-lg border border-rose-900/30 text-center">
+          <span class="block text-[10px] font-bold text-rose-400 uppercase">Basket Size</span>
+          <span id="vBasket" class="text-base font-black text-rose-200">Rp 0</span>
+          <div class="text-[10px] font-semibold text-slate-400 mt-1">
             Grego: <span id="vBasketGrego" class="font-bold">0.0%</span> | Fisk: <span id="vBasketFisk" class="font-bold">0.0%</span>
           </div>
         </div>
@@ -171,13 +259,13 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+      <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800">
         <canvas id="barChart" height="200"></canvas>
       </div>
-      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+      <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800">
         <canvas id="lineChart" height="200"></canvas>
       </div>
-      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+      <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800">
         <canvas id="pieChart" height="200"></canvas>
       </div>
     </div>
@@ -185,47 +273,64 @@
   </div>
 
   <script>
-    // URL WEB APP GOOGLE APPS SCRIPT (BERHASIL DI-DEPLOY)
     const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzkcNC-ql7B6R1TKW6xMDyBiF2Q1sO6A0hIBOa2fCTwf04GERklYu9PZ3Eqwd2YoNxnUA/exec";
 
     let masterData = [];
     let charts = {};
 
     const blnIndo = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
-    const blnInggris = ["january","february","march","april","may","june","july","august","september","october","november","december"];
 
-    // Register Chart.js DataLabels Plugin
+    function getMonthIndex(bulanStr) {
+      if (!bulanStr) return -1;
+      const str = String(bulanStr).toLowerCase().trim();
+      const monthMap = {
+        'januari': 0, 'january': 0, 'jan': 0,
+        'februari': 1, 'february': 1, 'feb': 1,
+        'maret': 2, 'march': 2, 'mar': 2,
+        'april': 3, 'apr': 3,
+        'mei': 4, 'may': 4,
+        'juni': 5, 'june': 5, 'jun': 5,
+        'juli': 6, 'july': 6, 'jul': 6,
+        'agustus': 7, 'august': 7, 'aug': 7, 'ags': 7,
+        'september': 8, 'sep': 8,
+        'oktober': 9, 'october': 9, 'okt': 9, 'oct': 9,
+        'november': 10, 'nov': 10,
+        'desember': 11, 'december': 11, 'des': 11, 'dec': 11
+      };
+      return monthMap[str] !== undefined ? monthMap[str] : -1;
+    }
+
     if (typeof ChartDataLabels !== 'undefined') {
       Chart.register(ChartDataLabels);
     }
 
     window.onload = () => {
-      // Fetch data dari Google Apps Script Web App
       fetch(GAS_WEB_APP_URL)
         .then(response => {
           if (!response.ok) throw new Error("Gagal mengambil data dari server");
           return response.json();
         })
         .then(data => {
-          masterData = data;
+          masterData = Array.isArray(data) ? data : (data.raw || []);
           
-          // Set pilihan Tahun
-          const years = [...new Set(data.map(d => d.year))].sort((a,b) => b-a);
-          const fYear = document.getElementById('fYear');
-          fYear.innerHTML = '';
+          const years = [...new Set(masterData.map(d => d.year))].sort((a,b) => b-a);
+          const fYearTY = document.getElementById('fYearTY');
+          const fYearLY = document.getElementById('fYearLY');
+          
+          fYearTY.innerHTML = '';
+          fYearLY.innerHTML = '';
           years.forEach(y => {
-            fYear.innerHTML += `<option value="${y}">${y}</option>`;
+            fYearTY.innerHTML += `<option value="${y}">${y}</option>`;
+            fYearLY.innerHTML += `<option value="${y}">${y}</option>`;
           });
 
-          // Set pilihan Bulan
-          const fBulanAwal = document.getElementById('fBulanAwal');
-          const fBulanAkhir = document.getElementById('fBulanAkhir');
-          fBulanAwal.innerHTML = '';
-          fBulanAkhir.innerHTML = '';
-          blnIndo.forEach((b, i) => {
-            fBulanAwal.innerHTML += `<option value="${i}">${b}</option>`;
-            fBulanAkhir.innerHTML += `<option value="${i}" ${i === 11 ? 'selected' : ''}>${b}</option>`;
-          });
+          if (years.length > 1) {
+            fYearLY.value = years[1];
+          }
+
+          // Populate Slicer Bulan TY & LY
+          populateMonthDropdowns('fBulanAwalTY', 'fBulanAkhirTY');
+          populateMonthDropdowns('fBulanAwalLY', 'fBulanAkhirLY');
 
           applyFilters();
         })
@@ -234,7 +339,6 @@
           alert("Terjadi kesalahan saat memuat data. Silakan pastikan URL Web App sudah benar dan dapat diakses.");
         });
 
-      // Update Jam & Tanggal secara Realtime
       setInterval(() => {
         const n = new Date();
         document.getElementById('clock').innerText = n.toLocaleTimeString('id-ID', {timeZone: 'Asia/Makassar'});
@@ -244,41 +348,68 @@
       }, 1000);
     };
 
+    function populateMonthDropdowns(idAwal, idAkhir) {
+      const elAwal = document.getElementById(idAwal);
+      const elAkhir = document.getElementById(idAkhir);
+      elAwal.innerHTML = '';
+      elAkhir.innerHTML = '';
+      blnIndo.forEach((b, i) => {
+        elAwal.innerHTML += `<option value="${i}">${b}</option>`;
+        elAkhir.innerHTML += `<option value="${i}" ${i === 11 ? 'selected' : ''}>${b}</option>`;
+      });
+    }
+
+    function onYearTYChange() {
+      const yearTY = parseInt(document.getElementById('fYearTY').value);
+      const fYearLY = document.getElementById('fYearLY');
+      
+      const targetLY = yearTY - 1;
+      const optionExists = Array.from(fYearLY.options).some(opt => parseInt(opt.value) === targetLY);
+      
+      if (optionExists) {
+        fYearLY.value = targetLY;
+      }
+      applyFilters();
+    }
+
     function applyFilters() {
       if (!masterData || masterData.length === 0) return;
 
-      const year = parseInt(document.getElementById('fYear').value) || new Date().getFullYear();
-      const bA = parseInt(document.getElementById('fBulanAwal').value) || 0;
-      const bK = parseInt(document.getElementById('fBulanAkhir').value) || 11;
-      const tA = parseInt(document.getElementById('fTglAwal').value) || 1;
-      const tK = parseInt(document.getElementById('fTglAkhir').value) || 31;
+      // Filter Parameter TY
+      const yearTY = parseInt(document.getElementById('fYearTY').value) || new Date().getFullYear();
+      const bATY = parseInt(document.getElementById('fBulanAwalTY').value) || 0;
+      const bKTY = parseInt(document.getElementById('fBulanAkhirTY').value) || 11;
+      const tATY = parseInt(document.getElementById('fTglAwalTY').value) || 1;
+      const tKTY = parseInt(document.getElementById('fTglAkhirTY').value) || 31;
 
-      // Data Periode Berjalan (Current)
-      const cur = masterData.filter(d => 
-        d.year === year && 
-        blnInggris.indexOf(d.bulan) >= bA && 
-        blnInggris.indexOf(d.bulan) <= bK && 
-        d.day >= tA && d.day <= tK
-      );
+      // Filter Parameter LY
+      const yearLY = parseInt(document.getElementById('fYearLY').value) || (yearTY - 1);
+      const bALY = parseInt(document.getElementById('fBulanAwalLY').value) || 0;
+      const bKLY = parseInt(document.getElementById('fBulanAkhirLY').value) || 11;
+      const tALY = parseInt(document.getElementById('fTglAwalLY').value) || 1;
+      const tKLY = parseInt(document.getElementById('fTglAkhirLY').value) || 31;
 
-      // Data Periode Tahun Lalu Gregorian (Prev)
-      const prev = masterData.filter(d => 
-        d.year === year - 1 && 
-        blnInggris.indexOf(d.bulan) >= bA && 
-        blnInggris.indexOf(d.bulan) <= bK && 
-        d.day >= tA && d.day <= tK
-      );
+      // Data Periode Berjalan TY (Current)
+      const cur = masterData.filter(d => {
+        const mIdx = getMonthIndex(d.bulan);
+        return d.year === yearTY && mIdx >= bATY && mIdx <= bKTY && d.day >= tATY && d.day <= tKTY;
+      });
 
-      // Trend Data untuk Chart
-      const trend = masterData.filter(d => 
-        d.year === year && 
-        blnInggris.indexOf(d.bulan) >= bA && 
-        blnInggris.indexOf(d.bulan) <= bK
-      );
+      // Data Periode Pembanding LY Gregorian (Prev)
+      const prev = masterData.filter(d => {
+        const mIdx = getMonthIndex(d.bulan);
+        return d.year === yearLY && mIdx >= bALY && mIdx <= bKLY && d.day >= tALY && d.day <= tKLY;
+      });
 
-      // Data Periode Tahun Lalu Fiskal (Fiscal Prev)
+      // Trend Data untuk Chart (berdasarkan filter TY)
+      const trend = masterData.filter(d => {
+        const mIdx = getMonthIndex(d.bulan);
+        return d.year === yearTY && mIdx >= bATY && mIdx <= bKTY;
+      });
+
+      // Data Periode Pembanding LY Fiskal (Fiscal Prev)
       const fiscalPrev = masterData.filter(d => 
-        d.year === year - 1 && 
+        d.year === yearLY && 
         cur.some(c => c.week === d.week && c.dayName === d.dayName)
       );
 
@@ -289,49 +420,57 @@
       const el = document.getElementById(elementId);
       if (!el) return;
       el.innerText = (val >= 0 ? '+' : '') + val.toFixed(1) + '%';
-      el.className = val < 0 ? 'font-bold text-red-600' : 'font-bold text-green-600';
+      el.className = val < 0 ? 'font-bold text-rose-400' : 'font-bold text-emerald-400';
     }
 
     function updateUI(cur, prev, trend, fiscalPrev) {
-      // Aggregasi Sales Performance
+      // 1. Perhitungan Data TY
       const s = cur.reduce((a, b) => a + b.sales, 0);
-      const ps = prev.reduce((a, b) => a + b.sales, 0);
       const t = cur.reduce((a, b) => a + b.target, 0);
       const ach = (s / (t || 1)) * 100;
-
       const bz = cur.reduce((a, b) => a + b.bazaar, 0);
-      const pbz = prev.reduce((a, b) => a + b.bazaar, 0);
       const inS = s - bz;
+
+      // 2. Perhitungan Data LY
+      const ps = prev.reduce((a, b) => a + b.sales, 0);
+      const pt = prev.reduce((a, b) => a + b.target, 0);
+      const pach = (ps / (pt || 1)) * 100;
+      const pbz = prev.reduce((a, b) => a + b.bazaar, 0);
       const pInS = ps - pbz;
 
-      // Growth Sales
+      // Update Tampilan Sales Performance - BARIS TY
+      document.getElementById('vTarget').innerText = Math.round(t).toLocaleString('id-ID');
+      document.getElementById('vSales').innerText = Math.round(s).toLocaleString('id-ID');
+      const vAch = document.getElementById('vAch');
+      vAch.innerText = ach.toFixed(1) + '%';
+      vAch.className = ach < 100 ? 'text-xs sm:text-sm font-extrabold text-rose-400' : 'text-xs sm:text-sm font-extrabold text-amber-400';
+      document.getElementById('vBazaar').innerText = Math.round(bz).toLocaleString('id-ID');
+      document.getElementById('vInStore').innerText = Math.round(inS).toLocaleString('id-ID');
+
+      // Update Tampilan Sales Performance - BARIS LY (KONTROL)
+      document.getElementById('vTargetLY').innerText = Math.round(pt).toLocaleString('id-ID');
+      document.getElementById('vSalesLY').innerText = Math.round(ps).toLocaleString('id-ID');
+      const vAchLY = document.getElementById('vAchLY');
+      vAchLY.innerText = pach.toFixed(1) + '%';
+      vAchLY.className = pach < 100 ? 'text-xs sm:text-sm font-extrabold text-rose-400' : 'text-xs sm:text-sm font-extrabold text-indigo-400';
+      document.getElementById('vBazaarLY').innerText = Math.round(pbz).toLocaleString('id-ID');
+      document.getElementById('vInStoreLY').innerText = Math.round(pInS).toLocaleString('id-ID');
+
+      // Growth Metrics
       const gr = ps ? ((s - ps) / ps) * 100 : 0;
       const sssg = pInS ? ((inS - pInS) / pInS) * 100 : 0;
-      
       const fCurS = s;
       const fPrevS = fiscalPrev.reduce((a, b) => a + b.sales, 0);
       const fGr = fPrevS ? ((fCurS - fPrevS) / fPrevS) * 100 : 0;
 
-      // DOM Update Sales Performance
-      document.getElementById('vTarget').innerText = Math.round(t).toLocaleString('id-ID');
-      document.getElementById('vSales').innerText = Math.round(s).toLocaleString('id-ID');
-      
-      const vAch = document.getElementById('vAch');
-      vAch.innerText = ach.toFixed(1) + '%';
-      vAch.className = ach < 100 ? 'text-xs sm:text-sm font-extrabold text-red-600' : 'text-xs sm:text-sm font-extrabold text-blue-600';
-
-      document.getElementById('vBazaar').innerText = Math.round(bz).toLocaleString('id-ID');
-      document.getElementById('vInStore').innerText = Math.round(inS).toLocaleString('id-ID');
-
-      // DOM Update Growth Panel
       setGrowthStyle('vGrowth', gr);
       setGrowthStyle('vSSSG', sssg);
       
       const vGrwFiskal = document.getElementById('vGrwFiskal');
       vGrwFiskal.innerText = (fGr >= 0 ? '+' : '') + fGr.toFixed(1) + '%';
-      vGrwFiskal.className = fGr < 0 ? 'font-bold text-red-600' : 'font-bold text-indigo-700';
+      vGrwFiskal.className = fGr < 0 ? 'font-bold text-rose-400' : 'font-bold text-indigo-400';
 
-      // Aggregasi Channel (SnT & B2B)
+      // Channels TY
       const snt = cur.reduce((a, b) => a + b.snt, 0);
       const b2b = cur.reduce((a, b) => a + b.b2b, 0);
       document.getElementById('vSnT').innerText = 'Rp ' + Math.round(snt).toLocaleString('id-ID');
@@ -339,49 +478,51 @@
       document.getElementById('vB2B').innerText = 'Rp ' + Math.round(b2b).toLocaleString('id-ID');
       document.getElementById('vB2BContrib').innerText = 'Contrib: ' + ((b2b / (s || 1)) * 100).toFixed(1) + '%';
 
-      // Aggregasi Statistik Operasional (Current)
+      // Channels LY
+      const psnt = prev.reduce((a, b) => a + b.snt, 0);
+      const pb2b = prev.reduce((a, b) => a + b.b2b, 0);
+      document.getElementById('vSnTLY').innerText = 'Rp ' + Math.round(psnt).toLocaleString('id-ID');
+      document.getElementById('vSnTContribLY').innerText = 'Contrib: ' + ((psnt / (ps || 1)) * 100).toFixed(1) + '%';
+      document.getElementById('vB2BLY').innerText = 'Rp ' + Math.round(pb2b).toLocaleString('id-ID');
+      document.getElementById('vB2BContribLY').innerText = 'Contrib: ' + ((pb2b / (ps || 1)) * 100).toFixed(1) + '%';
+
+      // Statistik Operasional
       const qty = cur.reduce((a, b) => a + b.qty, 0);
       const trx = cur.reduce((a, b) => a + b.trx, 0);
       const aur = s / (qty || 1);
       const upt = qty / (trx || 1);
       const basket = s / (trx || 1);
 
-      // Aggregasi Statistik Operasional (Gregorian Prev)
       const pQty = prev.reduce((a, b) => a + b.qty, 0);
       const pTrx = prev.reduce((a, b) => a + b.trx, 0);
       const pAur = ps / (pQty || 1);
       const pUpt = pQty / (pTrx || 1);
       const pBasket = ps / (pTrx || 1);
 
-      // Aggregasi Statistik Operasional (Fiscal Prev)
       const fQty = fiscalPrev.reduce((a, b) => a + b.qty, 0);
       const fTrx = fiscalPrev.reduce((a, b) => a + b.trx, 0);
       const fAur = fPrevS / (fQty || 1);
       const PerUpt = fQty / (fTrx || 1);
       const fBasket = fPrevS / (fTrx || 1);
 
-      // Perhitungan Growth Gregorian Statistik
       const qtyGr = pQty ? ((qty - pQty) / pQty) * 100 : 0;
       const trxGr = pTrx ? ((trx - pTrx) / pTrx) * 100 : 0;
       const aurGr = pAur ? ((aur - pAur) / pAur) * 100 : 0;
       const uptGr = pUpt ? ((upt - pUpt) / pUpt) * 100 : 0;
       const basketGr = pBasket ? ((basket - pBasket) / pBasket) * 100 : 0;
 
-      // Perhitungan Growth Fiskal Statistik
       const qtyFiskGr = fQty ? ((qty - fQty) / fQty) * 100 : 0;
       const trxFiskGr = fTrx ? ((trx - fTrx) / fTrx) * 100 : 0;
       const aurFiskGr = fAur ? ((aur - fAur) / fAur) * 100 : 0;
       const uptFiskGr = PerUpt ? ((upt - PerUpt) / PerUpt) * 100 : 0;
       const basketFiskGr = fBasket ? ((basket - fBasket) / fBasket) * 100 : 0;
 
-      // DOM Update Values Utama Statistik
       document.getElementById('vQty').innerText = qty.toLocaleString('id-ID');
       document.getElementById('vTrx').innerText = trx.toLocaleString('id-ID');
       document.getElementById('vAur').innerText = 'Rp ' + Math.round(aur).toLocaleString('id-ID');
       document.getElementById('vUpt').innerText = upt.toFixed(2);
       document.getElementById('vBasket').innerText = 'Rp ' + Math.round(basket).toLocaleString('id-ID');
 
-      // DOM Update Growth Grego & Fiskal Statistik
       setGrowthStyle('vQtyGrego', qtyGr);
       setGrowthStyle('vQtyFisk', qtyFiskGr);
 
@@ -407,7 +548,9 @@
 
       const totalDiv = (cur.reduce((a, b) => a + b.div1 + b.div2 + b.div3 + b.div4, 0)) || 1;
 
-      // 1. BAR CHART: Sales by Division
+      // Dark Theme Color Configuration for Charts
+      Chart.defaults.color = '#94a3b8';
+
       charts.barChart = new Chart('barChart', {
         type: 'bar',
         data: {
@@ -419,7 +562,7 @@
               cur.reduce((a, b) => a + b.div3, 0),
               cur.reduce((a, b) => a + b.div4, 0)
             ],
-            backgroundColor: '#3b82f6',
+            backgroundColor: '#f59e0b', // Amber Gold
             borderRadius: 6
           }]
         },
@@ -427,24 +570,23 @@
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            title: { display: true, text: 'Sales by Division', font: { size: 12, weight: 'bold' } },
+            title: { display: true, text: 'Sales by Division', color: '#f8fafc', font: { size: 12, weight: 'bold' } },
             legend: { display: false },
             datalabels: {
               anchor: 'end',
               align: 'end',
               formatter: (v) => ((v / totalDiv) * 100).toFixed(1) + '%',
               font: { size: 10, weight: 'bold' },
-              color: '#1e293b'
+              color: '#fbbf24'
             }
           },
           scales: {
             y: { display: false, beginAtZero: true },
-            x: { grid: { display: false } }
+            x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
           }
         }
       });
 
-      // 2. LINE CHART: Avg Sales/Day
       const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
       charts.lineChart = new Chart('lineChart', {
         type: 'line',
@@ -455,8 +597,8 @@
               const f = trend.filter(x => x.dayName === d);
               return f.length ? f.reduce((a, b) => a + b.sales, 0) / f.length : 0;
             }).map(v => Math.floor(v / 1000)),
-            borderColor: '#10b981',
-            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            borderColor: '#10b981', // Emerald Green
+            backgroundColor: 'rgba(16, 185, 129, 0.15)',
             fill: true,
             tension: 0.3,
             pointRadius: 4,
@@ -467,18 +609,17 @@
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            title: { display: true, text: 'Avg Sales/Day (in K)', font: { size: 12, weight: 'bold' } },
+            title: { display: true, text: 'Avg Sales/Day (in K)', color: '#f8fafc', font: { size: 12, weight: 'bold' } },
             legend: { display: false },
             datalabels: { display: false }
           },
           scales: {
             y: { display: false, beginAtZero: true },
-            x: { grid: { display: false } }
+            x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
           }
         }
       });
 
-      // 3. PIE CHART: DP vs CV
       charts.pieChart = new Chart('pieChart', {
         type: 'pie',
         data: {
@@ -488,14 +629,14 @@
               cur.reduce((a, b) => a + b.dp, 0),
               cur.reduce((a, b) => a + b.cv, 0)
             ],
-            backgroundColor: ['#f59e0b', '#ef4444']
+            backgroundColor: ['#d97706', '#f43f5e'] // Gold vs Rose
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            title: { display: true, text: 'DP vs CV Share', font: { size: 12, weight: 'bold' } },
+            title: { display: true, text: 'DP vs CV Share', color: '#f8fafc', font: { size: 12, weight: 'bold' } },
             datalabels: {
               formatter: (v, ctx) => {
                 const s = ctx.dataset.data.reduce((a, b) => a + b, 0);
