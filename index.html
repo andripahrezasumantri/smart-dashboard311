@@ -18,13 +18,32 @@
 </head>
 <body class="bg-[#0b1120] text-slate-100 antialiased min-h-screen">
 
+  <!-- OVERLAY PANEL PROSES SINKRONISASI DATABASE SPREADSHEET -->
+  <div id="loading-overlay" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[100] flex flex-col items-center justify-center p-4 transition-opacity duration-500">
+    <div class="bg-slate-900 border border-slate-800 p-6 md:p-8 rounded-2xl shadow-2xl flex flex-col items-center max-w-sm w-full text-center space-y-4">
+      <div class="relative flex items-center justify-center">
+        <div class="w-16 h-16 border-4 border-amber-500/20 border-t-amber-400 rounded-full animate-spin"></div>
+        <i class="fa-solid fa-database text-amber-400 text-xl absolute"></i>
+      </div>
+      <div>
+        <h3 class="text-sm font-black text-amber-400 uppercase tracking-wider">MDS 311 ANALYTICS</h3>
+        <p id="loading-status" class="text-xs text-slate-300 font-medium mt-1">Menghubungkan ke server Google Sheets...</p>
+      </div>
+      <div class="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden border border-slate-800">
+        <div id="loading-bar" class="bg-gradient-to-r from-amber-500 to-emerald-400 h-full w-1/4 transition-all duration-300 animate-pulse"></div>
+      </div>
+    </div>
+  </div>
+
   <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-40 hidden md:hidden"></div>
 
   <div class="flex flex-col md:flex-row min-h-screen">
 
+    <!-- SIDEBAR WITH IDENTITIES -->
     <aside id="sidebar" class="fixed md:sticky top-0 left-0 h-screen w-72 bg-slate-900/95 backdrop-blur-md border-r border-slate-800 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col justify-between p-4 shadow-2xl overflow-y-auto">
       <div class="space-y-5">
         
+        <!-- HEADER IDENTITAS DI SIDEBAR -->
         <div class="pb-3 border-b border-slate-800 space-y-2">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -41,6 +60,7 @@
             </button>
           </div>
 
+          <!-- DETAIL STORE & MANAGEMENT -->
           <div class="bg-slate-950/60 p-2.5 rounded-lg border border-slate-800/80 space-y-1">
             <p class="text-[11px] font-bold text-amber-500/90 leading-tight">
               MDS DUTA MALL BANJARMASIN - 311
@@ -52,6 +72,7 @@
           </div>
         </div>
 
+        <!-- NAVIGASI MENU -->
         <nav class="space-y-1">
           <button id="btn-sales" onclick="switchTab('sales')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-bold transition-all bg-amber-500/20 text-amber-400 border border-amber-500/30 shadow-md">
             <i class="fa-solid fa-cart-shopping w-4 text-center"></i>
@@ -72,14 +93,17 @@
         </nav>
       </div>
 
+      <!-- CLOCK & DATE IN SIDEBAR -->
       <div class="bg-slate-950/60 p-3 rounded-lg border border-slate-800 text-center mt-4">
         <div id="clock" class="text-sm font-bold text-amber-400 leading-none">00:00:00</div>
         <div id="date" class="text-[10px] text-slate-400 font-medium mt-1">--/--/----</div>
       </div>
     </aside>
 
+    <!-- MAIN CONTENT AREA -->
     <div class="flex-1 min-w-0 p-3 md:p-6 space-y-4">
 
+      <!-- TOP BAR MOBILE ONLY -->
       <div class="md:hidden bg-slate-900/90 backdrop-blur-md p-3 rounded-xl shadow-lg border border-slate-800 flex items-center justify-between">
         <div class="flex items-center gap-2.5">
           <button onclick="toggleSidebar()" class="p-2 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-700">
@@ -92,6 +116,7 @@
         </div>
       </div>
 
+      <!-- FILTER PANEL -->
       <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800 space-y-3 sticky top-3 z-30">
         
         <div>
@@ -154,6 +179,7 @@
 
       </div>
 
+      <!-- VIEW TAB 1: SALES PERFORMANCE -->
       <section id="view-sales" class="tab-content space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           
@@ -232,6 +258,7 @@
 
         </div>
 
+        <!-- PANEL ANALISIS ADVANCED: SALES PERFORMANCE -->
         <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-amber-500/30 space-y-2">
           <div class="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider">
             <i class="fa-solid fa-brain"></i>
@@ -243,6 +270,7 @@
         </div>
       </section>
 
+      <!-- VIEW TAB 2: SALES CHANNEL -->
       <section id="view-channel" class="tab-content hidden space-y-4">
         <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800">
           <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">SALES CHANNEL</h2>
@@ -279,6 +307,7 @@
           </div>
         </div>
 
+        <!-- PANEL ANALISIS ADVANCED: SALES CHANNEL -->
         <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-indigo-500/30 space-y-2">
           <div class="flex items-center gap-2 text-indigo-400 text-xs font-bold uppercase tracking-wider">
             <i class="fa-solid fa-chart-line"></i>
@@ -290,6 +319,7 @@
         </div>
       </section>
 
+      <!-- VIEW TAB 3: STATISTIK OPERASIONAL -->
       <section id="view-stats" class="tab-content hidden space-y-4">
         <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800">
           <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">STATISTIK OPERASIONAL</h2>
@@ -363,6 +393,7 @@
           </div>
         </div>
 
+        <!-- PANEL ANALISIS ADVANCED: STATISTIK OPERASIONAL -->
         <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-teal-500/30 space-y-2">
           <div class="flex items-center gap-2 text-teal-400 text-xs font-bold uppercase tracking-wider">
             <i class="fa-solid fa-calculator"></i>
@@ -374,6 +405,7 @@
         </div>
       </section>
 
+      <!-- VIEW TAB 4: GRAFIK -->
       <section id="view-grafik" class="tab-content hidden space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800">
@@ -387,6 +419,7 @@
           </div>
         </div>
 
+        <!-- PANEL ANALISIS ADVANCED: GRAFIK & DIVISI -->
         <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-purple-500/30 space-y-2">
           <div class="flex items-center gap-2 text-purple-400 text-xs font-bold uppercase tracking-wider">
             <i class="fa-solid fa-chart-pie"></i>
@@ -409,6 +442,23 @@
     let charts = {};
 
     const blnIndo = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+
+    function updateLoadingStatus(text, progressPct) {
+      const statusEl = document.getElementById('loading-status');
+      const barEl = document.getElementById('loading-bar');
+      if (statusEl) statusEl.innerText = text;
+      if (barEl) barEl.style.width = progressPct + '%';
+    }
+
+    function hideLoadingOverlay() {
+      const overlay = document.getElementById('loading-overlay');
+      if (overlay) {
+        overlay.classList.add('opacity-0');
+        setTimeout(() => {
+          overlay.classList.add('hidden');
+        }, 500);
+      }
+    }
 
     function switchTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
@@ -457,10 +507,12 @@
     }
 
     function handleGASData(data) {
+      updateLoadingStatus("Memproses & menyusun struktur data...", 75);
       masterData = Array.isArray(data) ? data : (data.raw || []);
       
       if (!masterData || masterData.length === 0) {
-        console.warn("Data kosong");
+        updateLoadingStatus("Data tidak ditemukan!", 100);
+        setTimeout(hideLoadingOverlay, 1000);
         return;
       }
 
@@ -483,12 +535,17 @@
       populateMonthDropdowns('fBulanAwalLY', 'fBulanAkhirLY');
 
       applyFilters();
+
+      updateLoadingStatus("Sinkronisasi Selesai!", 100);
+      setTimeout(hideLoadingOverlay, 600);
     }
 
     function loadDataJSONP() {
+      updateLoadingStatus("Sinkronisasi data dengan Spreadsheet...", 35);
       const script = document.createElement('script');
       script.src = `${GAS_WEB_APP_URL}?callback=handleGASData`;
       script.onerror = function() {
+        updateLoadingStatus("Gagal terhubung ke Google Apps Script!", 100);
         alert("Gagal memuat data dari server Google Apps Script. Pastikan URL Web App sudah benar.");
       };
       document.body.appendChild(script);
@@ -689,7 +746,6 @@
 
       renderCharts(cur, trend);
 
-      // EKSSEKUSI PENGENERATAN ANALISIS LOGIKA TINGKAT LANJUT (OPSI 1)
       generateAdvancedInsights({
         s, t, ach, bz, inS, ps, pt, pbz, pInS, gr, fGr, sssg,
         snt, psnt, b2b, pb2b,
@@ -699,13 +755,7 @@
       });
     }
 
-    // =========================================================================
-    // LOGIKA ANALISIS BISNIS MANDIRI LENGKAP & DETAIL (DETAILED RULE-BASED OPSI 1)
-    // =========================================================================
     function generateAdvancedInsights(d) {
-      // -----------------------------------------------------------------------
-      // 1. ADVANCED INSIGHT: SALES PERFORMANCE
-      // -----------------------------------------------------------------------
       const gap = d.s - d.t;
       const absGap = Math.abs(gap);
       let gapText = "";
@@ -716,7 +766,6 @@
         gapText = `<span class="text-rose-400 font-bold">Shortfall / Defisit Rp ${Math.round(absGap).toLocaleString('id-ID')}</span> untuk mencapai Target 100%.`;
       }
 
-      // Hitung sisa hari dalam periode
       const daysInPeriod = (d.filterContext.tKTY - d.filterContext.tATY + 1) || 1;
       const numDaysRecorded = [...new Set(d.cur.map(x => x.day))].length || daysInPeriod;
       const remainingDays = Math.max(daysInPeriod - numDaysRecorded, 0);
@@ -731,7 +780,6 @@
         runRateText = `• <b>Evaluasi Akhir Periode:</b> Periode tanggal ini telah selesai dengan selisih akhir sebesar Rp ${Math.round(absGap).toLocaleString('id-ID')}.`;
       }
 
-      // Anomali Bazaar vs In-Store
       const bzShare = (d.bz / (d.s || 1)) * 100;
       let bzWarning = "";
       if (bzShare > 20) {
@@ -747,9 +795,6 @@
         ${bzWarning}
       `;
 
-      // -----------------------------------------------------------------------
-      // 2. ADVANCED INSIGHT: SALES CHANNEL
-      // -----------------------------------------------------------------------
       const sntGr = d.psnt ? (((d.snt - d.psnt) / d.psnt) * 100) : 0;
       const b2bGr = d.pb2b ? (((d.b2b - d.pb2b) / d.pb2b) * 100) : 0;
       const totalDigital = d.snt + d.b2b;
@@ -775,9 +820,6 @@
         <p class="text-amber-200/90">• <b>Rekomendasi Strategi:</b> ${channelRecommendation}</p>
       `;
 
-      // -----------------------------------------------------------------------
-      // 3. ADVANCED INSIGHT: STATISTIK OPERASIONAL
-      // -----------------------------------------------------------------------
       let driverDiagnosis = "";
       if (d.trxGr < 0 && d.basketGr > 0) {
         driverDiagnosis = `Trafik Pengunjung (TRX) mengalami penurunan (<b>${d.trxGr.toFixed(1)}%</b>), namun total omset tertolong oleh <b>peningkatan nilai belanja per pelanggan / Basket Size (${d.basketGr >= 0 ? '+' : ''}${d.basketGr.toFixed(1)}%)</b>.`;
@@ -789,7 +831,6 @@
         driverDiagnosis = `Terdapat tantangan ganda di mana Trafik Pengunjung (<b>${d.trxGr.toFixed(1)}%</b>) dan Basket Size (<b>${d.basketGr.toFixed(1)}%</b>) sama-sama tertekan.`;
       }
 
-      // Early Warning Indicator UPT (Cross-selling / Up-selling)
       let uptWarning = "";
       if (d.uptGr < 0) {
         uptWarning = `<p class="text-rose-300 font-semibold">• <b>Warning Tim Kasir & SPG:</b> UPT turun <b>${d.uptGr.toFixed(1)}%</b> (sekarang ${d.upt.toFixed(2)} item/struk). Indikasi perlunya penguatan program <i>Cross-selling / Add-on Product</i> di kasir & lantai penjualan.</p>`;
@@ -803,9 +844,6 @@
         ${uptWarning}
       `;
 
-      // -----------------------------------------------------------------------
-      // 4. ADVANCED INSIGHT: GRAFIK & DIVISI
-      // -----------------------------------------------------------------------
       const d1 = d.cur.reduce((a, b) => a + b.div1, 0);
       const d2 = d.cur.reduce((a, b) => a + b.div2, 0);
       const d3 = d.cur.reduce((a, b) => a + b.div3, 0);
@@ -823,7 +861,6 @@
       const topDiv = divs[0];
       const bottomDiv = divs[divs.length - 1];
 
-      // Analisis Peak Day
       const daysOrder = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
       const dayNamesIndo = { 'Mon':'Senin', 'Tue':'Selasa', 'Wed':'Rabu', 'Thu':'Kamis', 'Fri':'Jumat', 'Sat':'Sabtu', 'Sun':'Minggu' };
       
@@ -836,7 +873,6 @@
 
       const peakDay = dayAverages[0];
 
-      // DP vs CV
       const dp = d.cur.reduce((a, b) => a + b.dp, 0);
       const cv = d.cur.reduce((a, b) => a + b.cv, 0);
       const totalDpCv = (dp + cv) || 1;
