@@ -436,7 +436,8 @@
   </div>
 
   <script>
-    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxmFUkJ8adOv_tvKpTN_wSExtwsvTm_Lji600ViZTETkfERnb1Bn7u_NTgzXpMHcWqdkg/exec";
+    // URL WEB APP REVISI TERBARU MILIKMU
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbypZv7xFSXguOuG5zapsGxk_yRVt1py-Y0KU9E471TR0Xm3KhPcQWueos6i5FzDA_iS7g/exec";
 
     let masterData = [];
     let charts = {};
@@ -508,7 +509,32 @@
 
     function handleGASData(data) {
       updateLoadingStatus("Memproses & menyusun struktur data...", 75);
-      masterData = Array.isArray(data) ? data : (data.raw || []);
+      
+      // RESET TOTAL MASTER DATA AGAR TIDAK TERJADI DUPLIKASI (PERBAIKAN QTY 73.045)
+      masterData = [];
+
+      const raw = Array.isArray(data) ? data : (data.raw || []);
+      
+      // SANITASI & PARSING TIPE DATA
+      masterData = raw.map(d => ({
+        ...d,
+        year: parseInt(d.year) || 0,
+        day: parseInt(d.day) || 0,
+        week: parseInt(d.week) || 0,
+        sales: parseFloat(d.sales) || 0,
+        target: parseFloat(d.target) || 0,
+        bazaar: parseFloat(d.bazaar) || 0,
+        snt: parseFloat(d.snt) || 0,
+        b2b: parseFloat(d.b2b) || 0,
+        qty: parseFloat(d.qty) || 0,
+        trx: parseFloat(d.trx) || 0,
+        div1: parseFloat(d.div1) || 0,
+        div2: parseFloat(d.div2) || 0,
+        div3: parseFloat(d.div3) || 0,
+        div4: parseFloat(d.div4) || 0,
+        dp: parseFloat(d.dp) || 0,
+        cv: parseFloat(d.cv) || 0
+      }));
       
       if (!masterData || masterData.length === 0) {
         updateLoadingStatus("Data tidak ditemukan!", 100);
