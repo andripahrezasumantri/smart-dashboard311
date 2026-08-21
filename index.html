@@ -7,278 +7,430 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <style>
     body {
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      background-color: #0b1120; /* Deep Midnight Slate */
+      background-color: #0b1120;
       color: #f1f5f9;
     }
   </style>
 </head>
-<body class="p-3 md:p-6">
+<body class="bg-[#0b1120] text-slate-100 antialiased min-h-screen">
 
-  <div class="max-w-7xl mx-auto space-y-4">
-    
-    <div class="bg-slate-900/90 backdrop-blur-md p-4 md:p-5 rounded-xl shadow-lg border border-slate-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-      <div>
-        <h1 class="text-xl md:text-2xl font-black text-amber-400 tracking-tight flex items-center gap-2">
-          <span>SMART ANALYTICS CORE DASHBOARD</span>
-        </h1>
-        <p class="text-xs md:text-sm font-semibold text-amber-500/90">MDS DUTA MALL BANJARMASIN - 311</p>
-        <p class="text-xs text-slate-400 font-medium mt-1">
-          Store Manager: <span class="font-bold text-slate-200">ANDRI PAHREZA SUMANTRI</span> | 
-          Assistant Store Manager: <span class="font-bold text-slate-200">DEVIN GUNAWAN</span>
-        </p>
-      </div>
-      
-      <div class="text-left md:text-right bg-slate-950/60 p-2.5 rounded-lg border border-slate-800 w-full md:w-auto">
-        <div id="clock" class="text-base md:text-lg font-bold text-amber-400 leading-none">00:00:00</div>
-        <div id="date" class="text-xs text-slate-400 font-medium mt-1">--/--/----</div>
-      </div>
-    </div>
+  <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-40 hidden md:hidden"></div>
 
-    <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800 space-y-3">
-      
-      <div>
-        <div class="text-[11px] font-bold text-amber-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]"></span> Periode Utama (This Year / TY)
-        </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-          <div>
-            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Tahun (TY)</label>
-            <select id="fYearTY" onchange="onYearTYChange()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500"></select>
+  <div class="flex flex-col md:flex-row min-h-screen">
+
+    <aside id="sidebar" class="fixed md:sticky top-0 left-0 h-screen w-72 bg-slate-900/95 backdrop-blur-md border-r border-slate-800 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col justify-between p-4 shadow-2xl overflow-y-auto">
+      <div class="space-y-5">
+        
+        <div class="pb-3 border-b border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 font-black shrink-0">
+                <i class="fa-solid fa-chart-line"></i>
+              </div>
+              <div>
+                <h2 class="text-xs font-black text-amber-400 tracking-wider uppercase leading-tight">SMART ANALYTICS</h2>
+                <p class="text-[10px] font-bold text-slate-400">CORE DASHBOARD</p>
+              </div>
+            </div>
+            <button onclick="toggleSidebar()" class="md:hidden text-slate-400 hover:text-slate-100 p-1">
+              <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
           </div>
-          <div>
-            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Bulan Awal (TY)</label>
-            <select id="fBulanAwalTY" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500"></select>
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Bulan Akhir (TY)</label>
-            <select id="fBulanAkhirTY" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500"></select>
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Tgl Awal (TY)</label>
-            <input type="number" id="fTglAwalTY" value="1" min="1" max="31" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500">
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Tgl Akhir (TY)</label>
-            <input type="number" id="fTglAkhirTY" value="31" min="1" max="31" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500">
+
+          <div class="bg-slate-950/60 p-2.5 rounded-lg border border-slate-800/80 space-y-1">
+            <p class="text-[11px] font-bold text-amber-500/90 leading-tight">
+              MDS DUTA MALL BANJARMASIN - 311
+            </p>
+            <div class="text-[10px] text-slate-400 font-medium space-y-0.5 border-t border-slate-800/60 pt-1 mt-1">
+              <p>Store Manager:<br><span class="font-bold text-slate-200">ANDRI PAHREZA SUMANTRI</span></p>
+              <p>Assistant Store Manager:<br><span class="font-bold text-slate-200">DEVIN GUNAWAN</span></p>
+            </div>
           </div>
         </div>
+
+        <nav class="space-y-1">
+          <button id="btn-sales" onclick="switchTab('sales')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-bold transition-all bg-amber-500/20 text-amber-400 border border-amber-500/30 shadow-md">
+            <i class="fa-solid fa-cart-shopping w-4 text-center"></i>
+            <span>Sales Performance</span>
+          </button>
+          <button id="btn-channel" onclick="switchTab('channel')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-bold text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-all border border-transparent">
+            <i class="fa-solid fa-store w-4 text-center"></i>
+            <span>Sales Channel</span>
+          </button>
+          <button id="btn-stats" onclick="switchTab('stats')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-bold text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-all border border-transparent">
+            <i class="fa-solid fa-calculator w-4 text-center"></i>
+            <span>Statistik Operasional</span>
+          </button>
+          <button id="btn-grafik" onclick="switchTab('grafik')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-bold text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-all border border-transparent">
+            <i class="fa-solid fa-chart-pie w-4 text-center"></i>
+            <span>Grafik</span>
+          </button>
+        </nav>
       </div>
 
-      <hr class="border-slate-800">
+      <div class="bg-slate-950/60 p-3 rounded-lg border border-slate-800 text-center mt-4">
+        <div id="clock" class="text-sm font-bold text-amber-400 leading-none">00:00:00</div>
+        <div id="date" class="text-[10px] text-slate-400 font-medium mt-1">--/--/----</div>
+      </div>
+    </aside>
 
-      <div>
-        <div class="text-[11px] font-bold text-indigo-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.6)]"></span> Periode Pembanding (Last Year / LY)
-        </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+    <div class="flex-1 min-w-0 p-3 md:p-6 space-y-4">
+
+      <div class="md:hidden bg-slate-900/90 backdrop-blur-md p-3 rounded-xl shadow-lg border border-slate-800 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <button onclick="toggleSidebar()" class="p-2 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-700">
+            <i class="fa-solid fa-bars text-lg"></i>
+          </button>
           <div>
-            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Pembanding (LY)</label>
-            <select id="fYearLY" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Bulan Awal (LY)</label>
-            <select id="fBulanAwalLY" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Bulan Akhir (LY)</label>
-            <select id="fBulanAkhirLY" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Tgl Awal (LY)</label>
-            <input type="number" id="fTglAwalLY" value="1" min="1" max="31" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Tgl Akhir (LY)</label>
-            <input type="number" id="fTglAkhirLY" value="31" min="1" max="31" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <h1 class="text-xs font-black text-amber-400 tracking-tight">SMART ANALYTICS CORE</h1>
+            <p class="text-[10px] font-bold text-slate-400">MDS DUTA MALL BANJARMASIN - 311</p>
           </div>
         </div>
       </div>
 
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      
-      <div class="md:col-span-2 bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800 space-y-3">
-        <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider">SALES PERFORMANCE</h2>
+      <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800 space-y-3 sticky top-3 z-30">
         
         <div>
-          <div class="text-[10px] font-bold text-amber-400 uppercase mb-1 flex items-center gap-1">
-            <span>PERIODE UTAMA (TY)</span>
+          <div class="text-[11px] font-bold text-amber-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]"></span> Periode Utama (This Year / TY)
           </div>
-          <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center">
-            <div class="bg-amber-950/30 p-2.5 rounded-lg border border-amber-900/40">
-              <span class="block text-[10px] font-bold text-amber-400 uppercase">Target TY</span>
-              <span id="vTarget" class="text-xs sm:text-sm font-extrabold text-slate-100">0</span>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Tahun (TY)</label>
+              <select id="fYearTY" onchange="onYearTYChange()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500"></select>
             </div>
-            <div class="bg-amber-950/30 p-2.5 rounded-lg border border-amber-900/40">
-              <span class="block text-[10px] font-bold text-amber-400 uppercase">Sales TY</span>
-              <span id="vSales" class="text-xs sm:text-sm font-extrabold text-slate-100">0</span>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Bulan Awal (TY)</label>
+              <select id="fBulanAwalTY" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500"></select>
             </div>
-            <div class="bg-amber-950/30 p-2.5 rounded-lg border border-amber-900/40">
-              <span class="block text-[10px] font-bold text-amber-400 uppercase">Achievement</span>
-              <span id="vAch" class="text-xs sm:text-sm font-extrabold text-amber-400">0%</span>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Bulan Akhir (TY)</label>
+              <select id="fBulanAkhirTY" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500"></select>
             </div>
-            <div class="bg-amber-950/30 p-2.5 rounded-lg border border-amber-900/40">
-              <span class="block text-[10px] font-bold text-amber-400 uppercase">Bazaar TY</span>
-              <span id="vBazaar" class="text-xs sm:text-sm font-extrabold text-slate-100">0</span>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Tgl Awal (TY)</label>
+              <input type="number" id="fTglAwalTY" value="1" min="1" max="31" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500">
             </div>
-            <div class="bg-amber-950/30 p-2.5 rounded-lg border border-amber-900/40 col-span-2 sm:col-span-1">
-              <span class="block text-[10px] font-bold text-amber-400 uppercase">In Store TY</span>
-              <span id="vInStore" class="text-xs sm:text-sm font-extrabold text-slate-100">0</span>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Tgl Akhir (TY)</label>
+              <input type="number" id="fTglAkhirTY" value="31" min="1" max="31" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500">
             </div>
           </div>
         </div>
+
+        <hr class="border-slate-800">
 
         <div>
-          <div class="text-[10px] font-bold text-indigo-400 uppercase mb-1">PEMBANDING (LY)</div>
-          <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center">
-            <div class="bg-indigo-950/30 p-2.5 rounded-lg border border-indigo-900/40">
-              <span class="block text-[10px] font-bold text-indigo-400 uppercase">Target LY</span>
-              <span id="vTargetLY" class="text-xs sm:text-sm font-extrabold text-slate-300">0</span>
+          <div class="text-[11px] font-bold text-indigo-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.6)]"></span> Periode Pembanding (Last Year / LY)
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Pembanding (LY)</label>
+              <select id="fYearLY" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
             </div>
-            <div class="bg-indigo-950/30 p-2.5 rounded-lg border border-indigo-900/40">
-              <span class="block text-[10px] font-bold text-indigo-400 uppercase">Sales LY</span>
-              <span id="vSalesLY" class="text-xs sm:text-sm font-extrabold text-slate-300">0</span>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Bulan Awal (LY)</label>
+              <select id="fBulanAwalLY" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
             </div>
-            <div class="bg-indigo-950/30 p-2.5 rounded-lg border border-indigo-900/40">
-              <span class="block text-[10px] font-bold text-indigo-400 uppercase">Ach LY</span>
-              <span id="vAchLY" class="text-xs sm:text-sm font-extrabold text-indigo-400">0%</span>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Bulan Akhir (LY)</label>
+              <select id="fBulanAkhirLY" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
             </div>
-            <div class="bg-indigo-950/30 p-2.5 rounded-lg border border-indigo-900/40">
-              <span class="block text-[10px] font-bold text-indigo-400 uppercase">Bazaar LY</span>
-              <span id="vBazaarLY" class="text-xs sm:text-sm font-extrabold text-slate-300">0</span>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Tgl Awal (LY)</label>
+              <input type="number" id="fTglAwalLY" value="1" min="1" max="31" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
             </div>
-            <div class="bg-indigo-950/30 p-2.5 rounded-lg border border-indigo-900/40 col-span-2 sm:col-span-1">
-              <span class="block text-[10px] font-bold text-indigo-400 uppercase">In Store LY</span>
-              <span id="vInStoreLY" class="text-xs sm:text-sm font-extrabold text-slate-300">0</span>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Tgl Akhir (LY)</label>
+              <input type="number" id="fTglAkhirLY" value="31" min="1" max="31" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
             </div>
           </div>
         </div>
 
       </div>
 
-      <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800 flex flex-col justify-between">
-        <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">GROWTH PERFORMANCE</h2>
-        <div class="bg-slate-950/80 p-3.5 rounded-lg border border-slate-800 my-auto text-center">
-          <div class="text-xs font-semibold text-slate-400 mb-1">GROWTH SUMMARY</div>
-          <div class="text-xs sm:text-sm font-bold space-x-1">
-            <span>grego : <span id="vGrowth" class="text-emerald-400">0.0%</span></span>
-            <span class="text-slate-600">|</span>
-            <span>fisk : <span id="vGrwFiskal" class="text-indigo-400">0.0%</span></span>
-            <span class="text-slate-600">|</span>
-            <span>SSSG : <span id="vSSSG" class="text-emerald-400">0.0%</span></span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800">
-      <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">SALES CHANNEL</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        
-        <div class="bg-slate-950/80 p-3 rounded-lg border border-indigo-900/40 space-y-2">
-          <span class="block text-xs font-bold text-indigo-400 border-b border-slate-800 pb-1">SNT (Shopping & Delivery)</span>
+      <section id="view-sales" class="tab-content space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           
-          <div class="flex justify-between items-center text-xs">
-            <span class="font-semibold text-slate-400">TY: <span id="vSnT" class="font-bold text-amber-400">Rp 0</span></span>
-            <span id="vSnTContrib" class="font-bold text-amber-300 bg-amber-950/60 border border-amber-800/50 px-2 py-0.5 rounded text-[10px]">Contrib: 0.0%</span>
+          <div class="md:col-span-2 bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800 space-y-3">
+            <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider">SALES PERFORMANCE</h2>
+            
+            <div>
+              <div class="text-[10px] font-bold text-amber-400 uppercase mb-1 flex items-center gap-1">
+                <span>PERIODE UTAMA (TY)</span>
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center">
+                <div class="bg-amber-950/30 p-2.5 rounded-lg border border-amber-900/40">
+                  <span class="block text-[10px] font-bold text-amber-400 uppercase">Target TY</span>
+                  <span id="vTarget" class="text-xs sm:text-sm font-extrabold text-slate-100">0</span>
+                </div>
+                <div class="bg-amber-950/30 p-2.5 rounded-lg border border-amber-900/40">
+                  <span class="block text-[10px] font-bold text-amber-400 uppercase">Sales TY</span>
+                  <span id="vSales" class="text-xs sm:text-sm font-extrabold text-slate-100">0</span>
+                </div>
+                <div class="bg-amber-950/30 p-2.5 rounded-lg border border-amber-900/40">
+                  <span class="block text-[10px] font-bold text-amber-400 uppercase">Achievement</span>
+                  <span id="vAch" class="text-xs sm:text-sm font-extrabold text-amber-400">0%</span>
+                </div>
+                <div class="bg-amber-950/30 p-2.5 rounded-lg border border-amber-900/40">
+                  <span class="block text-[10px] font-bold text-amber-400 uppercase">Bazaar TY</span>
+                  <span id="vBazaar" class="text-xs sm:text-sm font-extrabold text-slate-100">0</span>
+                </div>
+                <div class="bg-amber-950/30 p-2.5 rounded-lg border border-amber-900/40 col-span-2 sm:col-span-1">
+                  <span class="block text-[10px] font-bold text-amber-400 uppercase">In Store TY</span>
+                  <span id="vInStore" class="text-xs sm:text-sm font-extrabold text-slate-100">0</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="text-[10px] font-bold text-indigo-400 uppercase mb-1">PEMBANDING (LY)</div>
+              <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center">
+                <div class="bg-indigo-950/30 p-2.5 rounded-lg border border-indigo-900/40">
+                  <span class="block text-[10px] font-bold text-indigo-400 uppercase">Target LY</span>
+                  <span id="vTargetLY" class="text-xs sm:text-sm font-extrabold text-slate-300">0</span>
+                </div>
+                <div class="bg-indigo-950/30 p-2.5 rounded-lg border border-indigo-900/40">
+                  <span class="block text-[10px] font-bold text-indigo-400 uppercase">Sales LY</span>
+                  <span id="vSalesLY" class="text-xs sm:text-sm font-extrabold text-slate-300">0</span>
+                </div>
+                <div class="bg-indigo-950/30 p-2.5 rounded-lg border border-indigo-900/40">
+                  <span class="block text-[10px] font-bold text-indigo-400 uppercase">Ach LY</span>
+                  <span id="vAchLY" class="text-xs sm:text-sm font-extrabold text-indigo-400">0%</span>
+                </div>
+                <div class="bg-indigo-950/30 p-2.5 rounded-lg border border-indigo-900/40">
+                  <span class="block text-[10px] font-bold text-indigo-400 uppercase">Bazaar LY</span>
+                  <span id="vBazaarLY" class="text-xs sm:text-sm font-extrabold text-slate-300">0</span>
+                </div>
+                <div class="bg-indigo-950/30 p-2.5 rounded-lg border border-indigo-900/40 col-span-2 sm:col-span-1">
+                  <span class="block text-[10px] font-bold text-indigo-400 uppercase">In Store LY</span>
+                  <span id="vInStoreLY" class="text-xs sm:text-sm font-extrabold text-slate-300">0</span>
+                </div>
+              </div>
+            </div>
+
           </div>
-          
-          <div class="flex justify-between items-center text-xs border-t border-slate-800/80 pt-1.5">
-            <span class="font-semibold text-slate-500">LY: <span id="vSnTLY" class="font-bold text-slate-300">Rp 0</span></span>
-            <span id="vSnTContribLY" class="font-bold text-slate-400 bg-slate-900 px-2 py-0.5 rounded text-[10px]">Contrib: 0.0%</span>
+
+          <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800 flex flex-col justify-between">
+            <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">GROWTH PERFORMANCE</h2>
+            <div class="bg-slate-950/80 p-3.5 rounded-lg border border-slate-800 my-auto text-center">
+              <div class="text-xs font-semibold text-slate-400 mb-1">GROWTH SUMMARY</div>
+              <div class="text-xs sm:text-sm font-bold space-x-1">
+                <span>grego : <span id="vGrowth" class="text-emerald-400">0.0%</span></span>
+                <span class="text-slate-600">|</span>
+                <span>fisk : <span id="vGrwFiskal" class="text-indigo-400">0.0%</span></span>
+                <span class="text-slate-600">|</span>
+                <span>SSSG : <span id="vSSSG" class="text-emerald-400">0.0%</span></span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-amber-500/30 space-y-2">
+          <div class="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider">
+            <i class="fa-solid fa-brain"></i>
+            <span>Analisis Performa Penjualan & Proyeksi Target (Executive Insight)</span>
+          </div>
+          <div id="insight-sales" class="text-xs text-slate-300 space-y-2 leading-relaxed bg-slate-950/60 p-3.5 rounded-lg border border-slate-800">
+            Memuat analisis data...
+          </div>
+        </div>
+      </section>
+
+      <section id="view-channel" class="tab-content hidden space-y-4">
+        <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800">
+          <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">SALES CHANNEL</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            
+            <div class="bg-slate-950/80 p-3 rounded-lg border border-indigo-900/40 space-y-2">
+              <span class="block text-xs font-bold text-indigo-400 border-b border-slate-800 pb-1">SNT (Shopping & Delivery)</span>
+              
+              <div class="flex justify-between items-center text-xs">
+                <span class="font-semibold text-slate-400">TY: <span id="vSnT" class="font-bold text-amber-400">Rp 0</span></span>
+                <span id="vSnTContrib" class="font-bold text-amber-300 bg-amber-950/60 border border-amber-800/50 px-2 py-0.5 rounded text-[10px]">Contrib: 0.0%</span>
+              </div>
+              
+              <div class="flex justify-between items-center text-xs border-t border-slate-800/80 pt-1.5">
+                <span class="font-semibold text-slate-500">LY: <span id="vSnTLY" class="font-bold text-slate-300">Rp 0</span></span>
+                <span id="vSnTContribLY" class="font-bold text-slate-400 bg-slate-900 px-2 py-0.5 rounded text-[10px]">Contrib: 0.0%</span>
+              </div>
+            </div>
+
+            <div class="bg-slate-950/80 p-3 rounded-lg border border-purple-900/40 space-y-2">
+              <span class="block text-xs font-bold text-purple-400 border-b border-slate-800 pb-1">B2B (Business to Business)</span>
+              
+              <div class="flex justify-between items-center text-xs">
+                <span class="font-semibold text-slate-400">TY: <span id="vB2B" class="font-bold text-purple-300">Rp 0</span></span>
+                <span id="vB2BContrib" class="font-bold text-purple-300 bg-purple-950/60 border border-purple-800/50 px-2 py-0.5 rounded text-[10px]">Contrib: 0.0%</span>
+              </div>
+              
+              <div class="flex justify-between items-center text-xs border-t border-slate-800/80 pt-1.5">
+                <span class="font-semibold text-slate-500">LY: <span id="vB2BLY" class="font-bold text-slate-300">Rp 0</span></span>
+                <span id="vB2BContribLY" class="font-bold text-slate-400 bg-slate-900 px-2 py-0.5 rounded text-[10px]">Contrib: 0.0%</span>
+              </div>
+            </div>
+
           </div>
         </div>
 
-        <div class="bg-slate-950/80 p-3 rounded-lg border border-purple-900/40 space-y-2">
-          <span class="block text-xs font-bold text-purple-400 border-b border-slate-800 pb-1">B2B (Business to Business)</span>
-          
-          <div class="flex justify-between items-center text-xs">
-            <span class="font-semibold text-slate-400">TY: <span id="vB2B" class="font-bold text-purple-300">Rp 0</span></span>
-            <span id="vB2BContrib" class="font-bold text-purple-300 bg-purple-950/60 border border-purple-800/50 px-2 py-0.5 rounded text-[10px]">Contrib: 0.0%</span>
+        <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-indigo-500/30 space-y-2">
+          <div class="flex items-center gap-2 text-indigo-400 text-xs font-bold uppercase tracking-wider">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>Analisis Performa Sales Channel & Omnichannel Impact</span>
           </div>
-          
-          <div class="flex justify-between items-center text-xs border-t border-slate-800/80 pt-1.5">
-            <span class="font-semibold text-slate-500">LY: <span id="vB2BLY" class="font-bold text-slate-300">Rp 0</span></span>
-            <span id="vB2BContribLY" class="font-bold text-slate-400 bg-slate-900 px-2 py-0.5 rounded text-[10px]">Contrib: 0.0%</span>
+          <div id="insight-channel" class="text-xs text-slate-300 space-y-2 leading-relaxed bg-slate-950/60 p-3.5 rounded-lg border border-slate-800">
+            Memuat analisis channel...
+          </div>
+        </div>
+      </section>
+
+      <section id="view-stats" class="tab-content hidden space-y-4">
+        <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800">
+          <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">STATISTIK OPERASIONAL</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-3">
+            
+            <div class="bg-purple-950/20 p-3 rounded-lg border border-purple-900/30 text-center flex flex-col justify-between">
+              <div>
+                <span class="block text-[10px] font-bold text-purple-400 uppercase">QTY</span>
+                <span id="vQty" class="text-base font-black text-purple-200">0</span>
+                <div class="text-[10px] font-semibold text-slate-400 mt-0.5">
+                  LY: <span id="vQtyLY" class="font-bold text-slate-300">0</span>
+                </div>
+              </div>
+              <div class="text-[10px] font-semibold text-slate-400 mt-2 pt-1.5 border-t border-slate-800/80">
+                Grego: <span id="vQtyGrego" class="font-bold">0.0%</span> | Fisk: <span id="vQtyFisk" class="font-bold">0.0%</span>
+              </div>
+            </div>
+
+            <div class="bg-teal-950/20 p-3 rounded-lg border border-teal-900/30 text-center flex flex-col justify-between">
+              <div>
+                <span class="block text-[10px] font-bold text-teal-400 uppercase">TRX</span>
+                <span id="vTrx" class="text-base font-black text-teal-200">0</span>
+                <div class="text-[10px] font-semibold text-slate-400 mt-0.5">
+                  LY: <span id="vTrxLY" class="font-bold text-slate-300">0</span>
+                </div>
+              </div>
+              <div class="text-[10px] font-semibold text-slate-400 mt-2 pt-1.5 border-t border-slate-800/80">
+                Grego: <span id="vTrxGrego" class="font-bold">0.0%</span> | Fisk: <span id="vTrxFisk" class="font-bold">0.0%</span>
+              </div>
+            </div>
+
+            <div class="bg-amber-950/20 p-3 rounded-lg border border-amber-900/30 text-center flex flex-col justify-between">
+              <div>
+                <span class="block text-[10px] font-bold text-amber-400 uppercase">AUR</span>
+                <span id="vAur" class="text-base font-black text-amber-200">Rp 0</span>
+                <div class="text-[10px] font-semibold text-slate-400 mt-0.5">
+                  LY: <span id="vAurLY" class="font-bold text-slate-300">Rp 0</span>
+                </div>
+              </div>
+              <div class="text-[10px] font-semibold text-slate-400 mt-2 pt-1.5 border-t border-slate-800/80">
+                Grego: <span id="vAurGrego" class="font-bold">0.0%</span> | Fisk: <span id="vAurFisk" class="font-bold">0.0%</span>
+              </div>
+            </div>
+
+            <div class="bg-emerald-950/20 p-3 rounded-lg border border-emerald-900/30 text-center flex flex-col justify-between">
+              <div>
+                <span class="block text-[10px] font-bold text-emerald-400 uppercase">UPT</span>
+                <span id="vUpt" class="text-base font-black text-emerald-200">0.00</span>
+                <div class="text-[10px] font-semibold text-slate-400 mt-0.5">
+                  LY: <span id="vUptLY" class="font-bold text-slate-300">0.00</span>
+                </div>
+              </div>
+              <div class="text-[10px] font-semibold text-slate-400 mt-2 pt-1.5 border-t border-slate-800/80">
+                Grego: <span id="vUptGrego" class="font-bold">0.0%</span> | Fisk: <span id="vUptFisk" class="font-bold">0.0%</span>
+              </div>
+            </div>
+
+            <div class="bg-rose-950/20 p-3 rounded-lg border border-rose-900/30 text-center flex flex-col justify-between">
+              <div>
+                <span class="block text-[10px] font-bold text-rose-400 uppercase">Basket Size</span>
+                <span id="vBasket" class="text-base font-black text-rose-200">Rp 0</span>
+                <div class="text-[10px] font-semibold text-slate-400 mt-0.5">
+                  LY: <span id="vBasketLY" class="font-bold text-slate-300">Rp 0</span>
+                </div>
+              </div>
+              <div class="text-[10px] font-semibold text-slate-400 mt-2 pt-1.5 border-t border-slate-800/80">
+                Grego: <span id="vBasketGrego" class="font-bold">0.0%</span> | Fisk: <span id="vBasketFisk" class="font-bold">0.0%</span>
+              </div>
+            </div>
+
           </div>
         </div>
 
-      </div>
-    </div>
+        <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-teal-500/30 space-y-2">
+          <div class="flex items-center gap-2 text-teal-400 text-xs font-bold uppercase tracking-wider">
+            <i class="fa-solid fa-calculator"></i>
+            <span>Analisis Operasional & Fluktuasi Basket Size</span>
+          </div>
+          <div id="insight-stats" class="text-xs text-slate-300 space-y-2 leading-relaxed bg-slate-950/60 p-3.5 rounded-lg border border-slate-800">
+            Memuat analisis statistik...
+          </div>
+        </div>
+      </section>
 
-    <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800">
-      <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">STATISTIK OPERASIONAL</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-3">
-        
-        <div class="bg-purple-950/20 p-3 rounded-lg border border-purple-900/30 text-center">
-          <span class="block text-[10px] font-bold text-purple-400 uppercase">QTY</span>
-          <span id="vQty" class="text-base font-black text-purple-200">0</span>
-          <div class="text-[10px] font-semibold text-slate-400 mt-1">
-            Grego: <span id="vQtyGrego" class="font-bold">0.0%</span> | Fisk: <span id="vQtyFisk" class="font-bold">0.0%</span>
+      <section id="view-grafik" class="tab-content hidden space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800">
+            <canvas id="barChart" height="220"></canvas>
+          </div>
+          <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800">
+            <canvas id="lineChart" height="220"></canvas>
+          </div>
+          <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800">
+            <canvas id="pieChart" height="220"></canvas>
           </div>
         </div>
 
-        <div class="bg-teal-950/20 p-3 rounded-lg border border-teal-900/30 text-center">
-          <span class="block text-[10px] font-bold text-teal-400 uppercase">TRX</span>
-          <span id="vTrx" class="text-base font-black text-teal-200">0</span>
-          <div class="text-[10px] font-semibold text-slate-400 mt-1">
-            Grego: <span id="vTrxGrego" class="font-bold">0.0%</span> | Fisk: <span id="vTrxFisk" class="font-bold">0.0%</span>
+        <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-purple-500/30 space-y-2">
+          <div class="flex items-center gap-2 text-purple-400 text-xs font-bold uppercase tracking-wider">
+            <i class="fa-solid fa-chart-pie"></i>
+            <span>Analisis Performa Divisi & Anomali Tren Harian</span>
+          </div>
+          <div id="insight-grafik" class="text-xs text-slate-300 space-y-2 leading-relaxed bg-slate-950/60 p-3.5 rounded-lg border border-slate-800">
+            Memuat analisis visual...
           </div>
         </div>
+      </section>
 
-        <div class="bg-amber-950/20 p-3 rounded-lg border border-amber-900/30 text-center">
-          <span class="block text-[10px] font-bold text-amber-400 uppercase">AUR</span>
-          <span id="vAur" class="text-base font-black text-amber-200">Rp 0</span>
-          <div class="text-[10px] font-semibold text-slate-400 mt-1">
-            Grego: <span id="vAurGrego" class="font-bold">0.0%</span> | Fisk: <span id="vAurFisk" class="font-bold">0.0%</span>
-          </div>
-        </div>
-
-        <div class="bg-emerald-950/20 p-3 rounded-lg border border-emerald-900/30 text-center">
-          <span class="block text-[10px] font-bold text-emerald-400 uppercase">UPT</span>
-          <span id="vUpt" class="text-base font-black text-emerald-200">0.00</span>
-          <div class="text-[10px] font-semibold text-slate-400 mt-1">
-            Grego: <span id="vUptGrego" class="font-bold">0.0%</span> | Fisk: <span id="vUptFisk" class="font-bold">0.0%</span>
-          </div>
-        </div>
-
-        <div class="bg-rose-950/20 p-3 rounded-lg border border-rose-900/30 text-center">
-          <span class="block text-[10px] font-bold text-rose-400 uppercase">Basket Size</span>
-          <span id="vBasket" class="text-base font-black text-rose-200">Rp 0</span>
-          <div class="text-[10px] font-semibold text-slate-400 mt-1">
-            Grego: <span id="vBasketGrego" class="font-bold">0.0%</span> | Fisk: <span id="vBasketFisk" class="font-bold">0.0%</span>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800">
-        <canvas id="barChart" height="200"></canvas>
-      </div>
-      <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800">
-        <canvas id="lineChart" height="200"></canvas>
-      </div>
-      <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800">
-        <canvas id="pieChart" height="200"></canvas>
-      </div>
     </div>
 
   </div>
 
   <script>
-    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzkcNC-ql7B6R1TKW6xMDyBiF2Q1sO6A0hIBOa2fCTwf04GERklYu9PZ3Eqwd2YoNxnUA/exec";
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxmFUkJ8adOv_tvKpTN_wSExtwsvTm_Lji600ViZTETkfERnb1Bn7u_NTgzXpMHcWqdkg/exec";
 
     let masterData = [];
     let charts = {};
 
     const blnIndo = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('bg-amber-500/20', 'text-amber-400', 'border-amber-500/30', 'shadow-md');
+        btn.classList.add('text-slate-400', 'hover:bg-slate-800', 'hover:text-slate-200', 'border-transparent');
+      });
+
+      document.getElementById(`view-${tabId}`).classList.remove('hidden');
+      const activeBtn = document.getElementById(`btn-${tabId}`);
+      activeBtn.classList.add('bg-amber-500/20', 'text-amber-400', 'border-amber-500/30', 'shadow-md');
+      activeBtn.classList.remove('text-slate-400', 'hover:bg-slate-800', 'hover:text-slate-200', 'border-transparent');
+
+      if (window.innerWidth < 768) toggleSidebar();
+    }
+
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    }
 
     function getMonthIndex(bulanStr) {
       if (!bulanStr) return -1;
@@ -304,40 +456,46 @@
       Chart.register(ChartDataLabels);
     }
 
+    function handleGASData(data) {
+      masterData = Array.isArray(data) ? data : (data.raw || []);
+      
+      if (!masterData || masterData.length === 0) {
+        console.warn("Data kosong");
+        return;
+      }
+
+      const years = [...new Set(masterData.map(d => d.year))].filter(y => y > 0).sort((a,b) => b-a);
+      const fYearTY = document.getElementById('fYearTY');
+      const fYearLY = document.getElementById('fYearLY');
+      
+      fYearTY.innerHTML = '';
+      fYearLY.innerHTML = '';
+      years.forEach(y => {
+        fYearTY.innerHTML += `<option value="${y}">${y}</option>`;
+        fYearLY.innerHTML += `<option value="${y}">${y}</option>`;
+      });
+
+      if (years.length > 1) {
+        fYearLY.value = years[1];
+      }
+
+      populateMonthDropdowns('fBulanAwalTY', 'fBulanAkhirTY');
+      populateMonthDropdowns('fBulanAwalLY', 'fBulanAkhirLY');
+
+      applyFilters();
+    }
+
+    function loadDataJSONP() {
+      const script = document.createElement('script');
+      script.src = `${GAS_WEB_APP_URL}?callback=handleGASData`;
+      script.onerror = function() {
+        alert("Gagal memuat data dari server Google Apps Script. Pastikan URL Web App sudah benar.");
+      };
+      document.body.appendChild(script);
+    }
+
     window.onload = () => {
-      fetch(GAS_WEB_APP_URL)
-        .then(response => {
-          if (!response.ok) throw new Error("Gagal mengambil data dari server");
-          return response.json();
-        })
-        .then(data => {
-          masterData = Array.isArray(data) ? data : (data.raw || []);
-          
-          const years = [...new Set(masterData.map(d => d.year))].sort((a,b) => b-a);
-          const fYearTY = document.getElementById('fYearTY');
-          const fYearLY = document.getElementById('fYearLY');
-          
-          fYearTY.innerHTML = '';
-          fYearLY.innerHTML = '';
-          years.forEach(y => {
-            fYearTY.innerHTML += `<option value="${y}">${y}</option>`;
-            fYearLY.innerHTML += `<option value="${y}">${y}</option>`;
-          });
-
-          if (years.length > 1) {
-            fYearLY.value = years[1];
-          }
-
-          // Populate Slicer Bulan TY & LY
-          populateMonthDropdowns('fBulanAwalTY', 'fBulanAkhirTY');
-          populateMonthDropdowns('fBulanAwalLY', 'fBulanAkhirLY');
-
-          applyFilters();
-        })
-        .catch(err => {
-          console.error("Error loading dashboard data:", err);
-          alert("Terjadi kesalahan saat memuat data. Silakan pastikan URL Web App sudah benar dan dapat diakses.");
-        });
+      loadDataJSONP();
 
       setInterval(() => {
         const n = new Date();
@@ -362,7 +520,6 @@
     function onYearTYChange() {
       const yearTY = parseInt(document.getElementById('fYearTY').value);
       const fYearLY = document.getElementById('fYearLY');
-      
       const targetLY = yearTY - 1;
       const optionExists = Array.from(fYearLY.options).some(opt => parseInt(opt.value) === targetLY);
       
@@ -375,45 +532,39 @@
     function applyFilters() {
       if (!masterData || masterData.length === 0) return;
 
-      // Filter Parameter TY
       const yearTY = parseInt(document.getElementById('fYearTY').value) || new Date().getFullYear();
       const bATY = parseInt(document.getElementById('fBulanAwalTY').value) || 0;
       const bKTY = parseInt(document.getElementById('fBulanAkhirTY').value) || 11;
       const tATY = parseInt(document.getElementById('fTglAwalTY').value) || 1;
       const tKTY = parseInt(document.getElementById('fTglAkhirTY').value) || 31;
 
-      // Filter Parameter LY
       const yearLY = parseInt(document.getElementById('fYearLY').value) || (yearTY - 1);
       const bALY = parseInt(document.getElementById('fBulanAwalLY').value) || 0;
       const bKLY = parseInt(document.getElementById('fBulanAkhirLY').value) || 11;
       const tALY = parseInt(document.getElementById('fTglAwalLY').value) || 1;
       const tKLY = parseInt(document.getElementById('fTglAkhirLY').value) || 31;
 
-      // Data Periode Berjalan TY (Current)
       const cur = masterData.filter(d => {
         const mIdx = getMonthIndex(d.bulan);
         return d.year === yearTY && mIdx >= bATY && mIdx <= bKTY && d.day >= tATY && d.day <= tKTY;
       });
 
-      // Data Periode Pembanding LY Gregorian (Prev)
       const prev = masterData.filter(d => {
         const mIdx = getMonthIndex(d.bulan);
         return d.year === yearLY && mIdx >= bALY && mIdx <= bKLY && d.day >= tALY && d.day <= tKLY;
       });
 
-      // Trend Data untuk Chart (berdasarkan filter TY)
       const trend = masterData.filter(d => {
         const mIdx = getMonthIndex(d.bulan);
         return d.year === yearTY && mIdx >= bATY && mIdx <= bKTY;
       });
 
-      // Data Periode Pembanding LY Fiskal (Fiscal Prev)
       const fiscalPrev = masterData.filter(d => 
         d.year === yearLY && 
         cur.some(c => c.week === d.week && c.dayName === d.dayName)
       );
 
-      updateUI(cur, prev, trend, fiscalPrev);
+      updateUI(cur, prev, trend, fiscalPrev, { yearTY, yearLY, bATY, bKTY, tATY, tKTY });
     }
 
     function setGrowthStyle(elementId, val) {
@@ -423,22 +574,19 @@
       el.className = val < 0 ? 'font-bold text-rose-400' : 'font-bold text-emerald-400';
     }
 
-    function updateUI(cur, prev, trend, fiscalPrev) {
-      // 1. Perhitungan Data TY
+    function updateUI(cur, prev, trend, fiscalPrev, filterContext) {
       const s = cur.reduce((a, b) => a + b.sales, 0);
       const t = cur.reduce((a, b) => a + b.target, 0);
       const ach = (s / (t || 1)) * 100;
       const bz = cur.reduce((a, b) => a + b.bazaar, 0);
       const inS = s - bz;
 
-      // 2. Perhitungan Data LY
       const ps = prev.reduce((a, b) => a + b.sales, 0);
       const pt = prev.reduce((a, b) => a + b.target, 0);
       const pach = (ps / (pt || 1)) * 100;
       const pbz = prev.reduce((a, b) => a + b.bazaar, 0);
       const pInS = ps - pbz;
 
-      // Update Tampilan Sales Performance - BARIS TY
       document.getElementById('vTarget').innerText = Math.round(t).toLocaleString('id-ID');
       document.getElementById('vSales').innerText = Math.round(s).toLocaleString('id-ID');
       const vAch = document.getElementById('vAch');
@@ -447,7 +595,6 @@
       document.getElementById('vBazaar').innerText = Math.round(bz).toLocaleString('id-ID');
       document.getElementById('vInStore').innerText = Math.round(inS).toLocaleString('id-ID');
 
-      // Update Tampilan Sales Performance - BARIS LY (KONTROL)
       document.getElementById('vTargetLY').innerText = Math.round(pt).toLocaleString('id-ID');
       document.getElementById('vSalesLY').innerText = Math.round(ps).toLocaleString('id-ID');
       const vAchLY = document.getElementById('vAchLY');
@@ -456,7 +603,6 @@
       document.getElementById('vBazaarLY').innerText = Math.round(pbz).toLocaleString('id-ID');
       document.getElementById('vInStoreLY').innerText = Math.round(pInS).toLocaleString('id-ID');
 
-      // Growth Metrics
       const gr = ps ? ((s - ps) / ps) * 100 : 0;
       const sssg = pInS ? ((inS - pInS) / pInS) * 100 : 0;
       const fCurS = s;
@@ -470,7 +616,6 @@
       vGrwFiskal.innerText = (fGr >= 0 ? '+' : '') + fGr.toFixed(1) + '%';
       vGrwFiskal.className = fGr < 0 ? 'font-bold text-rose-400' : 'font-bold text-indigo-400';
 
-      // Channels TY
       const snt = cur.reduce((a, b) => a + b.snt, 0);
       const b2b = cur.reduce((a, b) => a + b.b2b, 0);
       document.getElementById('vSnT').innerText = 'Rp ' + Math.round(snt).toLocaleString('id-ID');
@@ -478,7 +623,6 @@
       document.getElementById('vB2B').innerText = 'Rp ' + Math.round(b2b).toLocaleString('id-ID');
       document.getElementById('vB2BContrib').innerText = 'Contrib: ' + ((b2b / (s || 1)) * 100).toFixed(1) + '%';
 
-      // Channels LY
       const psnt = prev.reduce((a, b) => a + b.snt, 0);
       const pb2b = prev.reduce((a, b) => a + b.b2b, 0);
       document.getElementById('vSnTLY').innerText = 'Rp ' + Math.round(psnt).toLocaleString('id-ID');
@@ -486,7 +630,6 @@
       document.getElementById('vB2BLY').innerText = 'Rp ' + Math.round(pb2b).toLocaleString('id-ID');
       document.getElementById('vB2BContribLY').innerText = 'Contrib: ' + ((pb2b / (ps || 1)) * 100).toFixed(1) + '%';
 
-      // Statistik Operasional
       const qty = cur.reduce((a, b) => a + b.qty, 0);
       const trx = cur.reduce((a, b) => a + b.trx, 0);
       const aur = s / (qty || 1);
@@ -523,6 +666,12 @@
       document.getElementById('vUpt').innerText = upt.toFixed(2);
       document.getElementById('vBasket').innerText = 'Rp ' + Math.round(basket).toLocaleString('id-ID');
 
+      document.getElementById('vQtyLY').innerText = pQty.toLocaleString('id-ID');
+      document.getElementById('vTrxLY').innerText = pTrx.toLocaleString('id-ID');
+      document.getElementById('vAurLY').innerText = 'Rp ' + Math.round(pAur).toLocaleString('id-ID');
+      document.getElementById('vUptLY').innerText = pUpt.toFixed(2);
+      document.getElementById('vBasketLY').innerText = 'Rp ' + Math.round(pBasket).toLocaleString('id-ID');
+
       setGrowthStyle('vQtyGrego', qtyGr);
       setGrowthStyle('vQtyFisk', qtyFiskGr);
 
@@ -539,6 +688,166 @@
       setGrowthStyle('vBasketFisk', basketFiskGr);
 
       renderCharts(cur, trend);
+
+      // EKSSEKUSI PENGENERATAN ANALISIS LOGIKA TINGKAT LANJUT (OPSI 1)
+      generateAdvancedInsights({
+        s, t, ach, bz, inS, ps, pt, pbz, pInS, gr, fGr, sssg,
+        snt, psnt, b2b, pb2b,
+        qty, pQty, trx, pTrx, aur, pAur, upt, pUpt, basket, pBasket,
+        trxGr, basketGr, aurGr, uptGr,
+        cur, trend, filterContext
+      });
+    }
+
+    // =========================================================================
+    // LOGIKA ANALISIS BISNIS MANDIRI LENGKAP & DETAIL (DETAILED RULE-BASED OPSI 1)
+    // =========================================================================
+    function generateAdvancedInsights(d) {
+      // -----------------------------------------------------------------------
+      // 1. ADVANCED INSIGHT: SALES PERFORMANCE
+      // -----------------------------------------------------------------------
+      const gap = d.s - d.t;
+      const absGap = Math.abs(gap);
+      let gapText = "";
+      
+      if (gap >= 0) {
+        gapText = `<span class="text-emerald-400 font-bold">Surplus Rp ${Math.round(absGap).toLocaleString('id-ID')}</span> di atas target.`;
+      } else {
+        gapText = `<span class="text-rose-400 font-bold">Shortfall / Defisit Rp ${Math.round(absGap).toLocaleString('id-ID')}</span> untuk mencapai Target 100%.`;
+      }
+
+      // Hitung sisa hari dalam periode
+      const daysInPeriod = (d.filterContext.tKTY - d.filterContext.tATY + 1) || 1;
+      const numDaysRecorded = [...new Set(d.cur.map(x => x.day))].length || daysInPeriod;
+      const remainingDays = Math.max(daysInPeriod - numDaysRecorded, 0);
+      
+      let runRateText = "";
+      if (gap < 0 && remainingDays > 0) {
+        const requiredDaily = absGap / remainingDays;
+        runRateText = `• <b>Proyeksi Target:</b> Untuk menutup defisit dalam sisa <b>${remainingDays} hari</b>, dibutuhkan rata-rata omset minimal <b>Rp ${Math.round(requiredDaily).toLocaleString('id-ID')}/hari</b>.`;
+      } else if (gap >= 0) {
+        runRateText = `• <b>Proyeksi Target:</b> Performa penjualan telah memenuhi target periode ini. Pertahankan pace harian saat ini!`;
+      } else {
+        runRateText = `• <b>Evaluasi Akhir Periode:</b> Periode tanggal ini telah selesai dengan selisih akhir sebesar Rp ${Math.round(absGap).toLocaleString('id-ID')}.`;
+      }
+
+      // Anomali Bazaar vs In-Store
+      const bzShare = (d.bz / (d.s || 1)) * 100;
+      let bzWarning = "";
+      if (bzShare > 20) {
+        bzWarning = `<p class="text-amber-300">• <b>Catatan Event:</b> Kontribusi Event Bazaar sangat dominan (<b>${bzShare.toFixed(1)}%</b> dari total sales). Pastikan margin keuntungan produk bazaar tetap terjaga.</p>`;
+      } else {
+        bzWarning = `<p>• <b>Struktur Penjualan:</b> Penjualan didominasi area In-Store utama (<b>${(100 - bzShare).toFixed(1)}%</b>) dengan dorongan Bazaar sebesar <b>${bzShare.toFixed(1)}%</b>.</p>`;
+      }
+
+      document.getElementById('insight-sales').innerHTML = `
+        <p>• <b>Evaluasi Pencapaian Target:</b> Realisasi Sales TY mencapai <b>Rp ${Math.round(d.s).toLocaleString('id-ID')}</b> (<b>${d.ach.toFixed(1)}%</b>). Terdapat selisih ${gapText}</p>
+        <p>• <b>Dinamika Growth:</b> Pertumbuhan Gregorian sebesar <b>${d.gr >= 0 ? '+' : ''}${d.gr.toFixed(1)}%</b>, Growth Fiskal <b>${d.fGr >= 0 ? '+' : ''}${d.fGr.toFixed(1)}%</b>, dan SSSG (Like-for-Like In-Store) <b>${d.sssg >= 0 ? '+' : ''}${d.sssg.toFixed(1)}%</b>.</p>
+        ${runRateText}
+        ${bzWarning}
+      `;
+
+      // -----------------------------------------------------------------------
+      // 2. ADVANCED INSIGHT: SALES CHANNEL
+      // -----------------------------------------------------------------------
+      const sntGr = d.psnt ? (((d.snt - d.psnt) / d.psnt) * 100) : 0;
+      const b2bGr = d.pb2b ? (((d.b2b - d.pb2b) / d.pb2b) * 100) : 0;
+      const totalDigital = d.snt + d.b2b;
+      const totalDigitalContrib = ((totalDigital / (d.s || 1)) * 100).toFixed(1);
+
+      let channelRecommendation = "";
+      if (sntGr < 0) {
+        channelRecommendation += "SNT mengalami penurunan volume. Disarankan meningkatkan keaktifan posting broadcast katalog WhatsApp/Social Media. ";
+      } else {
+        channelRecommendation += "Channel SNT tumbuh positif dan efektif menjangkau pelanggan luar toko. ";
+      }
+
+      if (b2bGr < 0) {
+        channelRecommendation += "B2B tertekan. Diperlukan pendekatan langsung ke instansi/korporasi lokal untuk potensi pesanan grosir/voucher.";
+      } else {
+        channelRecommendation += "Performa B2B solid mendukung total omset.";
+      }
+
+      document.getElementById('insight-channel').innerHTML = `
+        <p>• <b>SNT (Shopping & Delivery):</b> Omset TY Rp ${Math.round(d.snt).toLocaleString('id-ID')} (Growth: <span class="${sntGr >= 0 ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold'}">${sntGr >= 0 ? '+' : ''}${sntGr.toFixed(1)}%</span> vs LY).</p>
+        <p>• <b>B2B (Corporate Sales):</b> Omset TY Rp ${Math.round(d.b2b).toLocaleString('id-ID')} (Growth: <span class="${b2bGr >= 0 ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold'}">${b2bGr >= 0 ? '+' : ''}${b2bGr.toFixed(1)}%</span> vs LY).</p>
+        <p>• <b>Total Omnichannel Impact:</b> Gabungan SNT & B2B menyumbang <b>Rp ${Math.round(totalDigital).toLocaleString('id-ID')}</b> (<b>${totalDigitalContrib}%</b> dari total sales toko).</p>
+        <p class="text-amber-200/90">• <b>Rekomendasi Strategi:</b> ${channelRecommendation}</p>
+      `;
+
+      // -----------------------------------------------------------------------
+      // 3. ADVANCED INSIGHT: STATISTIK OPERASIONAL
+      // -----------------------------------------------------------------------
+      let driverDiagnosis = "";
+      if (d.trxGr < 0 && d.basketGr > 0) {
+        driverDiagnosis = `Trafik Pengunjung (TRX) mengalami penurunan (<b>${d.trxGr.toFixed(1)}%</b>), namun total omset tertolong oleh <b>peningkatan nilai belanja per pelanggan / Basket Size (${d.basketGr >= 0 ? '+' : ''}${d.basketGr.toFixed(1)}%)</b>.`;
+      } else if (d.trxGr > 0 && d.basketGr < 0) {
+        driverDiagnosis = `Trafik Pengunjung (TRX) tumbuh baik (<b>+${d.trxGr.toFixed(1)}%</b>), namun nilai belanja per struk mengalami penurunan (<b>${d.basketGr.toFixed(1)}%</b>).`;
+      } else if (d.trxGr > 0 && d.basketGr > 0) {
+        driverDiagnosis = `Performa sangat sehat! Baik Trafik Pengunjung (TRX: <b>+${d.trxGr.toFixed(1)}%</b>) maupun Basket Size (<b>+${d.basketGr.toFixed(1)}%</b>) sama-sama tumbuh positif.`;
+      } else {
+        driverDiagnosis = `Terdapat tantangan ganda di mana Trafik Pengunjung (<b>${d.trxGr.toFixed(1)}%</b>) dan Basket Size (<b>${d.basketGr.toFixed(1)}%</b>) sama-sama tertekan.`;
+      }
+
+      // Early Warning Indicator UPT (Cross-selling / Up-selling)
+      let uptWarning = "";
+      if (d.uptGr < 0) {
+        uptWarning = `<p class="text-rose-300 font-semibold">• <b>Warning Tim Kasir & SPG:</b> UPT turun <b>${d.uptGr.toFixed(1)}%</b> (sekarang ${d.upt.toFixed(2)} item/struk). Indikasi perlunya penguatan program <i>Cross-selling / Add-on Product</i> di kasir & lantai penjualan.</p>`;
+      } else {
+        uptWarning = `<p class="text-emerald-300">• <b>Kinerja Penjualan Silang (UPT):</b> UPT terjaga positif di angka <b>${d.upt.toFixed(2)} item/struk</b> (Growth +${d.uptGr.toFixed(1)}%). Penawaran produk tambahan berjalan baik.</p>`;
+      }
+
+      document.getElementById('insight-stats').innerHTML = `
+        <p>• <b>Diagnosa Driver Penjualan:</b> ${driverDiagnosis}</p>
+        <p>• <b>Detail Metrik Belanja:</b> Rata-rata harga barang terpilih (AUR) adalah <b>Rp ${Math.round(d.aur).toLocaleString('id-ID')}</b> (${d.aurGr >= 0 ? '+' : ''}${d.aurGr.toFixed(1)}%), sehingga nilai Basket Size rata-rata menjadi <b>Rp ${Math.round(d.basket).toLocaleString('id-ID')}</b> per struk.</p>
+        ${uptWarning}
+      `;
+
+      // -----------------------------------------------------------------------
+      // 4. ADVANCED INSIGHT: GRAFIK & DIVISI
+      // -----------------------------------------------------------------------
+      const d1 = d.cur.reduce((a, b) => a + b.div1, 0);
+      const d2 = d.cur.reduce((a, b) => a + b.div2, 0);
+      const d3 = d.cur.reduce((a, b) => a + b.div3, 0);
+      const d4 = d.cur.reduce((a, b) => a + b.div4, 0);
+      const totalDiv = (d1 + d2 + d3 + d4) || 1;
+
+      const divs = [
+        { name: 'Divisi 1', val: d1, pct: (d1/totalDiv)*100 },
+        { name: 'Divisi 2', val: d2, pct: (d2/totalDiv)*100 },
+        { name: 'Divisi 3', val: d3, pct: (d3/totalDiv)*100 },
+        { name: 'Divisi 4', val: d4, pct: (d4/totalDiv)*100 }
+      ];
+      divs.sort((a,b) => b.val - a.val);
+
+      const topDiv = divs[0];
+      const bottomDiv = divs[divs.length - 1];
+
+      // Analisis Peak Day
+      const daysOrder = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      const dayNamesIndo = { 'Mon':'Senin', 'Tue':'Selasa', 'Wed':'Rabu', 'Thu':'Kamis', 'Fri':'Jumat', 'Sat':'Sabtu', 'Sun':'Minggu' };
+      
+      let dayAverages = daysOrder.map(dayName => {
+        const filtered = d.trend.filter(x => x.dayName === dayName);
+        const avg = filtered.length ? filtered.reduce((a,b) => a + b.sales, 0) / filtered.length : 0;
+        return { dayName, dayIndo: dayNamesIndo[dayName], avg };
+      });
+      dayAverages.sort((a,b) => b.avg - a.avg);
+
+      const peakDay = dayAverages[0];
+
+      // DP vs CV
+      const dp = d.cur.reduce((a, b) => a + b.dp, 0);
+      const cv = d.cur.reduce((a, b) => a + b.cv, 0);
+      const totalDpCv = (dp + cv) || 1;
+      const dpPct = ((dp / totalDpCv) * 100).toFixed(1);
+      const cvPct = ((cv / totalDpCv) * 100).toFixed(1);
+
+      document.getElementById('insight-grafik').innerHTML = `
+        <p>• <b>Analisis Kontribusi Divisi:</b> Penjualan terbesar didominasi oleh <b>${topDiv.name}</b> (Rp ${Math.round(topDiv.val).toLocaleString('id-ID')} / <b>${topDiv.pct.toFixed(1)}%</b>). Sementara <b>${bottomDiv.name}</b> memiliki porsi terendah (<b>${bottomDiv.pct.toFixed(1)}%</b>) dan memerlukan penataan ulang <i>visual merchandising</i> atau promosi khusus.</p>
+        <p>• <b>Puncak Trafik Penjualan Harian:</b> Rata-rata omset tertinggi terjadi pada hari <b>${peakDay.dayIndo}</b> (Rata-rata Rp ${Math.round(peakDay.avg).toLocaleString('id-ID')}). Pastikan alokasi jadwal manning/SPG berada di tingkat maksimal pada hari tersebut.</p>
+        <p>• <b>Komposisi Pengadaan:</b> Porsi Direct Purchase (DP) mencapai <b>${dpPct}%</b> dan Consignment Vendor (CV) sebesar <b>${cvPct}%</b>.</p>
+      `;
     }
 
     function renderCharts(cur, trend) {
@@ -548,7 +857,6 @@
 
       const totalDiv = (cur.reduce((a, b) => a + b.div1 + b.div2 + b.div3 + b.div4, 0)) || 1;
 
-      // Dark Theme Color Configuration for Charts
       Chart.defaults.color = '#94a3b8';
 
       charts.barChart = new Chart('barChart', {
@@ -562,7 +870,7 @@
               cur.reduce((a, b) => a + b.div3, 0),
               cur.reduce((a, b) => a + b.div4, 0)
             ],
-            backgroundColor: '#f59e0b', // Amber Gold
+            backgroundColor: '#f59e0b',
             borderRadius: 6
           }]
         },
@@ -595,9 +903,9 @@
           datasets: [{
             data: days.map(d => {
               const f = trend.filter(x => x.dayName === d);
-              return f.length ? f.reduce((a, b) => a + b.sales, 0) / f.length : 0;
+              return f.length ? f.reduce((a,b) => a + b.sales, 0) / f.length : 0;
             }).map(v => Math.floor(v / 1000)),
-            borderColor: '#10b981', // Emerald Green
+            borderColor: '#10b981',
             backgroundColor: 'rgba(16, 185, 129, 0.15)',
             fill: true,
             tension: 0.3,
@@ -629,7 +937,7 @@
               cur.reduce((a, b) => a + b.dp, 0),
               cur.reduce((a, b) => a + b.cv, 0)
             ],
-            backgroundColor: ['#d97706', '#f43f5e'] // Gold vs Rose
+            backgroundColor: ['#d97706', '#f43f5e']
           }]
         },
         options: {
