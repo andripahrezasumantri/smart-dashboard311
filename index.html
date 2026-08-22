@@ -18,16 +18,17 @@
 </head>
 <body class="bg-[#0b1120] text-slate-100 antialiased min-h-screen">
 
-  <!-- OVERLAY LOADING -->
+  <!-- OVERLAY LOADING BRANDING APS DESIGN SYSTEM -->
   <div id="loading-overlay" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[100] flex flex-col items-center justify-center p-4 transition-opacity duration-500">
-    <div class="bg-slate-900 border border-slate-800 p-6 md:p-8 rounded-2xl shadow-2xl flex flex-col items-center max-w-sm w-full text-center space-y-4">
+    <div class="bg-slate-900 border border-slate-800 p-6 md:p-8 rounded-2xl shadow-2xl flex flex-col items-center max-w-md w-full text-center space-y-4">
       <div class="relative flex items-center justify-center">
         <div class="w-16 h-16 border-4 border-amber-500/20 border-t-amber-400 rounded-full animate-spin"></div>
-        <i class="fa-solid fa-database text-amber-400 text-xl absolute"></i>
+        <i class="fa-solid fa-microchip text-amber-400 text-xl absolute"></i>
       </div>
       <div>
-        <h3 class="text-sm font-black text-amber-400 uppercase tracking-wider">MDS 311 ANALYTICS</h3>
-        <p id="loading-status" class="text-xs text-slate-300 font-medium mt-1">Connecting to Spreadsheet...</p>
+        <h3 class="text-xs font-black text-amber-400 uppercase tracking-widest">POWERED BY APS DESIGN SYSTEM</h3>
+        <p id="loading-status" class="text-xs text-slate-200 font-semibold mt-1.5">Fetching Core Analytics & Live Data Stream...</p>
+        <p class="text-[10px] text-slate-400 font-medium mt-1">Built with Precision by <span class="text-amber-300 font-bold">Andri Pahreza S.</span> (APS Design System)</p>
       </div>
       <div class="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden border border-slate-800">
         <div id="loading-bar" class="bg-gradient-to-r from-amber-500 to-emerald-400 h-full w-1/4 transition-all duration-300 animate-pulse"></div>
@@ -409,22 +410,22 @@
     }
 
     function loadDataJSONP() {
-      updateLoadingStatus("Syncing data from Google Sheets...", 40);
+      updateLoadingStatus("Connecting to APS Data Engine...", 40);
       const script = document.createElement('script');
       script.src = `${GAS_WEB_APP_URL}?callback=handleGASData`;
       script.onerror = function() {
         updateLoadingStatus("Connection failed!", 100);
-        alert("Failed to connect to Google Apps Script. Check Web App URL deployment.");
+        alert("Failed to connect to APS Data Engine. Check Web App URL deployment.");
       };
       document.body.appendChild(script);
     }
 
     function handleGASData(data) {
-      updateLoadingStatus("Processing filters & calculations...", 80);
+      updateLoadingStatus("Processing Core Analytics & Filters...", 80);
       masterData = Array.isArray(data) ? data : (data.raw || []);
 
       if (!masterData || masterData.length === 0) {
-        updateLoadingStatus("Data is empty!", 100);
+        updateLoadingStatus("Data Stream is empty!", 100);
         setTimeout(hideLoadingOverlay, 800);
         return;
       }
@@ -443,7 +444,7 @@
       populateMonthDropdowns('fBulanAwal', 'fBulanAkhir');
       applyFilters();
 
-      updateLoadingStatus("Sync Completed!", 100);
+      updateLoadingStatus("APS Design System Ready!", 100);
       setTimeout(hideLoadingOverlay, 500);
     }
 
@@ -596,7 +597,6 @@
       generateExecutiveInsights(s, t, ach, bz, inS, gr, fGr, sssg, snt, b2b, qty, trx, aur, upt, basket, cur);
     }
 
-    // FUNGSI PENJANAAN INSIGHT DUAL DINAMIS UNTUK SEMUA MENU
     function generateExecutiveInsights(s, t, ach, bz, inS, gr, fGr, sssg, snt, b2b, qty, trx, aur, upt, basket, cur) {
       const gap = t - s;
       const bzPct = s ? ((bz / s) * 100).toFixed(1) : 0;
@@ -632,7 +632,6 @@
       const d4 = cur.reduce((a, b) => a + (parseFloat(b.div4) || 0), 0);
       const dp = cur.reduce((a, b) => a + (parseFloat(b.dp) || 0), 0);
       const cv = cur.reduce((a, b) => a + (parseFloat(b.cv) || 0), 0);
-      const totalDiv = (d1 + d2 + d3 + d4) || 1;
 
       let insightGrafikHTML = `<p>• Porsi divisi terbesar ditempati oleh <b class="text-amber-400">Divisi ${getTopDiv(d1, d2, d3, d4)}</b> dengan kontribusi dominan dalam periode ini.</p>`;
       insightGrafikHTML += `<p>• Komposisi skema bisnis: <b class="text-amber-400">Direct Purchase (DP)</b> sebesar <b>${((dp / (dp + cv || 1)) * 100).toFixed(1)}%</b> vs <b class="text-rose-400">Consignment Vendor (CV)</b> sebesar <b>${((cv / (dp + cv || 1)) * 100).toFixed(1)}%</b>.</p>`;
