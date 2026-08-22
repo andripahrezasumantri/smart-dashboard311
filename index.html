@@ -27,7 +27,7 @@
       </div>
       <div>
         <h3 class="text-sm font-black text-amber-400 uppercase tracking-wider">MDS 311 ANALYTICS</h3>
-        <p id="loading-status" class="text-xs text-slate-300 font-medium mt-1">Menghubungkan ke Spreadsheet...</p>
+        <p id="loading-status" class="text-xs text-slate-300 font-medium mt-1">Connecting to Spreadsheet...</p>
       </div>
       <div class="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden border border-slate-800">
         <div id="loading-bar" class="bg-gradient-to-r from-amber-500 to-emerald-400 h-full w-1/4 transition-all duration-300 animate-pulse"></div>
@@ -43,7 +43,7 @@
     <aside id="sidebar" class="fixed md:sticky top-0 left-0 h-screen w-72 bg-slate-900/95 backdrop-blur-md border-r border-slate-800 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col justify-between p-4 shadow-2xl overflow-y-auto">
       <div class="space-y-5">
         
-        <!-- HEADER IDENTITAS SIDEBAR -->
+        <!-- HEADER IDENTITAS -->
         <div class="pb-3 border-b border-slate-800 space-y-2">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -123,23 +123,23 @@
           </div>
           <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
             <div>
-              <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Tahun</label>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Year</label>
               <select id="fYear" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500"></select>
             </div>
             <div>
-              <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Bulan Awal</label>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Start Month</label>
               <select id="fBulanAwal" onchange="onBulanAwalChange()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500"></select>
             </div>
             <div>
-              <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Bulan Akhir</label>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">End Month</label>
               <select id="fBulanAkhir" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500"></select>
             </div>
             <div>
-              <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Tgl Awal</label>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Start Date</label>
               <input type="number" id="fTglAwal" value="1" min="1" max="31" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500">
             </div>
             <div>
-              <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Tgl Akhir</label>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">End Date</label>
               <input type="number" id="fTglAkhir" value="31" min="1" max="31" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500">
             </div>
           </div>
@@ -338,29 +338,30 @@
   </div>
 
   <script>
-    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxmFUkJ8adOv_tvKpTN_wSExtwsvTm_Lji600ViZTETkfERnb1Bn7u_NTgzXpMHcWqdkg/exec";
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxN9qsRACefa19CxSWcBqEhd6_i7ztO7Z8L8mbuW4ar7O1f2BFweuYlY10eEC2nvtG-6g/exec";
 
     let masterData = [];
     let charts = {};
 
-    const blnIndo = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+    const blnEnglish = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
+    // MEMBACAKAN NAMA BULAN DARI KOLOM A SPREADSHEET (BAHASA INGGRIS)
     function getMonthIndex(bulanStr) {
       if (!bulanStr) return -1;
       const str = String(bulanStr).toLowerCase().trim();
       const monthMap = {
-        'januari': 0, 'january': 0, 'jan': 0,
-        'februari': 1, 'february': 1, 'feb': 1,
-        'maret': 2, 'march': 2, 'mar': 2,
+        'january': 0, 'jan': 0, 'januari': 0,
+        'february': 1, 'feb': 1, 'februari': 1,
+        'march': 2, 'mar': 2, 'maret': 2,
         'april': 3, 'apr': 3,
-        'mei': 4, 'may': 4,
-        'juni': 5, 'june': 5, 'jun': 5,
-        'juli': 6, 'july': 6, 'jul': 6,
-        'agustus': 7, 'august': 7, 'aug': 7, 'ags': 7,
+        'may': 4, 'mei': 4,
+        'june': 5, 'jun': 5, 'juni': 5,
+        'july': 6, 'jul': 6, 'juli': 6,
+        'august': 7, 'aug': 7, 'agustus': 7, 'ags': 7,
         'september': 8, 'sep': 8,
-        'oktober': 9, 'october': 9, 'okt': 9, 'oct': 9,
+        'october': 9, 'oct': 9, 'oktober': 9, 'okt': 9,
         'november': 10, 'nov': 10,
-        'desember': 11, 'december': 11, 'des': 11, 'dec': 11
+        'december': 11, 'dec': 11, 'desember': 11, 'des': 11
       };
       return monthMap[str] !== undefined ? monthMap[str] : -1;
     }
@@ -409,22 +410,22 @@
     }
 
     function loadDataJSONP() {
-      updateLoadingStatus("Sinkronisasi data dari Google Sheets...", 40);
+      updateLoadingStatus("Syncing data from Google Sheets...", 40);
       const script = document.createElement('script');
       script.src = `${GAS_WEB_APP_URL}?callback=handleGASData`;
       script.onerror = function() {
-        updateLoadingStatus("Gagal terhubung ke server!", 100);
-        alert("Gagal memuat data dari server. Pastikan URL Web App GAS sudah di-deploy dengan benar.");
+        updateLoadingStatus("Connection failed!", 100);
+        alert("Failed to connect to Google Apps Script. Check Web App URL deployment.");
       };
       document.body.appendChild(script);
     }
 
     function handleGASData(data) {
-      updateLoadingStatus("Menyiapkan filter & kalkulasi...", 80);
+      updateLoadingStatus("Processing filters & calculations...", 80);
       masterData = Array.isArray(data) ? data : (data.raw || []);
 
       if (!masterData || masterData.length === 0) {
-        updateLoadingStatus("Data Kosong!", 100);
+        updateLoadingStatus("Data is empty!", 100);
         setTimeout(hideLoadingOverlay, 800);
         return;
       }
@@ -443,17 +444,17 @@
       populateMonthDropdowns('fBulanAwal', 'fBulanAkhir');
       applyFilters();
 
-      updateLoadingStatus("Selesai!", 100);
+      updateLoadingStatus("Sync Completed!", 100);
       setTimeout(hideLoadingOverlay, 500);
     }
 
-    // MEMUAT DROPDOWN BULAN SECARA PRESISI (DEFAULT JANUARI KEDUANYA)
+    // ISI DROPDOWN BULAN BAHASA INGGRIS PRESISI (DEFAULT JANUARY KEDUANYA)
     function populateMonthDropdowns(idAwal, idAkhir) {
       const elAwal = document.getElementById(idAwal);
       const elAkhir = document.getElementById(idAkhir);
       elAwal.innerHTML = '';
       elAkhir.innerHTML = '';
-      blnIndo.forEach((b, i) => {
+      blnEnglish.forEach((b, i) => {
         elAwal.innerHTML += `<option value="${i}">${b}</option>`;
         elAkhir.innerHTML += `<option value="${i}">${b}</option>`;
       });
