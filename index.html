@@ -43,7 +43,7 @@
     <aside id="sidebar" class="fixed md:sticky top-0 left-0 h-screen w-72 bg-slate-900/95 backdrop-blur-md border-r border-slate-800 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col justify-between p-4 shadow-2xl overflow-y-auto">
       <div class="space-y-5">
         
-        <!-- HEADER IDENTITAS -->
+        <!-- HEADER IDENTITAS SIDEBAR -->
         <div class="pb-3 border-b border-slate-800 space-y-2">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -128,7 +128,7 @@
             </div>
             <div>
               <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Bulan Awal</label>
-              <select id="fBulanAwal" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500"></select>
+              <select id="fBulanAwal" onchange="onBulanAwalChange()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500"></select>
             </div>
             <div>
               <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Bulan Akhir</label>
@@ -150,7 +150,6 @@
       <section id="view-sales" class="tab-content space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           
-          <!-- PANEL SALES PERFORMANCE UTAMA -->
           <div class="md:col-span-2 bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800 space-y-3">
             <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider">SALES PERFORMANCE</h2>
             
@@ -178,11 +177,10 @@
             </div>
           </div>
 
-          <!-- PANEL GROWTH PERFORMANCE -->
           <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800 flex flex-col justify-between">
             <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">GROWTH PERFORMANCE</h2>
             <div class="bg-slate-950/80 p-3.5 rounded-lg border border-slate-800 my-auto text-center">
-              <div class="text-xs font-semibold text-slate-400 mb-1">GROWTH</div>
+              <div class="text-xs font-semibold text-slate-400 mb-1">GROWTH SUMMARY</div>
               <div class="text-xs sm:text-sm font-bold space-x-1">
                 <span>grego : <span id="vGrowth" class="text-emerald-400">0.0%</span></span>
                 <span class="text-slate-600">|</span>
@@ -195,7 +193,6 @@
 
         </div>
 
-        <!-- PANEL INSIGHT -->
         <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-amber-500/30 space-y-2">
           <div class="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider">
             <i class="fa-solid fa-brain"></i>
@@ -341,7 +338,7 @@
   </div>
 
   <script>
-    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxN9qsRACefa19CxSWcBqEhd6_i7ztO7Z8L8mbuW4ar7O1f2BFweuYlY10eEC2nvtG-6g/exec";
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxmFUkJ8adOv_tvKpTN_wSExtwsvTm_Lji600ViZTETkfERnb1Bn7u_NTgzXpMHcWqdkg/exec";
 
     let masterData = [];
     let charts = {};
@@ -432,7 +429,6 @@
         return;
       }
 
-      // Ambil tahun dari Kolom E (d.year) secara otomatis
       let yearsFromSheet = [...new Set(masterData.map(d => parseInt(d.year)))].filter(y => y > 2000).sort((a, b) => b - a);
       if (yearsFromSheet.length === 0) {
         yearsFromSheet = [2026, 2025, 2024];
@@ -451,6 +447,7 @@
       setTimeout(hideLoadingOverlay, 500);
     }
 
+    // MEMUAT DROPDOWN BULAN SECARA PRESISI (DEFAULT JANUARI KEDUANYA)
     function populateMonthDropdowns(idAwal, idAkhir) {
       const elAwal = document.getElementById(idAwal);
       const elAkhir = document.getElementById(idAkhir);
@@ -458,8 +455,18 @@
       elAkhir.innerHTML = '';
       blnIndo.forEach((b, i) => {
         elAwal.innerHTML += `<option value="${i}">${b}</option>`;
-        elAkhir.innerHTML += `<option value="${i}" ${i === 11 ? 'selected' : ''}>${b}</option>`;
+        elAkhir.innerHTML += `<option value="${i}">${b}</option>`;
       });
+      elAwal.value = 0;
+      elAkhir.value = 0;
+    }
+
+    // AUTO SINKRONISASI BULAN AKHIR IKUT BULAN AWAL
+    function onBulanAwalChange() {
+      const bAwal = parseInt(document.getElementById('fBulanAwal').value) || 0;
+      const elAkhir = document.getElementById('fBulanAkhir');
+      elAkhir.value = bAwal;
+      applyFilters();
     }
 
     function applyFilters() {
@@ -467,7 +474,7 @@
 
       const yearTY = parseInt(document.getElementById('fYear').value) || new Date().getFullYear();
       const bA = parseInt(document.getElementById('fBulanAwal').value) || 0;
-      const bK = parseInt(document.getElementById('fBulanAkhir').value) || 11;
+      const bK = parseInt(document.getElementById('fBulanAkhir').value) || 0;
       const tA = parseInt(document.getElementById('fTglAwal').value) || 1;
       const tK = parseInt(document.getElementById('fTglAkhir').value) || 31;
 
