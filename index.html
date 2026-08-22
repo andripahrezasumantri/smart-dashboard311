@@ -221,7 +221,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             
             <div class="bg-slate-950/80 p-3 rounded-lg border border-indigo-900/40 space-y-2">
-              <span class="block text-xs font-bold text-indigo-400 border-b border-slate-800 pb-1">SNT (Shopping & Delivery)</span>
+              <span class="block text-xs font-bold text-indigo-400 border-b border-slate-800 pb-1">SNT Shop & Talk)</span>
               <div class="flex justify-between items-center text-xs">
                 <span class="font-semibold text-slate-400">Total: <span id="vSnT" class="font-bold text-amber-400">Rp 0</span></span>
                 <span id="vSnTContrib" class="font-bold text-amber-300 bg-amber-950/60 border border-amber-800/50 px-2 py-0.5 rounded text-[10px]">Contrib: 0.0%</span>
@@ -352,8 +352,13 @@
 
   </div>
 
-  <!-- SCRIPT NAVIGASI UTAMA (TANPA LOGIKA PERHITUNGAN) -->
+  <!-- SCRIPT UTAMA -->
   <script>
+    // KONFIGURASI URL WEB APP GOOGLE APPS SCRIPT
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxmFUkJ8adOv_tvKpTN_wSExtwsvTm_Lji600ViZTETkfERnb1Bn7u_NTgzXpMHcWqdkg/exec";
+
+    let masterData = [];
+
     // FUNGSI SWITCH TAB NAVIGASI SIDEBAR (SPA)
     function switchTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
@@ -380,8 +385,26 @@
       overlay.classList.toggle('hidden');
     }
 
-    // UPDATE JAM & TANGGAL REALTIME
+    // INJEKSI SCRIPT JSONP UNTUK INTEGRASI GAS
+    function loadDataJSONP() {
+      const script = document.createElement('script');
+      script.src = `${GAS_WEB_APP_URL}?callback=handleGASData`;
+      script.onerror = function() {
+        console.error("Gagal terhubung ke Google Apps Script.");
+      };
+      document.body.appendChild(script);
+    }
+
+    // CALLBACK GLOBAL JSONP
+    function handleGASData(data) {
+      masterData = Array.isArray(data) ? data : (data.raw || []);
+      console.log("Data berhasil diterima:", masterData.length, "baris.");
+    }
+
+    // INISIALISASI SAAT HALAMAN DIMUAT
     window.onload = () => {
+      loadDataJSONP();
+
       setInterval(() => {
         const n = new Date();
         document.getElementById('clock').innerText = n.toLocaleTimeString('id-ID', {timeZone: 'Asia/Makassar'});
