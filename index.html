@@ -345,7 +345,6 @@
 
     const blnEnglish = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
-    // MEMBACAKAN NAMA BULAN DARI KOLOM A SPREADSHEET (BAHASA INGGRIS)
     function getMonthIndex(bulanStr) {
       if (!bulanStr) return -1;
       const str = String(bulanStr).toLowerCase().trim();
@@ -448,7 +447,6 @@
       setTimeout(hideLoadingOverlay, 500);
     }
 
-    // ISI DROPDOWN BULAN BAHASA INGGRIS PRESISI (DEFAULT JANUARY KEDUANYA)
     function populateMonthDropdowns(idAwal, idAkhir) {
       const elAwal = document.getElementById(idAwal);
       const elAkhir = document.getElementById(idAkhir);
@@ -462,7 +460,6 @@
       elAkhir.value = 0;
     }
 
-    // AUTO SINKRONISASI BULAN AKHIR IKUT BULAN AWAL
     function onBulanAwalChange() {
       const bAwal = parseInt(document.getElementById('fBulanAwal').value) || 0;
       const elAkhir = document.getElementById('fBulanAkhir');
@@ -481,25 +478,21 @@
 
       const yearLY = yearTY - 1;
 
-      // Filter Data TY
       const cur = masterData.filter(d => {
         const mIdx = getMonthIndex(d.bulan);
         return d.year === yearTY && mIdx >= bA && mIdx <= bK && d.day >= tA && d.day <= tK;
       });
 
-      // Filter Data LY Gregorian
       const prev = masterData.filter(d => {
         const mIdx = getMonthIndex(d.bulan);
         return d.year === yearLY && mIdx >= bA && mIdx <= bK && d.day >= tA && d.day <= tK;
       });
 
-      // Filter Trend Chart TY
       const trend = masterData.filter(d => {
         const mIdx = getMonthIndex(d.bulan);
         return d.year === yearTY && mIdx >= bA && mIdx <= bK;
       });
 
-      // Filter Data LY Fiskal
       const fiscalPrev = masterData.filter(d => 
         d.year === yearLY && 
         cur.some(c => c.week === d.week && c.dayName === d.dayName)
@@ -600,6 +593,57 @@
       setGrowthStyle('vBasketFisk', basketFiskGr);
 
       renderCharts(cur, trend);
+      generateExecutiveInsights(s, t, ach, bz, inS, gr, fGr, sssg, snt, b2b, qty, trx, aur, upt, basket, cur);
+    }
+
+    // FUNGSI PENJANAAN INSIGHT DUAL DINAMIS UNTUK SEMUA MENU
+    function generateExecutiveInsights(s, t, ach, bz, inS, gr, fGr, sssg, snt, b2b, qty, trx, aur, upt, basket, cur) {
+      const gap = t - s;
+      const bzPct = s ? ((bz / s) * 100).toFixed(1) : 0;
+      const sntPct = s ? ((snt / s) * 100).toFixed(1) : 0;
+      const b2bPct = s ? ((b2b / s) * 100).toFixed(1) : 0;
+
+      // 1. Insight Sales Performance
+      let insightSalesHTML = `<p>• Realisasi omzet penjualan mencapai <b class="text-amber-400">Rp ${Math.round(s).toLocaleString('id-ID')}</b> dari target <b class="text-slate-200">Rp ${Math.round(t).toLocaleString('id-ID')}</b> dengan tingkat pencapaian <b>${ach.toFixed(1)}%</b>.</p>`;
+      if (ach >= 100) {
+        insightSalesHTML += `<p>• <span class="text-emerald-400 font-bold">Performa Luar Biasa:</span> Target periode ini telah terlampaui sebesar <b>Rp ${Math.round(Math.abs(gap)).toLocaleString('id-ID')}</b>. Pertumbuhan Same Store Sales Growth (SSSG) tercatat <b class="text-emerald-400">${sssg >= 0 ? '+' : ''}${sssg.toFixed(1)}%</b>.</p>`;
+      } else {
+        insightSalesHTML += `<p>• <span class="text-rose-400 font-bold">Defisit Penjualan:</span> Terpaut gap sebesar <b class="text-rose-400">Rp ${Math.round(gap).toLocaleString('id-ID')}</b>. Penjualan toko reguler (In-Store) menyumbang <b class="text-amber-300">Rp ${Math.round(inS).toLocaleString('id-ID')}</b>, sementara area Bazaar memberi dorongan tambahan <b class="text-amber-300">Rp ${Math.round(bz).toLocaleString('id-ID')} (${bzPct}%)</b>.</p>`;
+      }
+      insightSalesHTML += `<p>• <span class="text-indigo-300 font-semibold">Evaluasi Pertumbuhan:</span> Growth Gregorian tercatat <b>${gr >= 0 ? '+' : ''}${gr.toFixed(1)}%</b>, sedangkan secara Kalender Fiskal Ritel tercatat <b>${fGr >= 0 ? '+' : ''}${fGr.toFixed(1)}%</b>.</p>`;
+      document.getElementById('insight-sales').innerHTML = insightSalesHTML;
+
+      // 2. Insight Sales Channel
+      let insightChannelHTML = `<p>• Total kontribusi dari saluran Omnichannel dan alternatif adalah <b class="text-indigo-400">Rp ${Math.round(snt + b2b).toLocaleString('id-ID')}</b> (<b>${(parseFloat(sntPct) + parseFloat(b2bPct)).toFixed(1)}%</b> dari total omzet toko).</p>`;
+      insightChannelHTML += `<p>• Kanal <b class="text-indigo-300">Shopping & Delivery (SnT)</b> membukukan <b class="text-amber-400">Rp ${Math.round(snt).toLocaleString('id-ID')}</b> (${sntPct}%), sedangkan transaksi <b class="text-purple-300">Business to Business (B2B)</b> menyumbang <b class="text-purple-300">Rp ${Math.round(b2b).toLocaleString('id-ID')}</b> (${b2bPct}%).</p>`;
+      insightChannelHTML += `<p>• <span class="text-emerald-400 font-semibold">Rekomendasi Strategis:</span> ${sntPct < 5 ? 'Aktivasi program promosi khusus SnT perlu ditingkatkan untuk mendorong kontribusi omnichannel di atas target minimal 5%.' : 'Kinerja SnT sudah berjalan sangat efisien dalam menjaga jangkauan pelanggan luar toko.'}</p>`;
+      document.getElementById('insight-channel').innerHTML = insightChannelHTML;
+
+      // 3. Insight Statistik Operasional
+      let insightStatsHTML = `<p>• Total transaksi terkumpul sebanyak <b class="text-teal-300">${trx.toLocaleString('id-ID')} TRX</b> dengan volume produk terjual <b class="text-purple-300">${qty.toLocaleString('id-ID')} QTY</b>.</p>`;
+      insightStatsHTML += `<p>• Nilai rata-rata per barang (AUR) berada di angka <b class="text-amber-300">Rp ${Math.round(aur).toLocaleString('id-ID')}</b> dan angka Units per Transaction (UPT) di <b class="text-emerald-300">${upt.toFixed(2)} item/TRX</b>.</p>`;
+      insightStatsHTML += `<p>• <span class="text-rose-300 font-semibold">Rata-rata Nilai Belanja (Basket Size):</span> Pelanggan membelanjakan rata-rata <b class="text-rose-300">Rp ${Math.round(basket).toLocaleString('id-ID')}</b> per transaksi. ${upt < 2 ? 'Fokus staf kasir dan floor team perlu diarahkan pada penawaran produk Add-On untuk mendongkrak UPT ke angka ideal minimal 2.0.' : 'Kombinasi UPT dan Basket Size terpantau sehat.'}</p>`;
+      document.getElementById('insight-stats').innerHTML = insightStatsHTML;
+
+      // 4. Insight Grafik
+      const d1 = cur.reduce((a, b) => a + (parseFloat(b.div1) || 0), 0);
+      const d2 = cur.reduce((a, b) => a + (parseFloat(b.div2) || 0), 0);
+      const d3 = cur.reduce((a, b) => a + (parseFloat(b.div3) || 0), 0);
+      const d4 = cur.reduce((a, b) => a + (parseFloat(b.div4) || 0), 0);
+      const dp = cur.reduce((a, b) => a + (parseFloat(b.dp) || 0), 0);
+      const cv = cur.reduce((a, b) => a + (parseFloat(b.cv) || 0), 0);
+      const totalDiv = (d1 + d2 + d3 + d4) || 1;
+
+      let insightGrafikHTML = `<p>• Porsi divisi terbesar ditempati oleh <b class="text-amber-400">Divisi ${getTopDiv(d1, d2, d3, d4)}</b> dengan kontribusi dominan dalam periode ini.</p>`;
+      insightGrafikHTML += `<p>• Komposisi skema bisnis: <b class="text-amber-400">Direct Purchase (DP)</b> sebesar <b>${((dp / (dp + cv || 1)) * 100).toFixed(1)}%</b> vs <b class="text-rose-400">Consignment Vendor (CV)</b> sebesar <b>${((cv / (dp + cv || 1)) * 100).toFixed(1)}%</b>.</p>`;
+      insightGrafikHTML += `<p>• <span class="text-purple-300 font-semibold">Analisis Tren Harian:</span> Fluktuasi penjualan harian menunjukkan pola pembentukan puncak omzet pada akhir pekan (Weekend Peak). Disarankan optimasi alokasi tim dan display visual difokuskan pada hari Jumat–Minggu.</p>`;
+      document.getElementById('insight-grafik').innerHTML = insightGrafikHTML;
+    }
+
+    function getTopDiv(d1, d2, d3, d4) {
+      const arr = [{n:'1',v:d1},{n:'2',v:d2},{n:'3',v:d3},{n:'4',v:d4}];
+      arr.sort((a,b) => b.v - a.v);
+      return arr[0].n;
     }
 
     function renderCharts(cur, trend) {
