@@ -18,8 +18,8 @@
 </head>
 <body class="bg-[#0b1120] text-slate-100 antialiased min-h-screen">
 
-  <!-- OVERLAY PANEL PROSES SINKRONISASI DATABASE SPREADSHEET -->
-  <div id="loading-overlay" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[100] flex flex-col items-center justify-center p-4 transition-opacity duration-500">
+  <!-- OVERLAY LOADING -->
+  <div id="loading-overlay" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[100] flex flex-col items-center justify-center p-4 transition-opacity duration-500 hidden">
     <div class="bg-slate-900 border border-slate-800 p-6 md:p-8 rounded-2xl shadow-2xl flex flex-col items-center max-w-sm w-full text-center space-y-4">
       <div class="relative flex items-center justify-center">
         <div class="w-16 h-16 border-4 border-amber-500/20 border-t-amber-400 rounded-full animate-spin"></div>
@@ -27,10 +27,10 @@
       </div>
       <div>
         <h3 class="text-sm font-black text-amber-400 uppercase tracking-wider">MDS 311 ANALYTICS</h3>
-        <p id="loading-status" class="text-xs text-slate-300 font-medium mt-1">Menghubungkan ke server Google Sheets...</p>
+        <p id="loading-status" class="text-xs text-slate-300 font-medium mt-1">Memuat sistem...</p>
       </div>
       <div class="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden border border-slate-800">
-        <div id="loading-bar" class="bg-gradient-to-r from-amber-500 to-emerald-400 h-full w-1/4 transition-all duration-300 animate-pulse"></div>
+        <div id="loading-bar" class="bg-gradient-to-r from-amber-500 to-emerald-400 h-full w-0 transition-all duration-300"></div>
       </div>
     </div>
   </div>
@@ -39,11 +39,11 @@
 
   <div class="flex flex-col md:flex-row min-h-screen">
 
-    <!-- SIDEBAR WITH IDENTITIES -->
+    <!-- SIDEBAR -->
     <aside id="sidebar" class="fixed md:sticky top-0 left-0 h-screen w-72 bg-slate-900/95 backdrop-blur-md border-r border-slate-800 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col justify-between p-4 shadow-2xl overflow-y-auto">
       <div class="space-y-5">
         
-        <!-- HEADER IDENTITAS DI SIDEBAR -->
+        <!-- HEADER IDENTITAS SIDEBAR -->
         <div class="pb-3 border-b border-slate-800 space-y-2">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -72,7 +72,7 @@
           </div>
         </div>
 
-        <!-- NAVIGASI MENU -->
+        <!-- NAVIGASI MENU SPA -->
         <nav class="space-y-1">
           <button id="btn-sales" onclick="switchTab('sales')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-bold transition-all bg-amber-500/20 text-amber-400 border border-amber-500/30 shadow-md">
             <i class="fa-solid fa-cart-shopping w-4 text-center"></i>
@@ -93,7 +93,7 @@
         </nav>
       </div>
 
-      <!-- CLOCK & DATE IN SIDEBAR -->
+      <!-- JAM & TANGGAL -->
       <div class="bg-slate-950/60 p-3 rounded-lg border border-slate-800 text-center mt-4">
         <div id="clock" class="text-sm font-bold text-amber-400 leading-none">00:00:00</div>
         <div id="date" class="text-[10px] text-slate-400 font-medium mt-1">--/--/----</div>
@@ -116,7 +116,7 @@
         </div>
       </div>
 
-      <!-- FILTER PANEL UTAMA (SLICER LY SUDAH DIHAPUS AKURAT) -->
+      <!-- FILTER PANEL -->
       <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800 space-y-3 sticky top-3 z-30">
         <div>
           <div class="text-[11px] font-bold text-amber-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
@@ -125,23 +125,29 @@
           <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
             <div>
               <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Tahun</label>
-              <select id="fYear" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500"></select>
+              <select id="fYear" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                <option value="">-- Pilih --</option>
+              </select>
             </div>
             <div>
               <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Bulan Awal</label>
-              <select id="fBulanAwal" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500"></select>
+              <select id="fBulanAwal" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                <option value="">-- Pilih --</option>
+              </select>
             </div>
             <div>
               <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Bulan Akhir</label>
-              <select id="fBulanAkhir" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500"></select>
+              <select id="fBulanAkhir" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                <option value="">-- Pilih --</option>
+              </select>
             </div>
             <div>
               <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Tgl Awal</label>
-              <input type="number" id="fTglAwal" value="1" min="1" max="31" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500">
+              <input type="number" id="fTglAwal" value="1" min="1" max="31" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500">
             </div>
             <div>
               <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Tgl Akhir</label>
-              <input type="number" id="fTglAkhir" value="31" min="1" max="31" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500">
+              <input type="number" id="fTglAkhir" value="31" min="1" max="31" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500">
             </div>
           </div>
         </div>
@@ -196,14 +202,14 @@
 
         </div>
 
-        <!-- PANEL ANALISIS ADVANCED: SALES PERFORMANCE -->
+        <!-- PANEL INSIGHT -->
         <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-amber-500/30 space-y-2">
           <div class="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider">
             <i class="fa-solid fa-brain"></i>
             <span>Analisis Performa Penjualan & Proyeksi Target (Executive Insight)</span>
           </div>
           <div id="insight-sales" class="text-xs text-slate-300 space-y-2 leading-relaxed bg-slate-950/60 p-3.5 rounded-lg border border-slate-800">
-            Memuat analisis data...
+            Siap untuk menerima logika analisis baru...
           </div>
         </div>
       </section>
@@ -233,14 +239,14 @@
           </div>
         </div>
 
-        <!-- PANEL ANALISIS ADVANCED: SALES CHANNEL -->
+        <!-- PANEL INSIGHT CHANNEL -->
         <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-indigo-500/30 space-y-2">
           <div class="flex items-center gap-2 text-indigo-400 text-xs font-bold uppercase tracking-wider">
             <i class="fa-solid fa-chart-line"></i>
             <span>Analisis Performa Sales Channel & Omnichannel Impact</span>
           </div>
           <div id="insight-channel" class="text-xs text-slate-300 space-y-2 leading-relaxed bg-slate-950/60 p-3.5 rounded-lg border border-slate-800">
-            Memuat analisis channel...
+            Siap untuk menerima logika channel baru...
           </div>
         </div>
       </section>
@@ -304,14 +310,14 @@
           </div>
         </div>
 
-        <!-- PANEL ANALISIS ADVANCED: STATISTIK OPERASIONAL -->
+        <!-- PANEL INSIGHT STATS -->
         <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-teal-500/30 space-y-2">
           <div class="flex items-center gap-2 text-teal-400 text-xs font-bold uppercase tracking-wider">
             <i class="fa-solid fa-calculator"></i>
             <span>Analisis Operasional & Fluktuasi Basket Size</span>
           </div>
           <div id="insight-stats" class="text-xs text-slate-300 space-y-2 leading-relaxed bg-slate-950/60 p-3.5 rounded-lg border border-slate-800">
-            Memuat analisis statistik...
+            Siap untuk menerima logika operasional baru...
           </div>
         </div>
       </section>
@@ -322,7 +328,7 @@
           <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800">
             <canvas id="barChart" height="220"></canvas>
           </div>
-          <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800">
+          <div class="bg-slate-950/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800">
             <canvas id="lineChart" height="220"></canvas>
           </div>
           <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800">
@@ -330,14 +336,14 @@
           </div>
         </div>
 
-        <!-- PANEL ANALISIS ADVANCED: GRAFIK & DIVISI -->
+        <!-- PANEL INSIGHT GRAFIK -->
         <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-purple-500/30 space-y-2">
           <div class="flex items-center gap-2 text-purple-400 text-xs font-bold uppercase tracking-wider">
             <i class="fa-solid fa-chart-pie"></i>
             <span>Analisis Performa Divisi & Anomali Tren Harian</span>
           </div>
           <div id="insight-grafik" class="text-xs text-slate-300 space-y-2 leading-relaxed bg-slate-950/60 p-3.5 rounded-lg border border-slate-800">
-            Memuat analisis visual...
+            Siap untuk menerima logika grafik baru...
           </div>
         </div>
       </section>
@@ -346,31 +352,9 @@
 
   </div>
 
+  <!-- SCRIPT NAVIGASI UTAMA (TANPA LOGIKA PERHITUNGAN) -->
   <script>
-    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxmFUkJ8adOv_tvKpTN_wSExtwsvTm_Lji600ViZTETkfERnb1Bn7u_NTgzXpMHcWqdkg/exec";
-
-    let masterData = [];
-    let charts = {};
-
-    const blnIndo = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
-
-    function updateLoadingStatus(text, progressPct) {
-      const statusEl = document.getElementById('loading-status');
-      const barEl = document.getElementById('loading-bar');
-      if (statusEl) statusEl.innerText = text;
-      if (barEl) barEl.style.width = progressPct + '%';
-    }
-
-    function hideLoadingOverlay() {
-      const overlay = document.getElementById('loading-overlay');
-      if (overlay) {
-        overlay.classList.add('opacity-0');
-        setTimeout(() => {
-          overlay.classList.add('hidden');
-        }, 500);
-      }
-    }
-
+    // FUNGSI SWITCH TAB NAVIGASI SIDEBAR (SPA)
     function switchTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
       document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -380,12 +364,15 @@
 
       document.getElementById(`view-${tabId}`).classList.remove('hidden');
       const activeBtn = document.getElementById(`btn-${tabId}`);
-      activeBtn.classList.add('bg-amber-500/20', 'text-amber-400', 'border-amber-500/30', 'shadow-md');
-      activeBtn.classList.remove('text-slate-400', 'hover:bg-slate-800', 'hover:text-slate-200', 'border-transparent');
+      if (activeBtn) {
+        activeBtn.classList.add('bg-amber-500/20', 'text-amber-400', 'border-amber-500/30', 'shadow-md');
+        activeBtn.classList.remove('text-slate-400', 'hover:bg-slate-800', 'hover:text-slate-200', 'border-transparent');
+      }
 
       if (window.innerWidth < 768) toggleSidebar();
     }
 
+    // FUNGSI TOGGLE SIDEBAR MOBILE
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar');
       const overlay = document.getElementById('sidebar-overlay');
@@ -393,70 +380,8 @@
       overlay.classList.toggle('hidden');
     }
 
-    function getMonthIndex(bulanStr) {
-      if (!bulanStr) return -1;
-      const str = String(bulanStr).toLowerCase().trim();
-      const monthMap = {
-        'januari': 0, 'january': 0, 'jan': 0,
-        'februari': 1, 'february': 1, 'feb': 1,
-        'maret': 2, 'march': 2, 'mar': 2,
-        'april': 3, 'apr': 3,
-        'mei': 4, 'may': 4,
-        'juni': 5, 'june': 5, 'jun': 5,
-        'juli': 6, 'july': 6, 'jul': 6,
-        'agustus': 7, 'august': 7, 'aug': 7, 'ags': 7,
-        'september': 8, 'sep': 8,
-        'oktober': 9, 'october': 9, 'okt': 9, 'oct': 9,
-        'november': 10, 'nov': 10,
-        'desember': 11, 'december': 11, 'des': 11, 'dec': 11
-      };
-      return monthMap[str] !== undefined ? monthMap[str] : -1;
-    }
-
-    if (typeof ChartDataLabels !== 'undefined') {
-      Chart.register(ChartDataLabels);
-    }
-
-    function handleGASData(data) {
-      updateLoadingStatus("Memproses & menyusun struktur data...", 75);
-      masterData = Array.isArray(data) ? data : (data.raw || []);
-      
-      if (!masterData || masterData.length === 0) {
-        updateLoadingStatus("Data tidak ditemukan!", 100);
-        setTimeout(hideLoadingOverlay, 1000);
-        return;
-      }
-
-      const years = [...new Set(masterData.map(d => d.year))].filter(y => y > 0).sort((a,b) => b-a);
-      const fYear = document.getElementById('fYear');
-      
-      fYear.innerHTML = '';
-      years.forEach(y => {
-        fYear.innerHTML += `<option value="${y}">${y}</option>`;
-      });
-
-      populateMonthDropdowns('fBulanAwal', 'fBulanAkhir');
-
-      applyFilters();
-
-      updateLoadingStatus("Sinkronisasi Selesai!", 100);
-      setTimeout(hideLoadingOverlay, 600);
-    }
-
-    function loadDataJSONP() {
-      updateLoadingStatus("Sinkronisasi data dengan Spreadsheet...", 35);
-      const script = document.createElement('script');
-      script.src = `${GAS_WEB_APP_URL}?callback=handleGASData`;
-      script.onerror = function() {
-        updateLoadingStatus("Gagal terhubung ke Google Apps Script!", 100);
-        alert("Gagal memuat data dari server Google Apps Script. Pastikan URL Web App sudah benar.");
-      };
-      document.body.appendChild(script);
-    }
-
+    // UPDATE JAM & TANGGAL REALTIME
     window.onload = () => {
-      loadDataJSONP();
-
       setInterval(() => {
         const n = new Date();
         document.getElementById('clock').innerText = n.toLocaleTimeString('id-ID', {timeZone: 'Asia/Makassar'});
@@ -465,345 +390,6 @@
         });
       }, 1000);
     };
-
-    function populateMonthDropdowns(idAwal, idAkhir) {
-      const elAwal = document.getElementById(idAwal);
-      const elAkhir = document.getElementById(idAkhir);
-      elAwal.innerHTML = '';
-      elAkhir.innerHTML = '';
-      blnIndo.forEach((b, i) => {
-        elAwal.innerHTML += `<option value="${i}">${b}</option>`;
-        elAkhir.innerHTML += `<option value="${i}" ${i === 11 ? 'selected' : ''}>${b}</option>`;
-      });
-    }
-
-    function applyFilters() {
-      if (!masterData || masterData.length === 0) return;
-
-      const yearTY = parseInt(document.getElementById('fYear').value) || new Date().getFullYear();
-      const bATY = parseInt(document.getElementById('fBulanAwal').value) || 0;
-      const bKTY = parseInt(document.getElementById('fBulanAkhir').value) || 11;
-      const tATY = parseInt(document.getElementById('fTglAwal').value) || 1;
-      const tKTY = parseInt(document.getElementById('fTglAkhir').value) || 31;
-
-      const yearLY = yearTY - 1;
-
-      // Data Periode Berjalan TY
-      const cur = masterData.filter(d => {
-        const mIdx = getMonthIndex(d.bulan);
-        return d.year === yearTY && mIdx >= bATY && mIdx <= bKTY && d.day >= tATY && d.day <= tKTY;
-      });
-
-      // Data Periode Pembanding LY Gregorian
-      const prev = masterData.filter(d => {
-        const mIdx = getMonthIndex(d.bulan);
-        return d.year === yearLY && mIdx >= bATY && mIdx <= bKTY && d.day >= tATY && d.day <= tKTY;
-      });
-
-      // Trend Data untuk Chart
-      const trend = masterData.filter(d => {
-        const mIdx = getMonthIndex(d.bulan);
-        return d.year === yearTY && mIdx >= bATY && mIdx <= bKTY;
-      });
-
-      // Data Periode Pembanding LY Fiskal
-      const fiscalPrev = masterData.filter(d => 
-        d.year === yearLY && 
-        cur.some(c => c.week === d.week && c.dayName === d.dayName)
-      );
-
-      updateUI(cur, prev, trend, fiscalPrev, { yearTY, yearLY, bATY, bKTY, tATY, tKTY });
-    }
-
-    function setGrowthStyle(elementId, val) {
-      const el = document.getElementById(elementId);
-      if (!el) return;
-      el.innerText = (val >= 0 ? '+' : '') + val.toFixed(1) + '%';
-      el.className = val < 0 ? 'font-bold text-rose-400' : 'font-bold text-emerald-400';
-    }
-
-    function updateUI(cur, prev, trend, fiscalPrev, filterContext) {
-      const s = cur.reduce((a, b) => a + (parseFloat(b.sales) || 0), 0);
-      const t = cur.reduce((a, b) => a + (parseFloat(b.target) || 0), 0);
-      const ach = (s / (t || 1)) * 100;
-      const bz = cur.reduce((a, b) => a + (parseFloat(b.bazaar) || 0), 0);
-      const inS = s - bz;
-
-      const ps = prev.reduce((a, b) => a + (parseFloat(b.sales) || 0), 0);
-      const pt = prev.reduce((a, b) => a + (parseFloat(b.target) || 0), 0);
-      const pbz = prev.reduce((a, b) => a + (parseFloat(b.bazaar) || 0), 0);
-      const pInS = ps - pbz;
-
-      document.getElementById('vTarget').innerText = Math.round(t).toLocaleString('id-ID');
-      document.getElementById('vSales').innerText = Math.round(s).toLocaleString('id-ID');
-      const vAch = document.getElementById('vAch');
-      vAch.innerText = ach.toFixed(1) + '%';
-      vAch.className = ach < 100 ? 'text-xs sm:text-sm font-extrabold text-rose-400' : 'text-xs sm:text-sm font-extrabold text-amber-400';
-      document.getElementById('vBazaar').innerText = Math.round(bz).toLocaleString('id-ID');
-      document.getElementById('vInStore').innerText = Math.round(inS).toLocaleString('id-ID');
-
-      const gr = ps ? ((s - ps) / ps) * 100 : 0;
-      const sssg = pInS ? ((inS - pInS) / pInS) * 100 : 0;
-      const fCurS = s;
-      const fPrevS = fiscalPrev.reduce((a, b) => a + (parseFloat(b.sales) || 0), 0);
-      const fGr = fPrevS ? ((fCurS - fPrevS) / fPrevS) * 100 : 0;
-
-      setGrowthStyle('vGrowth', gr);
-      setGrowthStyle('vSSSG', sssg);
-      
-      const vGrwFiskal = document.getElementById('vGrwFiskal');
-      vGrwFiskal.innerText = (fGr >= 0 ? '+' : '') + fGr.toFixed(1) + '%';
-      vGrwFiskal.className = fGr < 0 ? 'font-bold text-rose-400' : 'font-bold text-indigo-400';
-
-      const snt = cur.reduce((a, b) => a + (parseFloat(b.snt) || 0), 0);
-      const b2b = cur.reduce((a, b) => a + (parseFloat(b.b2b) || 0), 0);
-      document.getElementById('vSnT').innerText = 'Rp ' + Math.round(snt).toLocaleString('id-ID');
-      document.getElementById('vSnTContrib').innerText = 'Contrib: ' + ((snt / (s || 1)) * 100).toFixed(1) + '%';
-      document.getElementById('vB2B').innerText = 'Rp ' + Math.round(b2b).toLocaleString('id-ID');
-      document.getElementById('vB2BContrib').innerText = 'Contrib: ' + ((b2b / (s || 1)) * 100).toFixed(1) + '%';
-
-      const qty = cur.reduce((a, b) => a + (parseFloat(b.qty) || 0), 0);
-      const trx = cur.reduce((a, b) => a + (parseFloat(b.trx) || 0), 0);
-      const aur = s / (qty || 1);
-      const upt = qty / (trx || 1);
-      const basket = s / (trx || 1);
-
-      const pQty = prev.reduce((a, b) => a + (parseFloat(b.qty) || 0), 0);
-      const pTrx = prev.reduce((a, b) => a + (parseFloat(b.trx) || 0), 0);
-      const pAur = ps / (pQty || 1);
-      const pUpt = pQty / (pTrx || 1);
-      const pBasket = ps / (pTrx || 1);
-
-      const fQty = fiscalPrev.reduce((a, b) => a + (parseFloat(b.qty) || 0), 0);
-      const fTrx = fiscalPrev.reduce((a, b) => a + (parseFloat(b.trx) || 0), 0);
-      const fAur = fPrevS / (fQty || 1);
-      const PerUpt = fQty / (fTrx || 1);
-      const fBasket = fPrevS / (fTrx || 1);
-
-      const qtyGr = pQty ? ((qty - pQty) / pQty) * 100 : 0;
-      const trxGr = pTrx ? ((trx - pTrx) / pTrx) * 100 : 0;
-      const aurGr = pAur ? ((aur - pAur) / pAur) * 100 : 0;
-      const uptGr = pUpt ? ((upt - pUpt) / pUpt) * 100 : 0;
-      const basketGr = pBasket ? ((basket - pBasket) / pBasket) * 100 : 0;
-
-      const qtyFiskGr = fQty ? ((qty - fQty) / fQty) * 100 : 0;
-      const trxFiskGr = fTrx ? ((trx - fTrx) / fTrx) * 100 : 0;
-      const aurFiskGr = fAur ? ((aur - fAur) / fAur) * 100 : 0;
-      const uptFiskGr = PerUpt ? ((upt - PerUpt) / PerUpt) * 100 : 0;
-      const basketFiskGr = fBasket ? ((basket - fBasket) / fBasket) * 100 : 0;
-
-      document.getElementById('vQty').innerText = qty.toLocaleString('id-ID');
-      document.getElementById('vTrx').innerText = trx.toLocaleString('id-ID');
-      document.getElementById('vAur').innerText = 'Rp ' + Math.round(aur).toLocaleString('id-ID');
-      document.getElementById('vUpt').innerText = upt.toFixed(2);
-      document.getElementById('vBasket').innerText = 'Rp ' + Math.round(basket).toLocaleString('id-ID');
-
-      setGrowthStyle('vQtyGrego', qtyGr);
-      setGrowthStyle('vQtyFisk', qtyFiskGr);
-
-      setGrowthStyle('vTrxGrego', trxGr);
-      setGrowthStyle('vTrxFisk', trxFiskGr);
-
-      setGrowthStyle('vAurGrego', aurGr);
-      setGrowthStyle('vAurFisk', aurFiskGr);
-
-      setGrowthStyle('vUptGrego', uptGr);
-      setGrowthStyle('vUptFisk', uptFiskGr);
-
-      setGrowthStyle('vBasketGrego', basketGr);
-      setGrowthStyle('vBasketFisk', basketFiskGr);
-
-      renderCharts(cur, trend);
-
-      generateAdvancedInsights({
-        s, t, ach, bz, inS, ps, pt, pbz, pInS, gr, fGr, sssg,
-        snt, b2b,
-        qty, pQty, trx, pTrx, aur, pAur, upt, pUpt, basket, pBasket,
-        trxGr, basketGr, aurGr, uptGr,
-        cur, trend, filterContext
-      });
-    }
-
-    function generateAdvancedInsights(d) {
-      const gap = d.s - d.t;
-      const absGap = Math.abs(gap);
-      let gapText = gap >= 0 
-        ? `<span class="text-emerald-400 font-bold">Surplus Rp ${Math.round(absGap).toLocaleString('id-ID')}</span> di atas target.`
-        : `<span class="text-rose-400 font-bold">Shortfall / Defisit Rp ${Math.round(absGap).toLocaleString('id-ID')}</span> untuk mencapai Target 100%.`;
-
-      const daysInPeriod = (d.filterContext.tKTY - d.filterContext.tATY + 1) || 1;
-      const numDaysRecorded = [...new Set(d.cur.map(x => x.day))].length || daysInPeriod;
-      const remainingDays = Math.max(daysInPeriod - numDaysRecorded, 0);
-      
-      let runRateText = gap < 0 && remainingDays > 0
-        ? `• <b>Proyeksi Target:</b> Untuk menutup defisit dalam sisa <b>${remainingDays} hari</b>, dibutuhkan rata-rata omset minimal <b>Rp ${Math.round(absGap / remainingDays).toLocaleString('id-ID')}/hari</b>.`
-        : gap >= 0 ? `• <b>Proyeksi Target:</b> Performa penjualan telah memenuhi target periode ini. Pertahankan pace harian saat ini!`
-        : `• <b>Evaluasi Akhir Periode:</b> Periode tanggal ini telah selesai dengan selisih akhir sebesar Rp ${Math.round(absGap).toLocaleString('id-ID')}.`;
-
-      const bzShare = (d.bz / (d.s || 1)) * 100;
-      let bzWarning = bzShare > 20 
-        ? `<p class="text-amber-300">• <b>Catatan Event:</b> Kontribusi Event Bazaar sangat dominan (<b>${bzShare.toFixed(1)}%</b> dari total sales). Pastikan margin keuntungan produk bazaar tetap terjaga.</p>`
-        : `<p>• <b>Struktur Penjualan:</b> Penjualan didominasi area In-Store utama (<b>${(100 - bzShare).toFixed(1)}%</b>) dengan dorongan Bazaar sebesar <b>${bzShare.toFixed(1)}%</b>.</p>`;
-
-      document.getElementById('insight-sales').innerHTML = `
-        <p>• <b>Evaluasi Pencapaian Target:</b> Realisasi Sales TY mencapai <b>Rp ${Math.round(d.s).toLocaleString('id-ID')}</b> (<b>${d.ach.toFixed(1)}%</b>). Terdapat selisih ${gapText}</p>
-        <p>• <b>Dinamika Growth:</b> Pertumbuhan Gregorian sebesar <b>${d.gr >= 0 ? '+' : ''}${d.gr.toFixed(1)}%</b>, Growth Fiskal <b>${d.fGr >= 0 ? '+' : ''}${d.fGr.toFixed(1)}%</b>, dan SSSG (Like-for-Like In-Store) <b>${d.sssg >= 0 ? '+' : ''}${d.sssg.toFixed(1)}%</b>.</p>
-        ${runRateText}
-        ${bzWarning}
-      `;
-
-      const totalDigital = d.snt + d.b2b;
-      const totalDigitalContrib = ((totalDigital / (d.s || 1)) * 100).toFixed(1);
-
-      document.getElementById('insight-channel').innerHTML = `
-        <p>• <b>SNT (Shopping & Delivery):</b> Total Omset Rp ${Math.round(d.snt).toLocaleString('id-ID')}.</p>
-        <p>• <b>B2B (Corporate Sales):</b> Total Omset Rp ${Math.round(d.b2b).toLocaleString('id-ID')}.</p>
-        <p>• <b>Total Omnichannel Impact:</b> Gabungan SNT & B2B menyumbang <b>Rp ${Math.round(totalDigital).toLocaleString('id-ID')}</b> (<b>${totalDigitalContrib}%</b> dari total sales toko).</p>
-      `;
-
-      let driverDiagnosis = (d.trxGr < 0 && d.basketGr > 0)
-        ? `Trafik Pengunjung (TRX) mengalami penurunan (<b>${d.trxGr.toFixed(1)}%</b>), namun total omset tertolong oleh <b>peningkatan nilai belanja per pelanggan / Basket Size (${d.basketGr >= 0 ? '+' : ''}${d.basketGr.toFixed(1)}%)</b>.`
-        : (d.trxGr > 0 && d.basketGr < 0)
-        ? `Trafik Pengunjung (TRX) tumbuh baik (<b>+${d.trxGr.toFixed(1)}%</b>), namun nilai belanja per struk mengalami penurunan (<b>${d.basketGr.toFixed(1)}%</b>).`
-        : (d.trxGr > 0 && d.basketGr > 0)
-        ? `Performa sangat sehat! Baik Trafik Pengunjung (TRX: <b>+${d.trxGr.toFixed(1)}%</b>) maupun Basket Size (<b>+${d.basketGr.toFixed(1)}%</b>) sama-sama tumbuh positif.`
-        : `Terdapat tantangan ganda di mana Trafik Pengunjung (<b>${d.trxGr.toFixed(1)}%</b>) dan Basket Size (<b>${d.basketGr.toFixed(1)}%</b>) sama-sama tertekan.`;
-
-      document.getElementById('insight-stats').innerHTML = `
-        <p>• <b>Diagnosa Driver Penjualan:</b> ${driverDiagnosis}</p>
-        <p>• <b>Detail Metrik Belanja:</b> Rata-rata harga barang terpilih (AUR) adalah <b>Rp ${Math.round(d.aur).toLocaleString('id-ID')}</b>, sehingga nilai Basket Size rata-rata menjadi <b>Rp ${Math.round(d.basket).toLocaleString('id-ID')}</b> per struk.</p>
-      `;
-
-      const d1 = d.cur.reduce((a, b) => a + (parseFloat(b.div1) || 0), 0);
-      const d2 = d.cur.reduce((a, b) => a + (parseFloat(b.div2) || 0), 0);
-      const d3 = d.cur.reduce((a, b) => a + (parseFloat(b.div3) || 0), 0);
-      const d4 = d.cur.reduce((a, b) => a + (parseFloat(b.div4) || 0), 0);
-      const totalDiv = (d1 + d2 + d3 + d4) || 1;
-
-      const divs = [
-        { name: 'Divisi 1', val: d1, pct: (d1/totalDiv)*100 },
-        { name: 'Divisi 2', val: d2, pct: (d2/totalDiv)*100 },
-        { name: 'Divisi 3', val: d3, pct: (d3/totalDiv)*100 },
-        { name: 'Divisi 4', val: d4, pct: (d4/totalDiv)*100 }
-      ].sort((a,b) => b.val - a.val);
-
-      const dp = d.cur.reduce((a, b) => a + (parseFloat(b.dp) || 0), 0);
-      const cv = d.cur.reduce((a, b) => a + (parseFloat(b.cv) || 0), 0);
-      const totalDpCv = (dp + cv) || 1;
-
-      document.getElementById('insight-grafik').innerHTML = `
-        <p>• <b>Analisis Kontribusi Divisi:</b> Penjualan terbesar didominasi oleh <b>${divs[0].name}</b> (Rp ${Math.round(divs[0].val).toLocaleString('id-ID')} / <b>${divs[0].pct.toFixed(1)}%</b>). Sementara <b>${divs[3].name}</b> memiliki porsi terendah (<b>${divs[3].pct.toFixed(1)}%</b>).</p>
-        <p>• <b>Komposisi Pengadaan:</b> Porsi Direct Purchase (DP) mencapai <b>${((dp / totalDpCv) * 100).toFixed(1)}%</b> dan Consignment Vendor (CV) sebesar <b>${((cv / totalDpCv) * 100).toFixed(1)}%</b>.</p>
-      `;
-    }
-
-    function renderCharts(cur, trend) {
-      ['barChart', 'lineChart', 'pieChart'].forEach(id => {
-        if (charts[id]) charts[id].destroy();
-      });
-
-      const totalDiv = (cur.reduce((a, b) => a + (parseFloat(b.div1) || 0) + (parseFloat(b.div2) || 0) + (parseFloat(b.div3) || 0) + (parseFloat(b.div4) || 0), 0)) || 1;
-
-      Chart.defaults.color = '#94a3b8';
-
-      charts.barChart = new Chart('barChart', {
-        type: 'bar',
-        data: {
-          labels: ['D1', 'D2', 'D3', 'D4'],
-          datasets: [{
-            data: [
-              cur.reduce((a, b) => a + (parseFloat(b.div1) || 0), 0),
-              cur.reduce((a, b) => a + (parseFloat(b.div2) || 0), 0),
-              cur.reduce((a, b) => a + (parseFloat(b.div3) || 0), 0),
-              cur.reduce((a, b) => a + (parseFloat(b.div4) || 0), 0)
-            ],
-            backgroundColor: '#f59e0b',
-            borderRadius: 6
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            title: { display: true, text: 'Sales by Division', color: '#f8fafc', font: { size: 12, weight: 'bold' } },
-            legend: { display: false },
-            datalabels: {
-              anchor: 'end',
-              align: 'end',
-              formatter: (v) => ((v / totalDiv) * 100).toFixed(1) + '%',
-              font: { size: 10, weight: 'bold' },
-              color: '#fbbf24'
-            }
-          },
-          scales: {
-            y: { display: false, beginAtZero: true },
-            x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
-          }
-        }
-      });
-
-      const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-      charts.lineChart = new Chart('lineChart', {
-        type: 'line',
-        data: {
-          labels: days,
-          datasets: [{
-            data: days.map(d => {
-              const f = trend.filter(x => x.dayName === d);
-              return f.length ? f.reduce((a,b) => a + (parseFloat(b.sales) || 0), 0) / f.length : 0;
-            }).map(v => Math.floor(v / 1000)),
-            borderColor: '#10b981',
-            backgroundColor: 'rgba(16, 185, 129, 0.15)',
-            fill: true,
-            tension: 0.3,
-            pointRadius: 4,
-            pointBackgroundColor: '#10b981'
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            title: { display: true, text: 'Avg Sales/Day (in K)', color: '#f8fafc', font: { size: 12, weight: 'bold' } },
-            legend: { display: false },
-            datalabels: { display: false }
-          },
-          scales: {
-            y: { display: false, beginAtZero: true },
-            x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
-          }
-        }
-      });
-
-      charts.pieChart = new Chart('pieChart', {
-        type: 'pie',
-        data: {
-          labels: ['DP', 'CV'],
-          datasets: [{
-            data: [
-              cur.reduce((a, b) => a + (parseFloat(b.dp) || 0), 0),
-              cur.reduce((a, b) => a + (parseFloat(b.cv) || 0), 0)
-            ],
-            backgroundColor: ['#d97706', '#f43f5e']
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            title: { display: true, text: 'DP vs CV Share', color: '#f8fafc', font: { size: 12, weight: 'bold' } },
-            datalabels: {
-              formatter: (v, ctx) => {
-                const s = ctx.dataset.data.reduce((a, b) => a + b, 0);
-                return s ? ((v / s) * 100).toFixed(1) + '%' : '0.0%';
-              },
-              color: '#ffffff',
-              font: { weight: 'bold', size: 11 }
-            }
-          }
-        }
-      });
-    }
   </script>
 </body>
 </html>
