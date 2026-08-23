@@ -82,6 +82,10 @@
             <i class="fa-solid fa-store w-4 text-center"></i>
             <span>Sales Channel</span>
           </button>
+          <button id="btn-division" onclick="switchTab('division')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-bold text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-all border border-transparent">
+            <i class="fa-solid fa-layer-group w-4 text-center"></i>
+            <span>Performance by Division</span>
+          </button>
           <button id="btn-stats" onclick="switchTab('stats')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-bold text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-all border border-transparent">
             <i class="fa-solid fa-calculator w-4 text-center"></i>
             <span>Statistik Operasional</span>
@@ -147,7 +151,7 @@
         </div>
       </div>
 
-      <!-- VIEW TAB 1: SALES PERFORMANCE -->
+      <!-- VIEW TAB 1: SALES PERFORMANCE (FORMAT AWAL DIKEMBALIKAN) -->
       <section id="view-sales" class="tab-content space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           
@@ -208,30 +212,64 @@
       <!-- VIEW TAB 2: SALES CHANNEL -->
       <section id="view-channel" class="tab-content hidden space-y-4">
         <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800">
-          <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">SALES CHANNEL</h2>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div class="bg-slate-950/80 p-3 rounded-lg border border-indigo-900/40 space-y-2">
-              <span class="block text-xs font-bold text-indigo-400 border-b border-slate-800 pb-1">SNT (Shop & Talk)</span>
+          <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">SALES CHANNEL & SPECIALTY BRANDS</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            
+            <div class="bg-slate-950/80 p-3 rounded-lg border border-indigo-900/50 space-y-2">
+              <span class="block text-xs font-bold text-indigo-400 border-b border-slate-800 pb-1">SNT (Shop N Talk)</span>
               <div class="flex justify-between items-center text-xs">
-                <span class="font-semibold text-slate-400">Total: <span id="vSnT" class="font-bold text-amber-400">Rp 0</span></span>
-                <span id="vSnTContrib" class="font-bold text-amber-300 bg-amber-950/60 border border-amber-800/50 px-2 py-0.5 rounded text-[10px]">Contrib: 0.0%</span>
+                <span class="font-semibold text-slate-400">Sales: <span id="vSnT" class="font-bold text-indigo-300">Rp 0</span></span>
+                <span id="vSnTContrib" class="font-bold text-indigo-300 bg-indigo-950/60 border border-indigo-800/50 px-2 py-0.5 rounded text-[10px]">Contrib: 0.0%</span>
+              </div>
+              <div class="text-[10px] text-slate-400 pt-1 border-t border-slate-800/60 flex justify-between">
+                <span>Growth vs LY:</span>
+                <span id="vSnTGr" class="font-bold">0.0%</span>
               </div>
             </div>
 
-            <div class="bg-slate-950/80 p-3 rounded-lg border border-purple-900/40 space-y-2">
+            <div class="bg-slate-950/80 p-3 rounded-lg border border-purple-900/50 space-y-2">
               <span class="block text-xs font-bold text-purple-400 border-b border-slate-800 pb-1">B2B (Business to Business)</span>
               <div class="flex justify-between items-center text-xs">
-                <span class="font-semibold text-slate-400">Total: <span id="vB2B" class="font-bold text-purple-300">Rp 0</span></span>
+                <span class="font-semibold text-slate-400">Sales: <span id="vB2B" class="font-bold text-purple-300">Rp 0</span></span>
                 <span id="vB2BContrib" class="font-bold text-purple-300 bg-purple-950/60 border border-purple-800/50 px-2 py-0.5 rounded text-[10px]">Contrib: 0.0%</span>
               </div>
+              <div class="text-[10px] text-slate-400 pt-1 border-t border-slate-800/60 flex justify-between">
+                <span>Growth vs LY:</span>
+                <span id="vB2BGr" class="font-bold">0.0%</span>
+              </div>
             </div>
+
+            <div class="bg-slate-950/80 p-3 rounded-lg border border-emerald-900/50 space-y-2">
+              <span class="block text-xs font-bold text-emerald-400 border-b border-slate-800 pb-1">SUKO (Specialty Brand)</span>
+              <div class="flex justify-between items-center text-xs">
+                <span class="font-semibold text-slate-400">Sales: <span id="vSuko" class="font-bold text-emerald-300">Rp 0</span></span>
+                <span id="vSukoContrib" class="font-bold text-emerald-300 bg-emerald-950/60 border border-emerald-800/50 px-2 py-0.5 rounded text-[10px]">Contrib: 0.0%</span>
+              </div>
+              <div class="text-[10px] text-slate-400 pt-1 border-t border-slate-800/60 flex justify-between">
+                <span>Growth vs LY:</span>
+                <span id="vSukoGr" class="font-bold">0.0%</span>
+              </div>
+            </div>
+
+            <div class="bg-slate-950/80 p-3 rounded-lg border border-cyan-900/50 space-y-2">
+              <span class="block text-xs font-bold text-cyan-400 border-b border-slate-800 pb-1">FFS (Specialty Brand)</span>
+              <div class="flex justify-between items-center text-xs">
+                <span class="font-semibold text-slate-400">Sales: <span id="vFfs" class="font-bold text-cyan-300">Rp 0</span></span>
+                <span id="vFfsContrib" class="font-bold text-cyan-300 bg-cyan-950/60 border border-cyan-800/50 px-2 py-0.5 rounded text-[10px]">Contrib: 0.0%</span>
+              </div>
+              <div class="text-[10px] text-slate-400 pt-1 border-t border-slate-800/60 flex justify-between">
+                <span>Growth vs LY:</span>
+                <span id="vFfsGr" class="font-bold">0.0%</span>
+              </div>
+            </div>
+
           </div>
         </div>
 
         <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-indigo-500/30 space-y-2">
           <div class="flex items-center gap-2 text-indigo-400 text-xs font-bold uppercase tracking-wider">
             <i class="fa-solid fa-chart-line"></i>
-            <span>Analisis Performa Sales Channel & Omnichannel Impact</span>
+            <span>Analisis Performa Sales Channel & Specialty Brands Impact</span>
           </div>
           <div id="insight-channel" class="text-xs text-slate-300 space-y-2 leading-relaxed bg-slate-950/60 p-3.5 rounded-lg border border-slate-800">
             Menampilkan analisis channel...
@@ -239,7 +277,92 @@
         </div>
       </section>
 
-      <!-- VIEW TAB 3: STATISTIK OPERASIONAL -->
+      <!-- VIEW TAB 3: PERFORMANCE BY DIVISION (BARU DENGAN PROGRESS BAR MATRIX) -->
+      <section id="view-division" class="tab-content hidden space-y-4">
+        <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800 space-y-4">
+          <h2 class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-layer-group"></i> PERFORMANCE BY DIVISION (COMPARATIVE PROGRESS BAR MATRIX)
+          </h2>
+          
+          <div class="space-y-3" id="division-matrix-container">
+            <!-- D1: Ladies -->
+            <div class="bg-slate-950/80 p-3.5 rounded-lg border border-slate-800 space-y-2">
+              <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center text-xs gap-1">
+                <span class="font-bold text-amber-400">Division 1 (Ladies)</span>
+                <div class="flex gap-3 text-[11px] font-semibold text-slate-300">
+                  <span>TY: <span id="div1-ty" class="text-slate-100 font-bold">Rp 0</span></span>
+                  <span>LY: <span id="div1-ly" class="text-slate-400">Rp 0</span></span>
+                  <span>Contrib: <span id="div1-contrib" class="text-amber-300 font-bold">0.0%</span></span>
+                  <span>Growth: <span id="div1-gr" class="font-bold">0.0%</span></span>
+                </div>
+              </div>
+              <div class="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800">
+                <div id="div1-bar" class="bg-amber-500 h-full transition-all duration-500" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <!-- D2: Shoes & Bag -->
+            <div class="bg-slate-950/80 p-3.5 rounded-lg border border-slate-800 space-y-2">
+              <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center text-xs gap-1">
+                <span class="font-bold text-emerald-400">Division 2 (Shoes & Bag)</span>
+                <div class="flex gap-3 text-[11px] font-semibold text-slate-300">
+                  <span>TY: <span id="div2-ty" class="text-slate-100 font-bold">Rp 0</span></span>
+                  <span>LY: <span id="div2-ly" class="text-slate-400">Rp 0</span></span>
+                  <span>Contrib: <span id="div2-contrib" class="text-emerald-300 font-bold">0.0%</span></span>
+                  <span>Growth: <span id="div2-gr" class="font-bold">0.0%</span></span>
+                </div>
+              </div>
+              <div class="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800">
+                <div id="div2-bar" class="bg-emerald-500 h-full transition-all duration-500" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <!-- D3: Men -->
+            <div class="bg-slate-950/80 p-3.5 rounded-lg border border-slate-800 space-y-2">
+              <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center text-xs gap-1">
+                <span class="font-bold text-indigo-400">Division 3 (Men)</span>
+                <div class="flex gap-3 text-[11px] font-semibold text-slate-300">
+                  <span>TY: <span id="div3-ty" class="text-slate-100 font-bold">Rp 0</span></span>
+                  <span>LY: <span id="div3-ly" class="text-slate-400">Rp 0</span></span>
+                  <span>Contrib: <span id="div3-contrib" class="text-indigo-300 font-bold">0.0%</span></span>
+                  <span>Growth: <span id="div3-gr" class="font-bold">0.0%</span></span>
+                </div>
+              </div>
+              <div class="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800">
+                <div id="div3-bar" class="bg-indigo-500 h-full transition-all duration-500" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <!-- D4: Children & Home -->
+            <div class="bg-slate-950/80 p-3.5 rounded-lg border border-slate-800 space-y-2">
+              <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center text-xs gap-1">
+                <span class="font-bold text-purple-400">Division 4 (Children & Home)</span>
+                <div class="flex gap-3 text-[11px] font-semibold text-slate-300">
+                  <span>TY: <span id="div4-ty" class="text-slate-100 font-bold">Rp 0</span></span>
+                  <span>LY: <span id="div4-ly" class="text-slate-400">Rp 0</span></span>
+                  <span>Contrib: <span id="div4-contrib" class="text-purple-300 font-bold">0.0%</span></span>
+                  <span>Growth: <span id="div4-gr" class="font-bold">0.0%</span></span>
+                </div>
+              </div>
+              <div class="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800">
+                <div id="div4-bar" class="bg-purple-500 h-full transition-all duration-500" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-amber-500/30 space-y-2">
+          <div class="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider">
+            <i class="fa-solid fa-brain"></i>
+            <span>Analisis Performa Divisi & Kontribusi Kategori (Executive Division Insight)</span>
+          </div>
+          <div id="insight-division" class="text-xs text-slate-300 space-y-2 leading-relaxed bg-slate-950/60 p-3.5 rounded-lg border border-slate-800">
+            Menampilkan analisis divisi...
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW TAB 4: STATISTIK OPERASIONAL -->
       <section id="view-stats" class="tab-content hidden space-y-4">
         <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800">
           <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">STATISTIK OPERASIONAL</h2>
@@ -309,7 +432,7 @@
         </div>
       </section>
 
-      <!-- VIEW TAB 4: GRAFIK -->
+      <!-- VIEW TAB 5: GRAFIK -->
       <section id="view-grafik" class="tab-content hidden space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800">
@@ -339,7 +462,7 @@
   </div>
 
   <script>
-    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxN9qsRACefa19CxSWcBqEhd6_i7ztO7Z8L8mbuW4ar7O1f2BFweuYlY10eEC2nvtG-6g/exec";
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxfDraHGypf-YeAB5mhESq2nDcJANuxi3dUo1SO9La4SozIzK27iN_FELqSIPw5-YBYww/exec";
 
     let masterData = [];
     let charts = {};
@@ -422,7 +545,59 @@
 
     function handleGASData(data) {
       updateLoadingStatus("Processing Core Analytics & Filters...", 80);
-      masterData = Array.isArray(data) ? data : (data.raw || []);
+      
+      let rawArray = Array.isArray(data) ? data : (data.raw || []);
+
+      masterData = rawArray.map(d => {
+        if (Array.isArray(d)) {
+          return {
+            bulan: String(d[0] || "").toLowerCase().trim(),
+            week: parseInt(d[1]) || 0,
+            year: parseInt(d[4]) || 0,
+            dayName: String(d[5] || "").substring(0, 3),
+            day: parseInt(d[6]) || 0,
+            target: parseFloat(d[10]) || 0,
+            sales: parseFloat(d[14]) || 0,
+            dp: parseFloat(d[15]) || 0,
+            cv: parseFloat(d[16]) || 0,
+            bazaar: parseFloat(d[17]) || 0,
+            snt: parseFloat(d[18]) || 0,
+            ffs: parseFloat(d[19]) || 0,
+            suko: parseFloat(d[20]) || 0,
+            b2b: parseFloat(d[21]) || 0,
+            div1: parseFloat(d[22]) || 0,
+            div2: parseFloat(d[23]) || 0,
+            div3: parseFloat(d[24]) || 0,
+            div4: parseFloat(d[25]) || 0,
+            qty: parseFloat(d[26]) || 0,
+            trx: parseFloat(d[27]) || 0
+          };
+        } else if (typeof d === 'object' && d !== null) {
+          return {
+            bulan: String(d.bulan || "").toLowerCase().trim(),
+            week: parseInt(d.week) || 0,
+            year: parseInt(d.year) || 0,
+            dayName: String(d.dayName || "").substring(0, 3),
+            day: parseInt(d.day) || 0,
+            target: parseFloat(d.target) || 0,
+            sales: parseFloat(d.sales) || 0,
+            dp: parseFloat(d.dp) || 0,
+            cv: parseFloat(d.cv) || 0,
+            bazaar: parseFloat(d.bazaar) || 0,
+            snt: parseFloat(d.snt) || 0,
+            ffs: parseFloat(d.ffs) || 0,
+            suko: parseFloat(d.suko) || 0,
+            b2b: parseFloat(d.b2b) || 0,
+            div1: parseFloat(d.div1) || 0,
+            div2: parseFloat(d.div2) || 0,
+            div3: parseFloat(d.div3) || 0,
+            div4: parseFloat(d.div4) || 0,
+            qty: parseFloat(d.qty) || 0,
+            trx: parseFloat(d.trx) || 0
+          };
+        }
+        return d;
+      });
 
       if (!masterData || masterData.length === 0) {
         updateLoadingStatus("Data Stream is empty!", 100);
@@ -539,13 +714,53 @@
       vGrwFiskal.innerText = (fGr >= 0 ? '+' : '') + fGr.toFixed(1) + '%';
       vGrwFiskal.className = fGr < 0 ? 'font-bold text-rose-400' : 'font-bold text-indigo-400';
 
+      // CHANNELS & SPECIALTY
       const snt = cur.reduce((a, b) => a + (parseFloat(b.snt) || 0), 0);
       const b2b = cur.reduce((a, b) => a + (parseFloat(b.b2b) || 0), 0);
+      const suko = cur.reduce((a, b) => a + (parseFloat(b.suko) || 0), 0);
+      const ffs = cur.reduce((a, b) => a + (parseFloat(b.ffs) || 0), 0);
+
+      const pSnt = prev.reduce((a, b) => a + (parseFloat(b.snt) || 0), 0);
+      const pB2b = prev.reduce((a, b) => a + (parseFloat(b.b2b) || 0), 0);
+      const pSuko = prev.reduce((a, b) => a + (parseFloat(b.suko) || 0), 0);
+      const pFfs = prev.reduce((a, b) => a + (parseFloat(b.ffs) || 0), 0);
+
       document.getElementById('vSnT').innerText = 'Rp ' + Math.round(snt).toLocaleString('id-ID');
       document.getElementById('vSnTContrib').innerText = 'Contrib: ' + ((snt / (s || 1)) * 100).toFixed(1) + '%';
+      setGrowthStyle('vSnTGr', pSnt ? ((snt - pSnt) / pSnt) * 100 : 0);
+
       document.getElementById('vB2B').innerText = 'Rp ' + Math.round(b2b).toLocaleString('id-ID');
       document.getElementById('vB2BContrib').innerText = 'Contrib: ' + ((b2b / (s || 1)) * 100).toFixed(1) + '%';
+      setGrowthStyle('vB2BGr', pB2b ? ((b2b - pB2b) / pB2b) * 100 : 0);
 
+      document.getElementById('vSuko').innerText = 'Rp ' + Math.round(suko).toLocaleString('id-ID');
+      document.getElementById('vSukoContrib').innerText = 'Contrib: ' + ((suko / (s || 1)) * 100).toFixed(1) + '%';
+      setGrowthStyle('vSukoGr', pSuko ? ((suko - pSuko) / pSuko) * 100 : 0);
+
+      document.getElementById('vFfs').innerText = 'Rp ' + Math.round(ffs).toLocaleString('id-ID');
+      document.getElementById('vFfsContrib').innerText = 'Contrib: ' + ((ffs / (s || 1)) * 100).toFixed(1) + '%';
+      setGrowthStyle('vFfsGr', pFfs ? ((ffs - pFfs) / pFfs) * 100 : 0);
+
+      // DIVISION DATA (D1: Ladies, D2: Shoes & Bag, D3: Men, D4: Children & Home)
+      const d1 = cur.reduce((a, b) => a + (parseFloat(b.div1) || 0), 0);
+      const d2 = cur.reduce((a, b) => a + (parseFloat(b.div2) || 0), 0);
+      const d3 = cur.reduce((a, b) => a + (parseFloat(b.div3) || 0), 0);
+      const d4 = cur.reduce((a, b) => a + (parseFloat(b.div4) || 0), 0);
+
+      const pd1 = prev.reduce((a, b) => a + (parseFloat(b.div1) || 0), 0);
+      const pd2 = prev.reduce((a, b) => a + (parseFloat(b.div2) || 0), 0);
+      const pd3 = prev.reduce((a, b) => a + (parseFloat(b.div3) || 0), 0);
+      const pd4 = prev.reduce((a, b) => a + (parseFloat(b.div4) || 0), 0);
+
+      const totalDivSum = (d1 + d2 + d3 + d4) || 1;
+
+      // Update UI Division Matrix
+      updateDivisionRow('div1', d1, pd1, totalDivSum);
+      updateDivisionRow('div2', d2, pd2, totalDivSum);
+      updateDivisionRow('div3', d3, pd3, totalDivSum);
+      updateDivisionRow('div4', d4, pd4, totalDivSum);
+
+      // OPERATIONAL STATS
       const qty = cur.reduce((a, b) => a + (parseFloat(b.qty) || 0), 0);
       const trx = cur.reduce((a, b) => a + (parseFloat(b.trx) || 0), 0);
       const aur = s / (qty || 1);
@@ -594,14 +809,34 @@
       setGrowthStyle('vBasketFisk', basketFiskGr);
 
       renderCharts(cur, trend);
-      generateExecutiveInsights(s, t, ach, bz, inS, gr, fGr, sssg, snt, b2b, qty, trx, aur, upt, basket, cur);
+      generateExecutiveInsights(s, t, ach, bz, inS, gr, fGr, sssg, snt, b2b, suko, ffs, d1, d2, d3, d4, qty, trx, aur, upt, basket, cur);
     }
 
-    function generateExecutiveInsights(s, t, ach, bz, inS, gr, fGr, sssg, snt, b2b, qty, trx, aur, upt, basket, cur) {
+    function updateDivisionRow(prefix, tyVal, lyVal, totalSum) {
+      const contrib = (tyVal / totalSum) * 100;
+      const growth = lyVal ? ((tyVal - lyVal) / lyVal) * 100 : 0;
+
+      document.getElementById(`${prefix}-ty`).innerText = 'Rp ' + Math.round(tyVal).toLocaleString('id-ID');
+      document.getElementById(`${prefix}-ly`).innerText = 'Rp ' + Math.round(lyVal).toLocaleString('id-ID');
+      document.getElementById(`${prefix}-contrib`).innerText = contrib.toFixed(1) + '%';
+      
+      const grEl = document.getElementById(`${prefix}-gr`);
+      grEl.innerText = (growth >= 0 ? '+' : '') + growth.toFixed(1) + '%';
+      grEl.className = growth < 0 ? 'font-bold text-rose-400' : 'font-bold text-emerald-400';
+
+      const barEl = document.getElementById(`${prefix}-bar`);
+      if (barEl) {
+        barEl.style.width = Math.min(contrib, 100) + '%';
+      }
+    }
+
+    function generateExecutiveInsights(s, t, ach, bz, inS, gr, fGr, sssg, snt, b2b, suko, ffs, d1, d2, d3, d4, qty, trx, aur, upt, basket, cur) {
       const gap = t - s;
       const bzPct = s ? ((bz / s) * 100).toFixed(1) : 0;
       const sntPct = s ? ((snt / s) * 100).toFixed(1) : 0;
       const b2bPct = s ? ((b2b / s) * 100).toFixed(1) : 0;
+      const sukoPct = s ? ((suko / s) * 100).toFixed(1) : 0;
+      const ffsPct = s ? ((ffs / s) * 100).toFixed(1) : 0;
 
       // 1. Insight Sales Performance
       let insightSalesHTML = `<p>• Realisasi omzet penjualan mencapai <b class="text-amber-400">Rp ${Math.round(s).toLocaleString('id-ID')}</b> dari target <b class="text-slate-200">Rp ${Math.round(t).toLocaleString('id-ID')}</b> dengan tingkat pencapaian <b>${ach.toFixed(1)}%</b>.</p>`;
@@ -613,36 +848,33 @@
       insightSalesHTML += `<p>• <span class="text-indigo-300 font-semibold">Evaluasi Pertumbuhan:</span> Growth Gregorian tercatat <b>${gr >= 0 ? '+' : ''}${gr.toFixed(1)}%</b>, sedangkan secara Kalender Fiskal Ritel tercatat <b>${fGr >= 0 ? '+' : ''}${fGr.toFixed(1)}%</b>.</p>`;
       document.getElementById('insight-sales').innerHTML = insightSalesHTML;
 
-      // 2. Insight Sales Channel
-      let insightChannelHTML = `<p>• Total kontribusi dari saluran Omnichannel dan alternatif adalah <b class="text-indigo-400">Rp ${Math.round(snt + b2b).toLocaleString('id-ID')}</b> (<b>${(parseFloat(sntPct) + parseFloat(b2bPct)).toFixed(1)}%</b> dari total omzet toko).</p>`;
-      insightChannelHTML += `<p>• Kanal <b class="text-indigo-300">Shopping & Delivery (SnT)</b> membukukan <b class="text-amber-400">Rp ${Math.round(snt).toLocaleString('id-ID')}</b> (${sntPct}%), sedangkan transaksi <b class="text-purple-300">Business to Business (B2B)</b> menyumbang <b class="text-purple-300">Rp ${Math.round(b2b).toLocaleString('id-ID')}</b> (${b2bPct}%).</p>`;
-      insightChannelHTML += `<p>• <span class="text-emerald-400 font-semibold">Rekomendasi Strategis:</span> ${sntPct < 5 ? 'Aktivasi program promosi khusus SnT perlu ditingkatkan untuk mendorong kontribusi omnichannel di atas target minimal 5%.' : 'Kinerja SnT sudah berjalan sangat efisien dalam menjaga jangkauan pelanggan luar toko.'}</p>`;
+      // 2. Insight Sales Channel & Specialty Brands
+      let insightChannelHTML = `<p>• Total kontribusi gabungan dari Omnichannel & Specialty Brands mencapai <b class="text-indigo-400">Rp ${Math.round(snt + b2b + suko + ffs).toLocaleString('id-ID')}</b> (<b>${(parseFloat(sntPct) + parseFloat(b2bPct) + parseFloat(sukoPct) + parseFloat(ffsPct)).toFixed(1)}%</b> dari total omzet toko).</p>`;
+      insightChannelHTML += `<p>• Breakdown Kanal: <b class="text-indigo-300">SNT (Shop N Talk)</b> <b class="text-amber-400">Rp ${Math.round(snt).toLocaleString('id-ID')}</b> (${sntPct}%), <b class="text-purple-300">B2B</b> <b class="text-purple-300">Rp ${Math.round(b2b).toLocaleString('id-ID')}</b> (${b2bPct}%).</p>`;
+      insightChannelHTML += `<p>• Breakdown Specialty Brands: <b class="text-emerald-400">SUKO</b> menyumbang <b class="text-emerald-300">Rp ${Math.round(suko).toLocaleString('id-ID')}</b> (${sukoPct}%) dan <b class="text-cyan-400">FFS</b> menyumbang <b class="text-cyan-300">Rp ${Math.round(ffs).toLocaleString('id-ID')}</b> (${ffsPct}%).</p>`;
       document.getElementById('insight-channel').innerHTML = insightChannelHTML;
 
-      // 3. Insight Statistik Operasional
+      // 3. Insight Division Matrix
+      const totalD = (d1 + d2 + d3 + d4) || 1;
+      let insightDivisionHTML = `<p>• Komposisi kontribusi divisi utama: <b class="text-amber-400">Division 1 (Ladies)</b> sebesar <b>${((d1/totalD)*100).toFixed(1)}%</b>, <b class="text-emerald-400">Division 2 (Shoes & Bag)</b> sebesar <b>${((d2/totalD)*100).toFixed(1)}%</b>.</p>`;
+      insightDivisionHTML += `<p>• Kontribusi kategori pendukung: <b class="text-indigo-400">Division 3 (Men)</b> sebesar <b>${((d3/totalD)*100).toFixed(1)}%</b> dan <b class="text-purple-400">Division 4 (Children & Home)</b> sebesar <b>${((d4/totalD)*100).toFixed(1)}%</b>.</p>`;
+      insightDivisionHTML += `<p>• <span class="text-emerald-400 font-semibold">Rekomendasi Kategori:</span> Fokuskan alokasi ruang pajang (*visual merchandising*) pada divisi dengan pertumbuhan tertinggi guna memaksimalkan *Basket Size* pelanggan.</p>`;
+      document.getElementById('insight-division').innerHTML = insightDivisionHTML;
+
+      // 4. Insight Statistik Operasional
       let insightStatsHTML = `<p>• Total transaksi terkumpul sebanyak <b class="text-teal-300">${trx.toLocaleString('id-ID')} TRX</b> dengan volume produk terjual <b class="text-purple-300">${qty.toLocaleString('id-ID')} QTY</b>.</p>`;
       insightStatsHTML += `<p>• Nilai rata-rata per barang (AUR) berada di angka <b class="text-amber-300">Rp ${Math.round(aur).toLocaleString('id-ID')}</b> dan angka Units per Transaction (UPT) di <b class="text-emerald-300">${upt.toFixed(2)} item/TRX</b>.</p>`;
       insightStatsHTML += `<p>• <span class="text-rose-300 font-semibold">Rata-rata Nilai Belanja (Basket Size):</span> Pelanggan membelanjakan rata-rata <b class="text-rose-300">Rp ${Math.round(basket).toLocaleString('id-ID')}</b> per transaksi. ${upt < 2 ? 'Fokus staf kasir dan floor team perlu diarahkan pada penawaran produk Add-On untuk mendongkrak UPT ke angka ideal minimal 2.0.' : 'Kombinasi UPT dan Basket Size terpantau sehat.'}</p>`;
       document.getElementById('insight-stats').innerHTML = insightStatsHTML;
 
-      // 4. Insight Grafik
-      const d1 = cur.reduce((a, b) => a + (parseFloat(b.div1) || 0), 0);
-      const d2 = cur.reduce((a, b) => a + (parseFloat(b.div2) || 0), 0);
-      const d3 = cur.reduce((a, b) => a + (parseFloat(b.div3) || 0), 0);
-      const d4 = cur.reduce((a, b) => a + (parseFloat(b.div4) || 0), 0);
+      // 5. Insight Grafik
       const dp = cur.reduce((a, b) => a + (parseFloat(b.dp) || 0), 0);
       const cv = cur.reduce((a, b) => a + (parseFloat(b.cv) || 0), 0);
 
-      let insightGrafikHTML = `<p>• Porsi divisi terbesar ditempati oleh <b class="text-amber-400">Divisi ${getTopDiv(d1, d2, d3, d4)}</b> dengan kontribusi dominan dalam periode ini.</p>`;
+      let insightGrafikHTML = `<p>• Porsi divisi terbesar terpantau aktif melalui matriks perbandingan divisi.</p>`;
       insightGrafikHTML += `<p>• Komposisi skema bisnis: <b class="text-amber-400">Direct Purchase (DP)</b> sebesar <b>${((dp / (dp + cv || 1)) * 100).toFixed(1)}%</b> vs <b class="text-rose-400">Consignment Vendor (CV)</b> sebesar <b>${((cv / (dp + cv || 1)) * 100).toFixed(1)}%</b>.</p>`;
       insightGrafikHTML += `<p>• <span class="text-purple-300 font-semibold">Analisis Tren Harian:</span> Fluktuasi penjualan harian menunjukkan pola pembentukan puncak omzet pada akhir pekan (Weekend Peak). Disarankan optimasi alokasi tim dan display visual difokuskan pada hari Jumat–Minggu.</p>`;
       document.getElementById('insight-grafik').innerHTML = insightGrafikHTML;
-    }
-
-    function getTopDiv(d1, d2, d3, d4) {
-      const arr = [{n:'1',v:d1},{n:'2',v:d2},{n:'3',v:d3},{n:'4',v:d4}];
-      arr.sort((a,b) => b.v - a.v);
-      return arr[0].n;
     }
 
     function renderCharts(cur, trend) {
@@ -657,7 +889,7 @@
       charts.barChart = new Chart('barChart', {
         type: 'bar',
         data: {
-          labels: ['D1', 'D2', 'D3', 'D4'],
+          labels: ['Ladies', 'Shoes&Bag', 'Men', 'Child&Home'],
           datasets: [{
             data: [
               cur.reduce((a, b) => a + (parseFloat(b.div1) || 0), 0),
