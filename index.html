@@ -151,6 +151,10 @@
             <i class="fa-solid fa-cart-shopping w-4 text-center"></i>
             <span>Sales Performance</span>
           </button>
+          <button id="btn-scheme" onclick="switchTab('scheme')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-bold text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-all border border-transparent">
+            <i class="fa-solid fa-handshake w-4 text-center"></i>
+            <span>Business Scheme (DP vs CV)</span>
+          </button>
           <button id="btn-channel" onclick="switchTab('channel')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-bold text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-all border border-transparent">
             <i class="fa-solid fa-store w-4 text-center"></i>
             <span>Sales Channel</span>
@@ -283,6 +287,98 @@
           </div>
           <div id="insight-sales" class="text-xs text-slate-300 space-y-2 leading-relaxed bg-slate-950/60 p-3.5 rounded-lg border border-slate-800">
             Menampilkan analisis data...
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW TAB NEW: BUSINESS SCHEME (DP vs CV) -->
+      <section id="view-scheme" class="tab-content hidden space-y-4">
+        <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <h2 class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
+              <i class="fa-solid fa-handshake"></i> BUSINESS SCHEME PERFORMANCE (DIRECT PURCHASE vs CONSIGNMENT VENDOR)
+            </h2>
+            <span class="text-[10px] font-semibold text-slate-400 bg-slate-950 border border-slate-800 px-2 py-0.5 rounded">TY vs LY Comparison</span>
+          </div>
+
+          <!-- CARDS GRID DP VS CV -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <!-- CARD DIRECT PURCHASE (DP) -->
+            <div class="bg-slate-950/80 p-4 rounded-xl border border-amber-500/40 space-y-3 relative overflow-hidden">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                  <h3 class="text-sm font-black text-amber-400 tracking-wider uppercase">DIRECT PURCHASE (DP)</h3>
+                </div>
+                <span id="vDpContrib" class="text-[11px] font-bold text-amber-300 bg-amber-950/60 border border-amber-800/60 px-2 py-0.5 rounded">Contrib: 0.0%</span>
+              </div>
+
+              <div class="grid grid-cols-3 gap-2 pt-1 text-center">
+                <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                  <span class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Sales TY</span>
+                  <span id="vDpTY" class="text-xs sm:text-sm font-black text-slate-100">Rp 0</span>
+                </div>
+                <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                  <span class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Sales LY</span>
+                  <span id="vDpLY" class="text-xs sm:text-sm font-bold text-slate-400">Rp 0</span>
+                </div>
+                <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                  <span class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Growth</span>
+                  <span id="vDpGr" class="text-xs sm:text-sm font-black text-emerald-400">0.0%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- CARD CONSIGNMENT VENDOR (CV) -->
+            <div class="bg-slate-950/80 p-4 rounded-xl border border-rose-500/40 space-y-3 relative overflow-hidden">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+                  <h3 class="text-sm font-black text-rose-400 tracking-wider uppercase">CONSIGNMENT VENDOR (CV)</h3>
+                </div>
+                <span id="vCvContrib" class="text-[11px] font-bold text-rose-300 bg-rose-950/60 border border-rose-800/60 px-2 py-0.5 rounded">Contrib: 0.0%</span>
+              </div>
+
+              <div class="grid grid-cols-3 gap-2 pt-1 text-center">
+                <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                  <span class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Sales TY</span>
+                  <span id="vCvTY" class="text-xs sm:text-sm font-black text-slate-100">Rp 0</span>
+                </div>
+                <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                  <span class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Sales LY</span>
+                  <span id="vCvLY" class="text-xs sm:text-sm font-bold text-slate-400">Rp 0</span>
+                </div>
+                <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                  <span class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Growth</span>
+                  <span id="vCvGr" class="text-xs sm:text-sm font-black text-emerald-400">0.0%</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- VISUAL PROGRESS RATIO BAR -->
+          <div class="bg-slate-950/80 p-3.5 rounded-xl border border-slate-800 space-y-2">
+            <div class="flex justify-between text-xs font-bold">
+              <span class="text-amber-400">Direct Purchase Share</span>
+              <span class="text-rose-400">Consignment Vendor Share</span>
+            </div>
+            <div class="w-full bg-slate-900 rounded-full h-3 overflow-hidden border border-slate-800 flex">
+              <div id="barDpShare" class="bg-amber-500 h-full transition-all duration-500" style="width: 50%"></div>
+              <div id="barCvShare" class="bg-rose-500 h-full transition-all duration-500" style="width: 50%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INSIGHT BOX SCHEME -->
+        <div class="bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-amber-500/30 space-y-2">
+          <div class="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider">
+            <i class="fa-solid fa-brain"></i>
+            <span>Analisis Skema Bisnis & Evaluasi Portofolio Penjualan</span>
+          </div>
+          <div id="insight-scheme" class="text-xs text-slate-300 space-y-2 leading-relaxed bg-slate-950/60 p-3.5 rounded-lg border border-slate-800">
+            Menampilkan analisis skema bisnis...
           </div>
         </div>
       </section>
@@ -633,8 +729,8 @@
             day: parseInt(d[6]) || 0,
             target: parseFloat(d[10]) || 0,
             sales: parseFloat(d[14]) || 0,
-            dp: parseFloat(d[15]) || 0,
-            cv: parseFloat(d[16]) || 0,
+            dp: parseFloat(d[15]) || 0,   // Kolom P (DP)
+            cv: parseFloat(d[16]) || 0,   // Kolom Q (CV)
             bazaar: parseFloat(d[17]) || 0,
             snt: parseFloat(d[18]) || 0,
             ffs: parseFloat(d[19]) || 0,
@@ -794,6 +890,33 @@
       vGrwFiskal.innerText = (fGr >= 0 ? '+' : '') + fGr.toFixed(1) + '%';
       vGrwFiskal.className = fGr < 0 ? 'font-bold text-rose-400' : 'font-bold text-indigo-400';
 
+      // BUSINESS SCHEME DATA (DP & CV)
+      const dpTY = cur.reduce((a, b) => a + (parseFloat(b.dp) || 0), 0);
+      const cvTY = cur.reduce((a, b) => a + (parseFloat(b.cv) || 0), 0);
+
+      const dpLY = prev.reduce((a, b) => a + (parseFloat(b.dp) || 0), 0);
+      const cvLY = prev.reduce((a, b) => a + (parseFloat(b.cv) || 0), 0);
+
+      const dpGr = dpLY ? ((dpTY - dpLY) / dpLY) * 100 : 0;
+      const cvGr = cvLY ? ((cvTY - cvLY) / cvLY) * 100 : 0;
+
+      const totalSchemeTY = (dpTY + cvTY) || 1;
+      const dpContribPct = (dpTY / totalSchemeTY) * 100;
+      const cvContribPct = (cvTY / totalSchemeTY) * 100;
+
+      document.getElementById('vDpTY').innerText = 'Rp ' + Math.round(dpTY).toLocaleString('id-ID');
+      document.getElementById('vDpLY').innerText = 'Rp ' + Math.round(dpLY).toLocaleString('id-ID');
+      setGrowthStyle('vDpGr', dpGr);
+      document.getElementById('vDpContrib').innerText = 'Contrib: ' + dpContribPct.toFixed(1) + '%';
+
+      document.getElementById('vCvTY').innerText = 'Rp ' + Math.round(cvTY).toLocaleString('id-ID');
+      document.getElementById('vCvLY').innerText = 'Rp ' + Math.round(cvLY).toLocaleString('id-ID');
+      setGrowthStyle('vCvGr', cvGr);
+      document.getElementById('vCvContrib').innerText = 'Contrib: ' + cvContribPct.toFixed(1) + '%';
+
+      document.getElementById('barDpShare').style.width = Math.min(dpContribPct, 100) + '%';
+      document.getElementById('barCvShare').style.width = Math.min(cvContribPct, 100) + '%';
+
       // CHANNELS & SPECIALTY BRANDS
       const snt = cur.reduce((a, b) => a + (parseFloat(b.snt) || 0), 0);
       const b2b = cur.reduce((a, b) => a + (parseFloat(b.b2b) || 0), 0);
@@ -892,6 +1015,7 @@
         yearTY, bA, bK, tA, tK,
         s, t, ach, bz, inS, gr, fGr, sssg,
         deltaRpGrego, deltaRpFiskal, deltaRpSSSG,
+        dpTY, cvTY, dpLY, cvLY, dpGr, cvGr, dpContribPct, cvContribPct,
         snt, b2b, suko, ffs,
         pSnt, pB2b, pSuko, pFfs,
         d1, d2, d3, d4, pd1, pd2, pd3, pd4, totalDivSum,
@@ -900,7 +1024,7 @@
       };
 
       renderCharts(cur, trend);
-      generateExecutiveInsights(s, t, ach, bz, inS, gr, fGr, sssg, snt, b2b, suko, ffs, d1, d2, d3, d4, qty, trx, aur, upt, basket, cur);
+      generateExecutiveInsights(s, t, ach, bz, inS, gr, fGr, sssg, snt, b2b, suko, ffs, d1, d2, d3, d4, qty, trx, aur, upt, basket, cur, dpTY, cvTY, dpGr, cvGr, dpContribPct, cvContribPct);
     }
 
     function updateDivisionRow(prefix, tyVal, lyVal, totalSum) {
@@ -921,7 +1045,7 @@
       }
     }
 
-    function generateExecutiveInsights(s, t, ach, bz, inS, gr, fGr, sssg, snt, b2b, suko, ffs, d1, d2, d3, d4, qty, trx, aur, upt, basket, cur) {
+    function generateExecutiveInsights(s, t, ach, bz, inS, gr, fGr, sssg, snt, b2b, suko, ffs, d1, d2, d3, d4, qty, trx, aur, upt, basket, cur, dpTY, cvTY, dpGr, cvGr, dpContribPct, cvContribPct) {
       const gap = t - s;
       const bzPct = s ? ((bz / s) * 100).toFixed(1) : 0;
       const sntPct = s ? ((snt / s) * 100).toFixed(1) : 0;
@@ -939,26 +1063,32 @@
       insightSalesHTML += `<p>• <span class="text-indigo-300 font-semibold">Evaluasi Pertumbuhan:</span> Growth Gregorian tercatat <b>${gr >= 0 ? '+' : ''}${gr.toFixed(1)}%</b>, sedangkan secara Kalender Fiskal Ritel tercatat <b>${fGr >= 0 ? '+' : ''}${fGr.toFixed(1)}%</b>.</p>`;
       document.getElementById('insight-sales').innerHTML = insightSalesHTML;
 
-      // 2. Insight Sales Channel & Specialty Brands
+      // 2. Insight Business Scheme (DP vs CV)
+      let insightSchemeHTML = `<p>• Skema <b class="text-amber-400">Direct Purchase (DP)</b> menyumbang <b class="text-slate-100">Rp ${Math.round(dpTY).toLocaleString('id-ID')}</b> (Contrib: <b>${dpContribPct.toFixed(1)}%</b>) dengan pertumbuhan <b class="${dpGr >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${dpGr >= 0 ? '+' : ''}${dpGr.toFixed(1)}% vs LY</b>.</p>`;
+      insightSchemeHTML += `<p>• Skema <b class="text-rose-400">Consignment Vendor (CV)</b> menyumbang <b class="text-slate-100">Rp ${Math.round(cvTY).toLocaleString('id-ID')}</b> (Contrib: <b>${cvContribPct.toFixed(1)}%</b>) dengan pertumbuhan <b class="${cvGr >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${cvGr >= 0 ? '+' : ''}${cvGr.toFixed(1)}% vs LY</b>.</p>`;
+      insightSchemeHTML += `<p>• <span class="text-indigo-300 font-semibold">Diagnosa Portofolio:</span> Skema ${dpContribPct > cvContribPct ? '<b class="text-amber-400">Direct Purchase (DP)</b> mendominasi omzet toko' : '<b class="text-rose-400">Consignment Vendor (CV)</b> mendominasi omzet toko'}. Pastikan ketersediaan stok (*stock depth*) pada skema pendorong omzet utama tetap terjaga secara konsisten.</p>`;
+      document.getElementById('insight-scheme').innerHTML = insightSchemeHTML;
+
+      // 3. Insight Sales Channel & Specialty Brands
       let insightChannelHTML = `<p>• Total kontribusi gabungan dari Omnichannel & Specialty Brands mencapai <b class="text-indigo-400">Rp ${Math.round(snt + b2b + suko + ffs).toLocaleString('id-ID')}</b> (<b>${(parseFloat(sntPct) + parseFloat(b2bPct) + parseFloat(sukoPct) + parseFloat(ffsPct)).toFixed(1)}%</b> dari total omzet toko).</p>`;
       insightChannelHTML += `<p>• Breakdown Kanal: <b class="text-indigo-300">SNT (Shop N Talk)</b> <b class="text-amber-400">Rp ${Math.round(snt).toLocaleString('id-ID')}</b> (${sntPct}%), <b class="text-purple-300">B2B</b> <b class="text-purple-300">Rp ${Math.round(b2b).toLocaleString('id-ID')}</b> (${b2bPct}%).</p>`;
       insightChannelHTML += `<p>• Breakdown Specialty Brands: <b class="text-emerald-400">SUKO</b> menyumbang <b class="text-emerald-300">Rp ${Math.round(suko).toLocaleString('id-ID')}</b> (${sukoPct}%) dan <b class="text-cyan-400">FFS</b> menyumbang <b class="text-cyan-300">Rp ${Math.round(ffs).toLocaleString('id-ID')}</b> (${ffsPct}%).</p>`;
       document.getElementById('insight-channel').innerHTML = insightChannelHTML;
 
-      // 3. Insight Division Matrix
+      // 4. Insight Division Matrix
       const totalD = (d1 + d2 + d3 + d4) || 1;
       let insightDivisionHTML = `<p>• Komposisi kontribusi divisi utama: <b class="text-amber-400">Division 1 (Ladies)</b> sebesar <b>${((d1/totalD)*100).toFixed(1)}%</b>, <b class="text-emerald-400">Division 2 (Shoes & Bag)</b> sebesar <b>${((d2/totalD)*100).toFixed(1)}%</b>.</p>`;
       insightDivisionHTML += `<p>• Kontribusi kategori pendukung: <b class="text-indigo-400">Division 3 (Men)</b> sebesar <b>${((d3/totalD)*100).toFixed(1)}%</b> dan <b class="text-purple-400">Division 4 (Children & Home)</b> sebesar <b>${((d4/totalD)*100).toFixed(1)}%</b>.</p>`;
       insightDivisionHTML += `<p>• <span class="text-emerald-400 font-semibold">Rekomendasi Kategori:</span> Fokuskan alokasi ruang pajang (*visual merchandising*) pada divisi dengan pertumbuhan tertinggi guna memaksimalkan *Basket Size* pelanggan.</p>`;
       document.getElementById('insight-division').innerHTML = insightDivisionHTML;
 
-      // 4. Insight Statistik Operasional
+      // 5. Insight Statistik Operasional
       let insightStatsHTML = `<p>• Total transaksi terkumpul sebanyak <b class="text-teal-300">${trx.toLocaleString('id-ID')} TRX</b> dengan volume produk terjual <b class="text-purple-300">${qty.toLocaleString('id-ID')} QTY</b>.</p>`;
       insightStatsHTML += `<p>• Nilai rata-rata per barang (AUR) berada di angka <b class="text-amber-300">Rp ${Math.round(aur).toLocaleString('id-ID')}</b> dan angka Units per Transaction (UPT) di <b class="text-emerald-300">${upt.toFixed(2)} item/TRX</b>.</p>`;
       insightStatsHTML += `<p>• <span class="text-rose-300 font-semibold">Rata-rata Nilai Belanja (Basket Size):</span> Pelanggan membelanjakan rata-rata <b class="text-rose-300">Rp ${Math.round(basket).toLocaleString('id-ID')}</b> per transaksi. ${upt < 2 ? 'Fokus staf kasir dan floor team perlu diarahkan pada penawaran produk Add-On untuk mendongkrak UPT ke angka ideal minimal 2.0.' : 'Kombinasi UPT dan Basket Size terpantau sehat.'}</p>`;
       document.getElementById('insight-stats').innerHTML = insightStatsHTML;
 
-      // 5. Insight Grafik
+      // 6. Insight Grafik
       const dp = cur.reduce((a, b) => a + (parseFloat(b.dp) || 0), 0);
       const cv = cur.reduce((a, b) => a + (parseFloat(b.cv) || 0), 0);
 
@@ -968,7 +1098,7 @@
       document.getElementById('insight-grafik').innerHTML = insightGrafikHTML;
     }
 
-    // AUTO-GENERATED EXECUTIVE SUMMARY REPORT - HEADER CLEAN TANPA GARIS
+    // AUTO-GENERATED EXECUTIVE SUMMARY REPORT
     function generateExecutiveSummary() {
       const d = latestCalculatedData;
       if (!d || !d.s) {
@@ -1055,7 +1185,13 @@
           </div>
 
           <div>
-            <p class="font-bold text-indigo-400 border-b border-slate-800 pb-0.5">2. OMNICHANNEL & SPECIALTY BRANDS (DELTA RP)</p>
+            <p class="font-bold text-amber-400 border-b border-slate-800 pb-0.5">2. BUSINESS SCHEME PERFORMANCE (DP vs CV)</p>
+            <p>• Direct Purchase (DP) : Rp ${Math.round(d.dpTY).toLocaleString('id-ID')} (Contrib: ${d.dpContribPct.toFixed(1)}% | Growth: ${d.dpGr >= 0 ? '+' : ''}${d.dpGr.toFixed(1)}% vs LY)</p>
+            <p>• Consignment Vendor (CV) : Rp ${Math.round(d.cvTY).toLocaleString('id-ID')} (Contrib: ${d.cvContribPct.toFixed(1)}% | Growth: ${d.cvGr >= 0 ? '+' : ''}${d.cvGr.toFixed(1)}% vs LY)</p>
+          </div>
+
+          <div>
+            <p class="font-bold text-indigo-400 border-b border-slate-800 pb-0.5">3. OMNICHANNEL & SPECIALTY BRANDS (DELTA RP)</p>
             <p>• Shop N Talk (SNT): Rp ${Math.round(d.snt).toLocaleString('id-ID')} (Contrib: ${sntPct}% | Delta: ${sntDeltaRp >= 0 ? '+Rp ' : '-Rp '}${Math.round(Math.abs(sntDeltaRp)).toLocaleString('id-ID')})</p>
             <p>• B2B Corporate    : Rp ${Math.round(d.b2b).toLocaleString('id-ID')} (Contrib: ${b2bPct}% | Delta: ${b2bDeltaRp >= 0 ? '+Rp ' : '-Rp '}${Math.round(Math.abs(b2bDeltaRp)).toLocaleString('id-ID')})</p>
             <p>• SUKO Specialty   : Rp ${Math.round(d.suko).toLocaleString('id-ID')} (Contrib: ${sukoPct}% | Delta: ${sukoDeltaRp >= 0 ? '+Rp ' : '-Rp '}${Math.round(Math.abs(sukoDeltaRp)).toLocaleString('id-ID')})</p>
@@ -1063,7 +1199,7 @@
           </div>
 
           <div>
-            <p class="font-bold text-emerald-400 border-b border-slate-800 pb-0.5">3. DIVISIONAL MATRIX PERFORMANCE (TY vs LY)</p>
+            <p class="font-bold text-emerald-400 border-b border-slate-800 pb-0.5">4. DIVISIONAL MATRIX PERFORMANCE (TY vs LY)</p>
             <p>• Div 1 (Ladies)         : Rp ${Math.round(d.d1).toLocaleString('id-ID')} (Contrib: ${((d.d1/d.totalDivSum)*100).toFixed(1)}% | Delta: ${d1DeltaRp >= 0 ? '+Rp ' : '-Rp '}${Math.round(Math.abs(d1DeltaRp)).toLocaleString('id-ID')})</p>
             <p>• Div 2 (Shoes & Bag)    : Rp ${Math.round(d.d2).toLocaleString('id-ID')} (Contrib: ${((d.d2/d.totalDivSum)*100).toFixed(1)}% | Delta: ${d2DeltaRp >= 0 ? '+Rp ' : '-Rp '}${Math.round(Math.abs(d2DeltaRp)).toLocaleString('id-ID')})</p>
             <p>• Div 3 (Men)            : Rp ${Math.round(d.d3).toLocaleString('id-ID')} (Contrib: ${((d.d3/d.totalDivSum)*100).toFixed(1)}% | Delta: ${d3DeltaRp >= 0 ? '+Rp ' : '-Rp '}${Math.round(Math.abs(d3DeltaRp)).toLocaleString('id-ID')})</p>
@@ -1071,7 +1207,7 @@
           </div>
 
           <div>
-            <p class="font-bold text-teal-400 border-b border-slate-800 pb-0.5">4. OPERATIONAL EFFICIENCY & UPT METRICS</p>
+            <p class="font-bold text-teal-400 border-b border-slate-800 pb-0.5">5. OPERATIONAL EFFICIENCY & UPT METRICS</p>
             <p>• Volume Transaksi : ${d.trx.toLocaleString('id-ID')} TRX | Product Sales: ${d.qty.toLocaleString('id-ID')} QTY</p>
             <p>• Basket Size      : Rp ${Math.round(d.basket).toLocaleString('id-ID')} (${d.basketGr >= 0 ? '+' : ''}${d.basketGr.toFixed(1)}% vs LY)</p>
             <p>• AUR (Avg Price)  : Rp ${Math.round(d.aur).toLocaleString('id-ID')} (${d.aurGr >= 0 ? '+' : ''}${d.aurGr.toFixed(1)}% vs LY)</p>
@@ -1079,7 +1215,7 @@
           </div>
 
           <div class="bg-slate-950 p-3 rounded border border-slate-800 space-y-2">
-            <p class="font-bold text-amber-400 border-b border-slate-800 pb-0.5">5. EXECUTIVE DIAGNOSIS & STRATEGIC GUIDANCE</p>
+            <p class="font-bold text-amber-400 border-b border-slate-800 pb-0.5">6. EXECUTIVE DIAGNOSIS & STRATEGIC GUIDANCE</p>
             <div class="text-[11px] text-slate-300 space-y-2 leading-relaxed">
               <p>${bulletDivTop}</p>
               <p>${bulletUPT}</p>
