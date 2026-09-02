@@ -265,7 +265,7 @@
                 <td class="p-2 font-bold text-emerald-400">UPT (Item/TRX)</td>
                 <td id="ops-upt-ty" class="p-2 text-slate-100">0.00</td>
                 <td id="ops-upt-lyg" class="p-2 text-slate-400">0.00</td>
-                <td id="ops-upt-grg" class="p-2">0.0%</td>
+                <td id="ops-upt-grg" class="p-2">0.00</td>
                 <td id="ops-upt-lyf" class="p-2 text-slate-400">0.00</td>
                 <td id="ops-upt-grf" class="p-2">0.0%</td>
               </tr>
@@ -354,6 +354,14 @@
           <button id="btn-grafik" onclick="switchTab('grafik')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-bold text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-all border border-transparent">
             <i class="fa-solid fa-chart-pie w-4 text-center"></i>
             <span>Grafik</span>
+          </button>
+          
+          <div class="pt-2 border-t border-slate-800/80 my-1"></div>
+
+          <!-- MENU NAVIGASI READ ME / TUTORIAL -->
+          <button id="btn-readme" onclick="switchTab('readme')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-bold text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-all border border-transparent">
+            <i class="fa-solid fa-book-open w-4 text-center text-cyan-400"></i>
+            <span class="text-cyan-400">Read Me & Tutorial</span>
           </button>
         </nav>
       </div>
@@ -822,6 +830,83 @@
           <div id="insight-grafik" class="text-xs text-slate-300 space-y-2 leading-relaxed bg-slate-950/60 p-3.5 rounded-lg border border-slate-800">
             Menampilkan analisis grafik...
           </div>
+        </div>
+      </section>
+
+      <!-- VIEW TAB 6: READ ME & TUTORIAL -->
+      <section id="view-readme" class="tab-content hidden space-y-4">
+        <div class="bg-slate-900/90 backdrop-blur-md p-4 md:p-6 rounded-xl shadow-lg border border-cyan-500/30 space-y-6">
+          
+          <div class="border-b border-slate-800 pb-3 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 text-lg font-bold">
+              <i class="fa-solid fa-book-open"></i>
+            </div>
+            <div>
+              <h2 class="text-sm font-black text-cyan-400 uppercase tracking-wider">PANDUAN & TUTORIAL SMART ANALYTICS CORE</h2>
+              <p class="text-[11px] font-semibold text-slate-400">Petunjuk Penggunaan Aplikasi, Filter Data, & Interpretasi Metrik Ritel</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            
+            <!-- STEP 1 -->
+            <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800 space-y-2">
+              <h3 class="font-bold text-amber-400 flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-amber-500/20 border border-amber-500 text-amber-400 flex items-center justify-center text-[10px]">1</span>
+                Cara Penggunaan Filter (Slicer)
+              </h3>
+              <ul class="text-slate-300 space-y-1.5 list-disc list-inside leading-relaxed text-[11px]">
+                <li><b>Year:</b> Pilih tahun transaksi utama (This Year / TY).</li>
+                <li><b>Start & End Month:</b> Rentang bulan yang ingin dianalisis (Misal: Jan - Ags).</li>
+                <li><b>Start & End Date:</b> Pilih tanggal spesifik. Jika filter akumulasi YTD penuh hingga pertengahan bulan, tentukan tanggal batas akhir di <b>End Date</b>.</li>
+                <li>Semua data nominal dan grafik akan langsung memperbarui kalkulasi secara otomatis.</li>
+              </ul>
+            </div>
+
+            <!-- STEP 2 -->
+            <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800 space-y-2">
+              <h3 class="font-bold text-emerald-400 flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-500 text-emerald-400 flex items-center justify-center text-[10px]">2</span>
+                Membaca Metrik Growth (Pertumbuhan)
+              </h3>
+              <ul class="text-slate-300 space-y-1.5 list-disc list-inside leading-relaxed text-[11px]">
+                <li><b>Grego (Gregorian Growth):</b> Perbandingan Masehi (*Tanggal & Bulan sama* dengan tahun lalu).</li>
+                <li><b>Fisk (Fiscal Growth):</b> Perbandingan Ritel (*Pencocokan Minggu & Hari* yang sama dengan tahun lalu).</li>
+                <li><b>SSSG (Same Store Sales Growth):</b> Pertumbuhan khusus toko reguler (<b>In-Store Only</b>, tidak termasuk Bazaar).</li>
+              </ul>
+            </div>
+
+            <!-- STEP 3 -->
+            <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800 space-y-2">
+              <h3 class="font-bold text-indigo-400 flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-indigo-500/20 border border-indigo-500 text-indigo-400 flex items-center justify-center text-[10px]">3</span>
+                Fitur Tombol Modal Audit (Detail Nominal & Tanggal)
+              </h3>
+              <ul class="text-slate-300 space-y-1.5 list-disc list-inside leading-relaxed text-[11px]">
+                <li>Klik tombol <b>"View LY Sales Detail"</b> di Sales Performance untuk melihat nominal pasti Rupiah Sales LY Masehi, Fiskal, SSSG, serta rentang tanggal pembandingnya.</li>
+                <li>Klik tombol <b>"View LY Operational Detail"</b> di Statistik Operasional untuk memverifikasi angka QTY, TRX, AUR, UPT, dan Basket Size TY vs LY secara rinci.</li>
+              </ul>
+            </div>
+
+            <!-- STEP 4 -->
+            <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800 space-y-2">
+              <h3 class="font-bold text-rose-400 flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-rose-500/20 border border-rose-500 text-rose-400 flex items-center justify-center text-[10px]">4</span>
+                Export Executive Summary Report
+              </h3>
+              <ul class="text-slate-300 space-y-1.5 list-disc list-inside leading-relaxed text-[11px]">
+                <li>Klik tombol **"Generate Executive Summary"** di atas panel filter.</li>
+                <li>Sistem secara otomatis menyusun ringkasan narasi profesional beserta analisis diagnosa divisi & rekomendasi taktis.</li>
+                <li>Gunakan tombol **"Copy Text"** untuk WhatsApp/Email, atau **"Print / Export PDF"** untuk kebutuhan cetak laporan formal.</li>
+              </ul>
+            </div>
+
+          </div>
+
+          <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 text-[11px] text-slate-400 text-center">
+            <p>Smart Analytics Core Engine v2.0 • Built with Precision by <span class="text-amber-400 font-bold">Andri Pahreza S.</span></p>
+          </div>
+
         </div>
       </section>
 
@@ -1525,7 +1610,8 @@
       // BULLET POINT 3: REKOMENDASI TAKTIS
       let bulletStrategic = "";
       if (d.ach < 100) {
-        bulletStrategic = `• STRATEGI PENGEJARAN TARGET: Instruksikan tim kasir untuk gencar menawarkan produk Add-On (kaos kaki/aksesoris) guna mendongkrak UPT minimal ke angka 2.0 item/TRX untuk mengejar defisit gap sebesar Rp ${Math.round(gap).toLocaleString('id-ID')}.`; } else {
+        bulletStrategic = `• STRATEGI PENGEJARAN TARGET: Instruksikan tim kasir untuk gencar menawarkan produk Add-On (kaos kaki/aksesoris) guna mendongkrak UPT minimal ke angka 2.0 item/TRX untuk mengejar defisit gap sebesar Rp ${Math.round(gap).toLocaleString('id-ID')}.`;
+      } else {
         bulletStrategic = `• STRATEGI PERTAHANAN PERFORMA: Kinerja toko berada dalam kondisi sangat sehat (Surplus Rp ${Math.round(Math.abs(gap)).toLocaleString('id-ID')}). Pertahankan display Visual Merchandising (VM) terbaik di area ${topDiv.name} menjelang puncak belanja akhir pekan.`;
       }
 
